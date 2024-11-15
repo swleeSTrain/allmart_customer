@@ -1,9 +1,9 @@
 import {configureStore} from "@reduxjs/toolkit";
-
+import pointReducer from "./slices/pointSlice.ts";
 
 const projectStore = configureStore({
     reducer: {
-
+        points: pointReducer,
     }
 });
 

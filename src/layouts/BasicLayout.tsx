@@ -1,7 +1,10 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
 
 
 function BasicLayout({children}: {children: React.ReactNode}) {
+
+    const navigate = useNavigate();
     return (
         <>
             <header className="bg-white shadow-lg flex justify-around items-center h-20  mb-4">
@@ -66,13 +69,21 @@ function BasicLayout({children}: {children: React.ReactNode}) {
             </div>
             <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around items-center h-20">
                 <button
-                    className="flex flex-col items-center justify-center w-1/3 text-xl text-gray-600 hover:text-blue-500 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                         className="w-10 h-10">
+                    className="flex flex-col items-center justify-center w-1/3 text-xl text-gray-600 hover:text-blue-500 focus:outline-none"
+                    onClick={() => navigate("/points")} // 포인트 페이지로 이동
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-10 h-10"
+                    >
                         <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z"/>
-                        <path fillRule="evenodd"
-                              d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z"
-                              clipRule="evenodd"/>
+                        <path
+                            fillRule="evenodd"
+                            d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z"
+                            clipRule="evenodd"
+                        />
                     </svg>
                     포인트
                 </button>
