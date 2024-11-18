@@ -10,7 +10,7 @@ const config:AxiosRequestConfig = {
 const host = 'http://localhost:8080/api/v1/customer'
 
 export const postSignUp = async (param:ISignUpParam ):Promise<ICustomer> => {
-
+    //
     const formData = new URLSearchParams();
     formData.append("phoneNumber", param.phoneNumber);
     const phoneNum = param.phoneNumber
