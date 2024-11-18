@@ -1,8 +1,8 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ICustomAsyncThunkConfig, ICustomer, ISignUpParam} from "../types/customer.ts";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {ICustomer, ISignUpParam} from "../types/customer.ts";
 import {Cookies} from "react-cookie";
 import {postSignUp} from "../api/customerAPI.ts";
-import {increment} from "./countSlice.ts";
+
 
 const cookies = new Cookies();
 
@@ -16,10 +16,9 @@ const initialState: ICustomer = {
 };
 
 
-const customerConfig : ICustomAsyncThunkConfig;
 
 export const postSignUpThunk
-    = createAsyncThunk<ICustomer,ISignUpParam,ICustomAsyncThunkConfig>('postSignUpThunk', postSignUp, customerConfig );
+    = createAsyncThunk<ICustomer,ISignUpParam>('postSignUpThunk', postSignUp);
 
 
 const signUpSlice = createSlice({
@@ -31,7 +30,11 @@ const signUpSlice = createSlice({
             const phoneNumber = action.payload.phoneNumber
             const result = {phoneNumber:phoneNumber}
             cookies.set("customer",JSON.stringify(result), {path : "/", maxAge:3600})
-            state.value.phoneNumber = phoneNumber
+            state.phoneNumber = phoneNumber
+        },
+        signout: (state, action) => {
+            console.log(state,action)
+            return {...initialState}
         }
     },
     extraReducers: (builder) =>
@@ -54,3 +57,4 @@ const signUpSlice = createSlice({
 )
 
 export const signupReducer = signUpSlice.reducer;
+export const {signup, signout} = signUpSlice.actions;
