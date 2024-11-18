@@ -1,5 +1,6 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
+import VoiceOrderButton from "../components/chatbot/VoiceOrderButton.tsx";
 
 
 function BasicLayout({children}: {children: React.ReactNode}) {
@@ -87,15 +88,10 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                     </svg>
                     포인트
                 </button>
-                <button
-                    className="relative flex flex-col items-center justify-center w-28 h-28 bg-blue-500 text-white rounded-full shadow-lg transform -translate-y-10 hover:bg-blue-600 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                         stroke="currentColor" className="w-12 h-12 mb-1">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"/>
-                    </svg>
-                    <span className="text-lg">음성주문</span>
-                </button>
+
+                {/* VoiceOrderButton 컴포넌트 사용 */}
+                <VoiceOrderButton/>
+
                 <button
                     className="flex flex-col items-center w-1/3 justify-center py-2 text-xl text-gray-600 hover:text-blue-500 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
