@@ -1,5 +1,5 @@
 import BasicLayout from "../../layouts/BasicLayout.tsx";
-import OrderVoiceComponent from "../../components/order/OrderVoiceComponent.tsx";
+import OrderVoiceComponent from "../../components/order/OrderVoiceWindow.tsx";
 
 function OrderVoicePage() {
     return (
