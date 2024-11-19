@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { convertSTT, convertTTS } from "../../api/VoiceAPI"; // 적절한 경로 수정
 import { sendChatbotRequest } from "../../api/ChatbotAPI";
-// import { useNavigate } from "react-router-dom";
 
 type ErrorState = string | null;
 
@@ -9,30 +8,24 @@ const OrderVoiceButton: React.FC = () => {
     const [isRecording, setIsRecording] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<ErrorState>(null);
+    const [isOverlayVisible, setIsOverlayVisible] = useState<boolean>(false);
+    const [chatMessages, setChatMessages] = useState<{ sender: string; text: string }[]>([]);
 
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
-    // const navigate = useNavigate()
-
-
 
     const handleClick = async () => {
-
-        setError(null); // 에러 초기화
-
-        // navigate({pathname: '/order/voice'})
+        setError(null);
 
         try {
             if (!isRecording) {
-                // 녹음 시작
                 setIsRecording(true);
-                audioChunksRef.current = []; // 이전 녹음 데이터 초기화
-
+                setIsOverlayVisible(true);
+                audioChunksRef.current = [];
 
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 const mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.ondataavailable = (event) => {
-
                     if (event.data.size > 0) {
                         audioChunksRef.current.push(event.data);
                     }
@@ -44,15 +37,12 @@ const OrderVoiceButton: React.FC = () => {
                     const audioFile = new File([audioBlob], "recording.webm", { type: "audio/webm" });
 
                     try {
-                        // STT 변환
                         const transcription = await convertSTT(audioFile);
-                        console.log("STT 결과:", transcription);
+                        setChatMessages((prev) => [...prev, { sender: "사용자", text: transcription }]);
 
-                        // 챗봇 요청
                         const chatbotResponse = await sendChatbotRequest(transcription);
-                        console.log("챗봇 응답:", chatbotResponse);
+                        setChatMessages((prev) => [...prev, { sender: "챗봇", text: chatbotResponse }]);
 
-                        // TTS 변환 및 재생
                         const ttsBlob = await convertTTS(chatbotResponse);
                         const ttsUrl = URL.createObjectURL(ttsBlob);
 
@@ -70,10 +60,8 @@ const OrderVoiceButton: React.FC = () => {
                 mediaRecorder.start();
                 mediaRecorderRef.current = mediaRecorder;
             } else {
-                // 녹음 중지
                 setIsRecording(false);
                 mediaRecorderRef.current?.stop();
-
             }
         } catch (err) {
             setError("녹음 시작 중 문제가 발생했습니다.");
@@ -137,9 +125,27 @@ const OrderVoiceButton: React.FC = () => {
                     </span>
                 </div>
             </button>
+
+            {/* 오버레이 */}
+            {isOverlayVisible && (
+                <div className="fixed inset-x-0 top-[8rem] h-3/5 bg-blue-100 z-50 flex flex-col p-4 overflow-y-auto">
+                    {chatMessages.map((msg, index) => (
+                        <div
+                            key={index}
+                            className={`mb-4 p-3 rounded-lg shadow-md max-w-sm ${
+                                msg.sender === "사용자"
+                                    ? "ml-auto bg-blue-500 text-white"
+                                    : "mr-auto bg-gray-200 text-black"
+                            }`}
+                        >
+                            <strong>{msg.sender}</strong>
+                            <p>{msg.text}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
-
 };
 
 export default OrderVoiceButton;
