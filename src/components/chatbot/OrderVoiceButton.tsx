@@ -14,6 +14,8 @@ const OrderVoiceButton: React.FC = () => {
     const audioChunksRef = useRef<Blob[]>([]);
     // const navigate = useNavigate()
 
+
+
     const handleClick = async () => {
 
         setError(null); // 에러 초기화
@@ -26,10 +28,11 @@ const OrderVoiceButton: React.FC = () => {
                 setIsRecording(true);
                 audioChunksRef.current = []; // 이전 녹음 데이터 초기화
 
+
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 const mediaRecorder = new MediaRecorder(stream);
-
                 mediaRecorder.ondataavailable = (event) => {
+
                     if (event.data.size > 0) {
                         audioChunksRef.current.push(event.data);
                     }
@@ -54,7 +57,7 @@ const OrderVoiceButton: React.FC = () => {
                         const ttsUrl = URL.createObjectURL(ttsBlob);
 
                         const audio = new Audio(ttsUrl);
-                        audio.play();
+                        await audio.play();
                         audio.onended = () => URL.revokeObjectURL(ttsUrl);
                     } catch (err) {
                         setError("음성 주문 처리 중 문제가 발생했습니다. 다시 시도해 주세요.");
@@ -70,10 +73,12 @@ const OrderVoiceButton: React.FC = () => {
                 // 녹음 중지
                 setIsRecording(false);
                 mediaRecorderRef.current?.stop();
+
             }
         } catch (err) {
             setError("녹음 시작 중 문제가 발생했습니다.");
             console.error(err);
+            console.error(error);
         }
     };
 
@@ -132,10 +137,6 @@ const OrderVoiceButton: React.FC = () => {
                     </span>
                 </div>
             </button>
-
-            {error && (
-                <p className="text-red-500 mt-2 text-sm text-center">{error}</p>
-            )}
         </div>
     );
 
