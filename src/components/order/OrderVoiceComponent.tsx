@@ -2,7 +2,7 @@
 function OrderVoiceComponent() {
     return (
         <div>
-            <h1>Voice Order Component</h1>
+            <h1>Order Voice Component</h1>
         </div>
     );
 }
