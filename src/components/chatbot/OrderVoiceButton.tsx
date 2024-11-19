@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { convertSTT, convertTTS } from "../../api/VoiceAPI"; // 적절한 경로 수정
 import { sendChatbotRequest } from "../../api/ChatbotAPI";
 
@@ -13,6 +13,13 @@ const OrderVoiceButton: React.FC = () => {
 
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    }, [chatMessages]);
 
     const handleClick = async () => {
         setError(null);
@@ -128,20 +135,37 @@ const OrderVoiceButton: React.FC = () => {
 
             {/* 오버레이 */}
             {isOverlayVisible && (
-                <div className="fixed inset-x-0 top-[8rem] h-3/5 bg-blue-100 z-50 flex flex-col p-4 overflow-y-auto">
-                    {chatMessages.map((msg, index) => (
-                        <div
-                            key={index}
-                            className={`mb-4 p-3 rounded-lg shadow-md max-w-sm ${
-                                msg.sender === "사용자"
-                                    ? "ml-auto bg-blue-500 text-white"
-                                    : "mr-auto bg-gray-200 text-black"
-                            }`}
+                <div className="fixed inset-x-0 top-[8rem] h-3/5 bg-[#FFF7E1] z-50 flex flex-col border-4 border-[#8B4513] rounded-lg shadow-lg overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-12 bg-[#8B4513] rounded-t-lg flex items-center justify-between px-4 z-10">
+                        <h2 className="font-pixel text-3xl text-[#FFD700]">채팅 창</h2>
+                        <button
+                            onClick={() => setIsOverlayVisible(false)}
+                            className="font-pixel text-3xl text-[#FFD700] hover:text-[#FFA500] transition-colors duration-200"
                         >
-                            <strong>{msg.sender}</strong>
-                            <p>{msg.text}</p>
-                        </div>
-                    ))}
+                            X
+                        </button>
+                    </div>
+                    <div ref={chatContainerRef} className="mt-12 p-4 overflow-y-auto h-full">
+                        {chatMessages.map((msg, index) => (
+                            <div
+                                key={index}
+                                className={`mb-4 p-3 rounded-lg shadow-md max-w-sm ${
+                                    msg.sender === "사용자"
+                                        ? "ml-auto bg-[#FFD700] text-[#4B0082]"
+                                        : "mr-auto bg-[#98FB98] text-[#006400]"
+                                } border-2 border-[#8B4513]`}
+                            >
+                                <strong className="font-pixel text-2xl">{msg.sender}</strong>
+                                <p className="font-pixel text-2xl mt-1">{msg.text}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {error && (
+                <div className="mt-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
+                    {error}
                 </div>
             )}
         </div>
