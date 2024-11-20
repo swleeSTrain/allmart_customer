@@ -1,5 +1,6 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
+import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 
 
 function BasicLayout({children}: {children: React.ReactNode}) {
@@ -8,7 +9,7 @@ function BasicLayout({children}: {children: React.ReactNode}) {
     return (
         <>
             <header className="bg-white shadow-lg flex justify-around items-center h-20  mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-10">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-10" onClick={() => navigate("/")}>
                     <path
                         d="M5.223 2.25c-.497 0-.974.198-1.325.55l-1.3 1.298A3.75 3.75 0 0 0 7.5 9.75c.627.47 1.406.75 2.25.75.844 0 1.624-.28 2.25-.75.626.47 1.406.75 2.25.75.844 0 1.623-.28 2.25-.75a3.75 3.75 0 0 0 4.902-5.652l-1.3-1.299a1.875 1.875 0 0 0-1.325-.549H5.223Z"/>
                     <path fillRule="evenodd"
@@ -87,15 +88,10 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                     </svg>
                     포인트
                 </button>
-                <button
-                    className="relative flex flex-col items-center justify-center w-28 h-28 bg-blue-500 text-white rounded-full shadow-lg transform -translate-y-10 hover:bg-blue-600 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                         stroke="currentColor" className="w-12 h-12 mb-1">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"/>
-                    </svg>
-                    <span className="text-lg">음성주문</span>
-                </button>
+
+                {/* OrderVoiceButton 컴포넌트 사용 */}
+                <OrderVoiceButton/>
+
                 <button
                     className="flex flex-col items-center w-1/3 justify-center py-2 text-xl text-gray-600 hover:text-blue-500 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
