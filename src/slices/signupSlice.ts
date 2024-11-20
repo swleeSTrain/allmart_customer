@@ -47,6 +47,7 @@ const signUpSlice = createSlice({
             })
             .addCase(postSignUpThunk.pending, (state) => {
                 console.log("postSignUpThunk.pending")
+                return state;
             })
 
     }

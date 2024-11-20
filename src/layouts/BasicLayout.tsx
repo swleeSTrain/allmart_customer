@@ -45,8 +45,8 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                         <li className="mb-4"><a href="#"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">장바구니</a>
                         </li>
-                        <li className="mb-4"><a href="#"
-                                                className="text-center text-4xl block hover:bg-gray-400 rounded">회원정보</a>
+                        <li className="mb-4"><a href="/customer/qrImage"
+                                                className="text-center text-4xl block hover:bg-blue-400 rounded">회원정보</a>
                         </li>
                         <li className="mb-4"><a href="#"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">고객센터</a>
@@ -54,7 +54,7 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                         <li className="mb-4"><a href="#"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">포인트</a>
                         </li>
-                        <button className="w-full h-20 text-5xl bg-blue-300 rounded">로그인</button>
+                        <button className="w-full h-20 text-5xl hover:bg-blue-400 rounded" onClick={()=> navigate(("/customer/signup"))} >로그인</button>
                     </ul>
                 </nav>
             </header>
