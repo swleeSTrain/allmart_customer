@@ -17,6 +17,8 @@ const loadCookie = () => {
 
 
 const useSignUp = () => {
+
+    console.log("useSignUp")
     const dispatch = useAppDispatch();
     let customer:ICustomer = useAppSelector(state => state.signup);
     if (!customer.phoneNumber) {
@@ -26,13 +28,16 @@ const useSignUp = () => {
 
 
 const doSignUp = (param: ISignUpParam) => {
+    console.log("Sending param:", param); // param 출력
     dispatch(postSignUpThunk(param))
         .unwrap()
         .then(data => {
             console.log("unwrap")
             console.log(data)
             cookies.set("customer", data, {path:"/"})
-        })
+        }).catch((error) => {
+        console.error("Error during sign-up:", error);
+    });
 }
 
 const doSignOut = () => {

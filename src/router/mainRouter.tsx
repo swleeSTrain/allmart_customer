@@ -4,9 +4,11 @@ import LoadingPage from "../pages/LoadingPage.tsx";
 
 import customerRouter from "./customerRouter.tsx"; // pointRouter를 import
 import pointRouter from "./pointRouter";
-import orderRouter from "./orderRouter.tsx"; // pointRouter를 import
+import orderRouter from "./orderRouter.tsx";
+import templateRouter from "./templateRouter.tsx";
 
-const MainPage = lazy(() => import("../pages/MainPage"));
+
+const MainPage = lazy(() => import("../pages/template/MainPage.tsx"));
 
 export const Loading = <LoadingPage />;
 
@@ -18,7 +20,9 @@ const mainRouter = createBrowserRouter([
     // pointRouter 추가
     pointRouter,
     customerRouter,
-    orderRouter
+    orderRouter,
+    templateRouter,
+
 ]);
 
 export default mainRouter;

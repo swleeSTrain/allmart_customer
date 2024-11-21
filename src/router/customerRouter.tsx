@@ -6,16 +6,13 @@ import LoadingComponent from "../components/common/LoadingComponent.tsx";
 
 const Loading = <LoadingComponent/>
 const QrImage = lazy(()=> import("../pages/customer/QrResultModalPage.tsx"))
+const Signup = lazy(() => import("../pages/customer/SignUpPage.tsx"))
 const customerRouter = {
     path: "/customer",
     children: [
         {
             path: "signup",
             element: <Suspense fallback={Loading}><Signup/></Suspense>,
-        },
-        {
-            path: "join",
-            element: <Suspense fallback={Loading}><Join/></Suspense>,
         },
         {
             path: "qrImage",

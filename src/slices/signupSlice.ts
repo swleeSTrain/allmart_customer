@@ -40,7 +40,7 @@ const signUpSlice = createSlice({
     extraReducers: (builder) =>
         builder
             .addCase(postSignUpThunk.fulfilled, (state:ICustomer, action) => {
-                console.log("postSignUpThunk.fulfilled")
+                console.log("Thunk fulfilled with payload:", action.payload);
                 const result = action.payload
                 return result;
 

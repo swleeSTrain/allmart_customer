@@ -10,14 +10,20 @@ const config:AxiosRequestConfig = {
 const host = 'http://localhost:8080/api/v1/customer'
 
 export const postSignUp = async (param:ISignUpParam ):Promise<ICustomer> => {
-    //
-    const formData = new URLSearchParams();
-    formData.append("phoneNumber", param.phoneNumber);
-    const phoneNum = param.phoneNumber
-
-    const res = await axios.post(`${host}/signUp/phoneNumber/${phoneNum}`,param, {headers: {"Content-Type": "application/json"}});
-
-    return res.data
+    
+    console.log("postSignUp 여기 왔니");
+    const phoneNumber = param.phoneNumber
+    try {
+        const res = await axios.post(
+            `${host}/signUp/phoneNumber/${phoneNumber}`,
+            null,
+            config
+        );
+        return res.data;
+    } catch (error: any) {
+        console.error("Error during sign-up request:", error.response || error.message);
+        throw new Error("Sign-up request failed");
+    }
 
 }
 
