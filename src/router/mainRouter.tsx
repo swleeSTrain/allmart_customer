@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import LoadingPage from "../pages/LoadingPage.tsx";
+
 import customerRouter from "./customerRouter.tsx"; // pointRouter를 import
 import pointRouter from "./pointRouter";
 import orderRouter from "./orderRouter.tsx"; // pointRouter를 import

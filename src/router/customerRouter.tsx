@@ -5,8 +5,6 @@ import LoadingComponent from "../components/common/LoadingComponent.tsx";
 
 
 const Loading = <LoadingComponent/>
-const Signup = lazy(() => import("../pages/customer/SignupPage.tsx"))
-const Join = lazy(() => import("../pages/customer/CustomerJoinPage.tsx"))
 const QrImage = lazy(()=> import("../pages/customer/QrResultModalPage.tsx"))
 const customerRouter = {
     path: "/customer",

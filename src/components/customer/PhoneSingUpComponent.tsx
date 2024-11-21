@@ -1,7 +1,7 @@
-import { ChangeEvent, useState } from "react";
-import useSignUp from "../hooks/useSignup.ts";
-import { ISignUpParam } from "../types/customer.ts";
-import LoginCheckPage from "../pages/customer/SignUpModalPage.tsx";
+import { ChangeEvent, useState, useEffect } from "react";
+import useSignUp from "../../hooks/useSignup.ts";
+import { ISignUpParam } from "../../types/customer.ts";
+import LoginCheckPage from "../../pages/customer/SignUpModalPage.tsx";
 
 const initialState: ISignUpParam = {
     phoneNumber: "",
@@ -14,9 +14,19 @@ function SignUpComponent() {
 
     const { doSignUp } = useSignUp();
 
+    useEffect(() => {
+        // 스크롤 비활성화
+        document.body.style.overflow = "hidden";
+
+        // 컴포넌트 언마운트 시 스크롤 복구
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
+
     const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-        let name: string | undefined = event.target.name as keyof ISignUpParam;
-        const value: string | undefined = event.target.value;
+        const name = event.target.name as keyof ISignUpParam;
+        const value = event.target.value;
 
         setParam((prevParam) => ({
             ...prevParam,
@@ -25,8 +35,7 @@ function SignUpComponent() {
     };
 
     const handleClick = () => {
-        // 회원가입 로직 실행
-        const isSuccess = param.phoneNumber.length > 0; // 예시: 성공 여부 조건
+        const isSuccess = param.phoneNumber.length > 0;
         if (isSuccess) {
             setModalMessage("회원가입이 성공적으로 완료되었습니다!");
         } else {
@@ -44,21 +53,22 @@ function SignUpComponent() {
     };
 
     return (
-        <div className="flex justify-center items-start h-screen w-screen pt-16">
-            <div className="w-full m-6 h-1/2 border-4 flex flex-col md:max-w-md">
-                <h1 className="text-2xl font-bold text-center mb-9 mt-8">회원가입</h1>
+        <div className="flex justify-center items-center min-h-screen p-4 bg-gray-100">
+            <div
+                className="w-full max-w-md bg-white rounded-lg shadow-lg p-6 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl transform -translate-y-16"
+            >
+                <h1 className="text-2xl font-bold text-center mb-8">회원가입</h1>
                 <input
                     type="text"
                     name="phoneNumber"
-                    className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 mb-14"
+                    className="w-full border border-gray-300 rounded-lg p-3 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
                     placeholder="전화번호를 입력 해주세요"
                     value={param.phoneNumber}
                     onChange={(e) => handleChange(e)}
                 />
-
                 <button
                     onClick={handleClick}
-                    className="bg-blue-500 text-white py-4 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+                    className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-300"
                 >
                     로그인
                 </button>

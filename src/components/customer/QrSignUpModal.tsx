@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import qrImage from '../assets/qrcode.png'
+import qrImage from '../../assets/qrcode.png'
 interface ResultModalProps {
     img: string;
     msg: string;

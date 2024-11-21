@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import ResultModal from "../../components/QrSignUpModal.tsx";
+import ResultModal from "../../components/customer/QrSignUpModal.tsx";
 import BasicLayout from "../../layouts/BasicLayout.tsx";
 
 function QrResultModalPage() {
