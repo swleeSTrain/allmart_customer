@@ -1,6 +1,6 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import VoiceOrderButton from "../components/chatbot/VoiceOrderButton.tsx";
+import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 
 
 function BasicLayout({children}: {children: React.ReactNode}) {
@@ -89,8 +89,8 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                     배송지
                 </button>
 
-                {/* VoiceOrderButton 컴포넌트 사용 */}
-                <VoiceOrderButton/>
+                {/* OrderVoiceButton 컴포넌트 사용 */}
+                <OrderVoiceButton/>
 
                 <button
                     className="flex flex-col items-center w-1/3 justify-center py-2 text-xl text-gray-600 hover:text-blue-500 focus:outline-none">
