@@ -1,11 +1,15 @@
-
 import React, { useState, useEffect } from "react";
+import {AddressForm} from "../../types/address.ts";
+import {saveAddress} from "../../api/AddressAPI.ts";
+
 
 const PostcodeSearch: React.FC = () => {
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-    const [postcode, setPostcode] = useState("");
-    const [roadAddress, setRoadAddress] = useState("");
-    const [detailAddress, setDetailAddress] = useState("");
+    const [formData, setFormData] = useState<AddressForm>({
+        postcode: "",
+        roadAddress: "",
+        detailAddress: "",
+    });
     const [guide, setGuide] = useState("");
 
     useEffect(() => {
@@ -14,7 +18,7 @@ const PostcodeSearch: React.FC = () => {
             script.id = "daum-postcode-script";
             script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
             script.async = true;
-            script.onload = () => setIsScriptLoaded(true); // 스크립트 로드 완료 후 상태 업데이트
+            script.onload = () => setIsScriptLoaded(true);
             document.body.appendChild(script);
         } else {
             setIsScriptLoaded(true);
@@ -29,9 +33,11 @@ const PostcodeSearch: React.FC = () => {
 
         new window.daum.Postcode({
             oncomplete: (data: any) => {
-                setPostcode(data.zonecode);
-                setRoadAddress(data.roadAddress);
-                setDetailAddress(""); // 상세주소 초기화
+                setFormData((prev) => ({
+                    ...prev,
+                    postcode: data.zonecode,
+                    roadAddress: data.roadAddress,
+                }));
 
                 if (data.autoRoadAddress) {
                     setGuide(`(예상 도로명 주소 : ${data.autoRoadAddress})`);
@@ -44,40 +50,29 @@ const PostcodeSearch: React.FC = () => {
         }).open();
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 입력값 검증
-        if (!postcode || !roadAddress || !detailAddress) {
+        if (!formData.postcode || !formData.roadAddress || !formData.detailAddress) {
             alert("모든 필드를 입력해주세요.");
             return;
         }
 
-        const addressData = {
-            postcode,
-            roadAddress,
-            detailAddress,
-        };
-
         try {
-            const response = await fetch("/api/addresses", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(addressData),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log("등록된 주소:", data);
-                alert("주소가 등록되었습니다!");
-            } else {
-                alert("주소 등록에 실패했습니다.");
-            }
+            const savedAddress = await saveAddress(formData);
+            console.log("등록된 주소:", savedAddress);
+            alert("주소가 등록되었습니다!");
         } catch (error) {
             console.error("주소 등록 중 에러 발생:", error);
-            alert("주소 등록 중 에러가 발생했습니다.");
+            alert("주소 등록에 실패했습니다.");
         }
     };
 
@@ -91,7 +86,8 @@ const PostcodeSearch: React.FC = () => {
                         <input
                             type="text"
                             placeholder="우편번호"
-                            value={postcode}
+                            name="postcode"
+                            value={formData.postcode}
                             readOnly
                             className="flex-grow px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
                         />
@@ -109,7 +105,8 @@ const PostcodeSearch: React.FC = () => {
                     <input
                         type="text"
                         placeholder="도로명 주소"
-                        value={roadAddress}
+                        name="roadAddress"
+                        value={formData.roadAddress}
                         readOnly
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
                     />
@@ -119,8 +116,9 @@ const PostcodeSearch: React.FC = () => {
                     <input
                         type="text"
                         placeholder="상세 주소"
-                        value={detailAddress}
-                        onChange={(e) => setDetailAddress(e.target.value)}
+                        name="detailAddress"
+                        value={formData.detailAddress}
+                        onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
                     />
                 </div>
