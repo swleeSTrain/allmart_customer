@@ -4,4 +4,3 @@ export interface IPoint {
 
     totalPoints: number;
 }
-

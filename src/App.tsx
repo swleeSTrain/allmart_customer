@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router-dom";
 
 
+
 function App() {
 
     const navigate = useNavigate();
@@ -107,8 +108,8 @@ function App() {
                   장바구니
               </button>
           </div>
-
       </div>
+
   )
 }
 
