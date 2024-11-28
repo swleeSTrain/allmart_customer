@@ -6,6 +6,7 @@ import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 function BasicLayout({children}: {children: React.ReactNode}) {
 
     const navigate = useNavigate();
+
     return (
         <>
             <header className="bg-white shadow-lg flex justify-around items-center h-20  mb-4">
