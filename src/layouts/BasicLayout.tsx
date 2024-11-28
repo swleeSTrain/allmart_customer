@@ -41,11 +41,11 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                         <li className="mb-4"><a href="#"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">최근 본
                             상품</a></li>
-                        <li className="mb-4"><a href="#"
+                        <li className="mb-4"><a href="/order/list"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">주문
                             상품</a></li>
-                        <li className="mb-4"><a href="#"
-                                                className="text-center text-4xl block hover:bg-gray-400 rounded">장바구니</a>
+                        <li className="mb-4"><a href="/address"
+                                                className="text-center text-4xl block hover:bg-gray-400 rounded">배송지</a>
                         </li>
                         <li className="mb-4"><a href="#"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">회원정보</a>
@@ -53,7 +53,7 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                         <li className="mb-4"><a href="#"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">고객센터</a>
                         </li>
-                        <li className="mb-4"><a href="#"
+                        <li className="mb-4"><a href="/points"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">포인트</a>
                         </li>
                         <button className="w-full h-20 text-5xl bg-blue-300 rounded">로그인</button>
@@ -72,7 +72,7 @@ function BasicLayout({children}: {children: React.ReactNode}) {
             <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around items-center h-20">
                 <button
                     className="flex flex-col items-center justify-center w-1/3 text-xl text-gray-600 hover:text-blue-500 focus:outline-none"
-                    onClick={() => navigate("/address")} // 포인트 페이지로 이동
+                    onClick={() => navigate("/flyer/read")} // 포인트 페이지로 이동
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -87,20 +87,21 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                             clipRule="evenodd"
                         />
                     </svg>
-                    배송지
+                    전단지
                 </button>
 
                 {/* OrderVoiceButton 컴포넌트 사용 */}
                 <OrderVoiceButton/>
 
                 <button
-                    className="flex flex-col items-center w-1/3 justify-center py-2 text-xl text-gray-600 hover:text-blue-500 focus:outline-none">
+                    className="flex flex-col items-center w-1/3 justify-center py-2 text-xl text-gray-600 hover:text-blue-500 focus:outline-none"
+                    onClick={() => navigate("/order/list")}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                          stroke="currentColor" className="w-10 h-10 mb-1">
                         <path strokeLinecap="round" strokeLinejoin="round"
                               d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.0 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
                     </svg>
-                    장바구니
+                    주문목록
                 </button>
             </div>
 
