@@ -1,4 +1,6 @@
 import BasicLayout from "../layouts/BasicLayout.tsx";
+import MartPage from "./mart/MartPage.tsx";
+
 
 
 
@@ -9,7 +11,9 @@ function MainPage() {
     return (
         <BasicLayout>
 
-            <div className='text-7xl underline'>Main Page</div>
+            <div>
+                <MartPage/>
+            </div>
         </BasicLayout>
     );
 }
