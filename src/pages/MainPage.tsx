@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import BasicLayout from "../layouts/BasicLayout";
+import CategoryListComponent from "../components/CategoryListComponent.tsx";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -39,10 +40,16 @@ function MainPage() {
     return (
         <BasicLayout>
             <h1>메인 페이지</h1>
-            {installPrompt && (
-                <button id="install" onClick={handleInstallClick}>
+            {installPrompt ? (
+                <button
+                    id="install"
+                    onClick={handleInstallClick}
+                    className="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
+                >
                     Install App
                 </button>
+            ) : (
+                <CategoryListComponent />
             )}
         </BasicLayout>
     );

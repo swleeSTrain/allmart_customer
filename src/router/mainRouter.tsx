@@ -3,7 +3,8 @@ import { lazy, Suspense } from "react";
 import LoadingPage from "../pages/LoadingPage.tsx";
 import pointRouter from "./pointRouter";
 import addressRouter from "./addressRouter.tsx";
-import orderRouter from "./orderRouter.tsx"; // pointRouter를 import
+import orderRouter from "./orderRouter.tsx";
+import productRouter from "./productRouter.tsx"; // pointRouter를 import
 
 const MainPage = lazy(() => import("../pages/MainPage"));
 
@@ -17,7 +18,8 @@ const mainRouter = createBrowserRouter([
     // pointRouter 추가
     pointRouter,
     addressRouter,
-    orderRouter
+    orderRouter,
+    productRouter,
 ]);
 
 export default mainRouter;

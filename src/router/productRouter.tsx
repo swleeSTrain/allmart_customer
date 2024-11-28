@@ -1,20 +1,20 @@
 import LoadingPage from "../pages/LoadingPage.tsx";
 import { lazy, Suspense } from "react";
-import { Navigate } from "react-router-dom";
 
-const Loading = <LoadingPage />;
+const Loading = <LoadingPage></LoadingPage>
+const ProductIndex = lazy(() => import("../pages/product/ProductIndexPage"))
+const ProductListPage = lazy(() => import("../pages/product/ProductListPage"))
 
-const PointsPage = lazy(() => import("../pages/point/PointPage.tsx"));
-
-const pointRouter = {
-    path: "/points",
-    element: <Suspense fallback={Loading}><PointsPage /></Suspense>,
+const productRouter = {
+    path: '/product',
+    element: <Suspense fallback={Loading}><ProductIndex/></Suspense>,
     children: [
         {
-            path: "",
-            element: <Navigate to="/points" replace={true} />,
+            path: "list",
+            element: <Suspense fallback={Loading}><ProductListPage/></Suspense>,
         },
-    ],
-};
+    ]
 
-export default pointRouter;
+}
+
+export default productRouter
