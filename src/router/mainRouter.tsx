@@ -23,7 +23,6 @@ const mainRouter = createBrowserRouter([
     customerRouter,
     orderRouter,
     addressRouter,
-    orderRouter,
     productRouter,
     flyerRouter
 
