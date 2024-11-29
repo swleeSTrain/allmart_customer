@@ -38,7 +38,7 @@ const PointReadComponent: React.FC = () => {
                     {/* 동전 테두리 */}
                     <div className="absolute inset-0 rounded-full border-4 border-yellow-500"></div>
                     {/* 중앙의 텍스트 또는 아이콘 */}
-                    <span className="text-white font-bold text-2xl sm:text-3xl">P</span>
+                    <span className="text-white font-bold text-2xl sm:text-3xl"></span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-800">
                     포인트 적립
