@@ -79,12 +79,13 @@ const OrderVoiceButton: React.FC = () => {
 
     return (
         <div className="relative flex flex-col items-center">
+            {/* 주문 버튼 */}
             <button
                 onClick={handleClick}
-                className={`relative flex flex-col items-center justify-center w-28 h-28 rounded-full shadow-lg transform -translate-y-10 focus:outline-none transition-all duration-200 ${
+                className={`fixed bottom-4 flex flex-col items-center justify-center w-40 h-40 rounded-full shadow-lg focus:outline-none transition-all duration-300 ${
                     isRecording
                         ? "bg-red-500 hover:bg-red-600"
-                        : "bg-blue-500 hover:bg-blue-600"
+                        : "bg-green-500 hover:bg-green-600"
                 } ${isLoading ? "opacity-70 cursor-wait" : ""}`}
                 aria-label={isRecording ? "주문 종료" : "음성 주문"}
                 disabled={isLoading}
@@ -92,7 +93,7 @@ const OrderVoiceButton: React.FC = () => {
                 <div className="flex flex-col items-center justify-center h-full w-full">
                     {isLoading ? (
                         <svg
-                            className="animate-spin w-12 h-12 text-white"
+                            className="animate-spin w-20 h-20 text-white"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -118,7 +119,7 @@ const OrderVoiceButton: React.FC = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="w-12 h-12"
+                            className="w-20 h-20 text-white"
                         >
                             <path
                                 strokeLinecap="round"
@@ -127,42 +128,54 @@ const OrderVoiceButton: React.FC = () => {
                             />
                         </svg>
                     )}
-                    <span className="text-lg mt-1">
-                        {isRecording ? "주문 종료" : "음성 주문"}
-                    </span>
+                    <span
+                        className={`text-3xl font-extrabold mt-5 ${
+                            isRecording ? "text-red-100" : "text-white"
+                        }`}
+                    >
+                    {isRecording ? "주문 종료" : "음성 주문"}
+                </span>
                 </div>
             </button>
 
-            {/* 오버레이 */}
+            {/* 오버레이 창 */}
             {isOverlayVisible && (
-                <div className="fixed inset-x-0 top-[8rem] h-3/5 bg-[#FFF7E1] z-50 flex flex-col border-4 border-[#8B4513] rounded-lg shadow-lg overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-12 bg-[#8B4513] rounded-t-lg flex items-center justify-between px-4 z-10">
-                        <h2 className="font-pixel text-3xl text-[#FFD700]">채팅 창</h2>
+                <div
+                    className="fixed inset-x-4 top-16 bottom-44 bg-gray-100 z-50 flex flex-col border border-gray-300 rounded-xl shadow-xl overflow-hidden"
+                >
+                    {/* 채팅창 헤더 */}
+                    <div
+                        className="sticky top-0 left-0 right-0 h-12 bg-blue-500 text-white flex items-center justify-between px-4 rounded-t-xl"
+                    >
+                        <h2 className="font-bold text-lg">음성 주문중</h2>
                         <button
                             onClick={() => setIsOverlayVisible(false)}
-                            className="font-pixel text-3xl text-[#FFD700] hover:text-[#FFA500] transition-colors duration-200"
+                            className="text-lg hover:text-gray-200 transition-colors duration-200"
                         >
                             X
                         </button>
                     </div>
-                    <div ref={chatContainerRef} className="mt-12 p-4 overflow-y-auto h-full">
+
+                    {/* 채팅 메시지 리스트 */}
+                    <div ref={chatContainerRef} className="p-4 overflow-y-auto flex-1 bg-white">
                         {chatMessages.map((msg, index) => (
                             <div
                                 key={index}
-                                className={`mb-4 p-3 rounded-lg shadow-md max-w-sm ${
+                                className={`mb-4 p-3 rounded-lg shadow-md max-w-[70%] ${
                                     msg.sender === "사용자"
-                                        ? "ml-auto bg-[#FFD700] text-[#4B0082]"
-                                        : "mr-auto bg-[#98FB98] text-[#006400]"
-                                } border-2 border-[#8B4513]`}
+                                        ? "ml-auto bg-blue-100 text-blue-900"
+                                        : "mr-auto bg-gray-200 text-gray-800"
+                                }`}
                             >
-                                <strong className="font-pixel text-2xl">{msg.sender}</strong>
-                                <p className="font-pixel text-2xl mt-1">{msg.text}</p>
+                                <p className="text-sm font-semibold mb-1 text-gray-600">{msg.sender}</p>
+                                <p className="text-base">{msg.text}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             )}
 
+            {/* 오류 메시지 */}
             {error && (
                 <div className="mt-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
                     {error}
@@ -170,6 +183,7 @@ const OrderVoiceButton: React.FC = () => {
             )}
         </div>
     );
+
 };
 
 export default OrderVoiceButton;

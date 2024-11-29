@@ -1,13 +1,12 @@
-import BasicLayout from "../../layouts/BasicLayout.tsx";
-import OrderListComponent from "../../components/order/OrderListComponent.tsx";
-
+import BasicLayout from "../../layouts/BasicLayout";
+import OrderListComponent from "../../components/order/OrderListComponent";
 
 function OrderListPage() {
     return (
         <BasicLayout>
-            <div>
-                주문목록페이지
-                <OrderListComponent></OrderListComponent>
+            <div className="p-4">
+                <h1 className="text-xl font-bold mb-4">주문 목록 페이지</h1>
+                <OrderListComponent />
             </div>
         </BasicLayout>
     );
