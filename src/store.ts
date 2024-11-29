@@ -1,20 +1,32 @@
-import {configureStore} from "@reduxjs/toolkit";
-import pointReducer from "./slices/pointSlice.ts";
-import {signupReducer} from "./slices/signupSlice.ts"
+// authStore.ts
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
+interface User {
+    id: string
+    username: string
+    // 필요한 다른 사용자 정보
+}
 
+interface AuthState {
+    user: User | null
+    isAuthenticated: boolean
+    login: (user: User) => void
+    logout: () => void
+}
 
-const projectStore = configureStore({
-    reducer: {
-        points: pointReducer,
-        signup: signupReducer,
-    }
+const useAuthStore = create<AuthState>()(
+    persist(
+        (set) => ({
+            user: null,
+            isAuthenticated: false,
+            login: (user) => set({ user, isAuthenticated: true }),
+            logout: () => set({ user: null, isAuthenticated: false }),
+        }),
+        {
+            name: 'auth-storage', // 로컬 스토리지에 저장될 키 이름
+        }
+    )
+)
 
-});
-
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof projectStore.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof projectStore.dispatch;
-
-export default projectStore
+export default useAuthStore
