@@ -1,19 +1,56 @@
-import BasicLayout from "../layouts/BasicLayout.tsx";
-import MartPage from "./mart/MartPage.tsx";
+import { useState, useEffect } from "react";
+import BasicLayout from "../layouts/BasicLayout";
+import CategoryListComponent from "../components/CategoryListComponent.tsx";
 
-
-
-
+interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<void>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
 
 function MainPage() {
+    const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
+    useEffect(() => {
+        const handleBeforeInstallPrompt = (event: Event) => {
+            event.preventDefault();
+            setInstallPrompt(event as BeforeInstallPromptEvent);
+        };
+
+        window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+        return () => {
+            window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+        };
+    }, []);
+
+    const handleInstallClick = () => {
+        if (installPrompt) {
+            installPrompt.prompt();
+            installPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('사용자가 앱 설치를 동의했습니다.');
+                } else {
+                    console.log('사용자가 앱 설치를 거부했습니다.');
+                }
+                setInstallPrompt(null);
+            });
+        }
+    };
 
     return (
         <BasicLayout>
-
-            <div>
-                <MartPage/>
-            </div>
+            <h1>메인 페이지</h1>
+            {installPrompt ? (
+                <button
+                    id="install"
+                    onClick={handleInstallClick}
+                    className="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
+                >
+                    Install App
+                </button>
+            ) : (
+                <CategoryListComponent />
+            )}
         </BasicLayout>
     );
 }

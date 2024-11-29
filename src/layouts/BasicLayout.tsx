@@ -1,83 +1,158 @@
-import React from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 
-
-function BasicLayout({children}: {children: React.ReactNode}) {
-
+function BasicLayout({ children }: { children: React.ReactNode }) {
+    const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
+
+    const toggleMenu = () => setMenuOpen(!menuOpen);
+
+    const menuItems = [
+        { name: "최근 본 상품", link: "#" },
+        { name: "주문 상품", link: "/order/list" },
+        { name: "배송지", link: "/address" },
+        { name: "회원정보", link: "#" },
+        { name: "고객센터", link: "#" },
+        { name: "포인트", link: "/points" },
+    ];
+
     return (
         <>
-            <header className="bg-white shadow-lg flex justify-around items-center h-20  mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-10" onClick={() => navigate("/")}>
-                    <path
-                        d="M5.223 2.25c-.497 0-.974.198-1.325.55l-1.3 1.298A3.75 3.75 0 0 0 7.5 9.75c.627.47 1.406.75 2.25.75.844 0 1.624-.28 2.25-.75.626.47 1.406.75 2.25.75.844 0 1.623-.28 2.25-.75a3.75 3.75 0 0 0 4.902-5.652l-1.3-1.299a1.875 1.875 0 0 0-1.325-.549H5.223Z"/>
-                    <path fillRule="evenodd"
-                          d="M3 20.25v-8.755c1.42.674 3.08.673 4.5 0A5.234 5.234 0 0 0 9.75 12c.804 0 1.568-.182 2.25-.506a5.234 5.234 0 0 0 2.25.506c.804 0 1.567-.182 2.25-.506 1.42.674 3.08.675 4.5.001v8.755h.75a.75.75 0 0 1 0 1.5H2.25a.75.75 0 0 1 0-1.5H3Zm3-6a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75v-3Zm8.25-.75a.75.75 0 0 0-.75.75v5.25c0 .414.336.75.75.75h3a.75.75 0 0 0 .75-.75v-5.25a.75.75 0 0 0-.75-.75h-3Z"
-                          clipRule="evenodd"/>
-                </svg>
-                <input type="text" placeholder="Search"
-                       className="w-2/3 mx-2 py-2 px-4 border rounded-lg border-gray-300"/>
-                <button className="w-fit rounded-s">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-10">
-                        <path fillRule="evenodd"
-                              d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
-                              clipRule="evenodd"/>
-                    </svg>
-                </button>
-                <input type="checkbox" id="menu-toggle" className="hidden peer"/>
-                <label htmlFor="menu-toggle"
-                       className="bg-white z-20 p-2 rounded cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-10">
-                        <path fillRule="evenodd"
-                              d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
-                              clipRule="evenodd"/>
-                    </svg>
-                </label>
+            <header className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
+                <div className="container mx-auto px-4 flex items-center justify-between h-20 md:justify-start">
+                    {/* 모바일 돋보기 버튼 */}
+                    <button
+                        aria-label="검색"
+                        onClick={() => console.log("Search clicked")}
+                        className="p-2 md:hidden"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-8 h-8 text-gray-600"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    </button>
+
+                    {/* 로고 */}
+                    <img
+                        src="/images/a.png"
+                        alt="마트 로고"
+                        className="h-20 md:h-16 lg:h-20 object-contain cursor-pointer mx-auto md:mx-0"
+                        onClick={() => navigate("/")}
+                    />
+
+                    {/* 모바일 햄버거 메뉴 버튼 */}
+                    <button
+                        aria-label="메뉴 열기"
+                        onClick={toggleMenu}
+                        className="cursor-pointer p-2 md:hidden"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-8 h-8 text-gray-600"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    </button>
+                    {/* 데스크톱 네비게이션 (현재 유지) */}
+                    <nav className="hidden md:flex flex-1 justify-center space-x-8">
+                        {menuItems.map((item, index) => (
+                            <a
+                                key={index}
+                                href={item.link}
+                                className="text-lg font-semibold text-gray-900 hover:text-blue-600"
+                            >
+                                {item.name}
+                            </a>
+                        ))}
+                    </nav>
+                    {/* 데스크톱 돋보기 버튼 */}
+                    <button
+                        aria-label="검색"
+                        onClick={() => console.log("Search clicked")}
+                        className="hidden md:block p-2"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-8 h-8 text-gray-600"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    </button>
+                </div>
+
+                {/* 모바일 네비게이션 */}
                 <nav
-                    className="fixed top-0 left-0 z-10 h-full w-full bg-white transform -translate-x-full transition-transform duration-300 ease-in-out peer-checked:translate-x-0">
-                    <ul className="pt-16 px-4">
-                        <li className="mb-4"><a href="#"
-                                                className="text-center text-4xl block hover:bg-gray-400 rounded">최근 본
-                            상품</a></li>
-                        <li className="mb-4"><a href="#"
-                                                className="text-center text-4xl block hover:bg-gray-400 rounded">주문
-                            상품</a></li>
-                        <li className="mb-4"><a href="#"
-                                                className="text-center text-4xl block hover:bg-gray-400 rounded">장바구니</a>
+                    className={`fixed top-0 left-0 z-40 h-full w-64 bg-white transform transition-transform duration-300 ease-in-out shadow-md md:hidden ${
+                        menuOpen ? "translate-x-0" : "-translate-x-full"
+                    }`}
+                >
+                    <ul className="pt-16 px-4 space-y-6">
+                        {menuItems.map((item, index) => (
+                            <li key={index}>
+                                <a
+                                    href={item.link}
+                                    className="block text-2xl font-semibold text-gray-900 hover:text-blue-600"
+                                >
+                                    {item.name}
+                                </a>
+                            </li>
+                        ))}
+                        <li>
+                            <button
+                                onClick={() => navigate("/login")}
+                                className="block w-full h-12 text-2xl font-semibold bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                            >
+                                로그인
+                            </button>
                         </li>
-                        <li className="mb-4"><a href="#"
-                                                className="text-center text-4xl block hover:bg-gray-400 rounded">회원정보</a>
-                        </li>
-                        <li className="mb-4"><a href="#"
-                                                className="text-center text-4xl block hover:bg-gray-400 rounded">고객센터</a>
-                        </li>
-                        <li className="mb-4"><a href="#"
-                                                className="text-center text-4xl block hover:bg-gray-400 rounded">포인트</a>
-                        </li>
-                        <button className="w-full h-20 text-5xl bg-blue-300 rounded">로그인</button>
                     </ul>
                 </nav>
+
             </header>
+
             {/* Content Layout with Aside and Main */}
             <div className="flex flex-1">
 
                 {/* Main Content */}
-                <main className="flex-1 bg-white p-8">
+                <main className="pt-20 px-4">
                     {children}
 
                 </main>
             </div>
-            <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around items-center h-20">
+            <div
+                className="fixed bottom-0 left-0 right-0 bg-slate-800 shadow-lg flex items-center justify-between h-28 px-6"
+            >
+                {/* 전단지 버튼 */}
                 <button
-                    className="flex flex-col items-center justify-center w-1/3 text-xl text-gray-600 hover:text-blue-500 focus:outline-none"
-                    onClick={() => navigate("/address")} // 포인트 페이지로 이동
+                    className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
+                    onClick={() => navigate("/flyer/read")}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="w-10 h-10"
+                        className="w-14 h-14 md:w-16 md:h-16"
                     >
                         <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z"/>
                         <path
@@ -86,20 +161,32 @@ function BasicLayout({children}: {children: React.ReactNode}) {
                             clipRule="evenodd"
                         />
                     </svg>
-                    배송지
+                    <span>전단지</span>
                 </button>
 
-                {/* OrderVoiceButton 컴포넌트 사용 */}
+                {/* 음성 주문 버튼 */}
                 <OrderVoiceButton/>
 
+                {/* 주문 목록 버튼 */}
                 <button
-                    className="flex flex-col items-center w-1/3 justify-center py-2 text-xl text-gray-600 hover:text-blue-500 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                         stroke="currentColor" className="w-10 h-10 mb-1">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.0 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+                    className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
+                    onClick={() => navigate("/order/list")}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-14 h-14 md:w-16 md:h-16"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.0 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        />
                     </svg>
-                    장바구니
+                    <span>주문목록</span>
                 </button>
             </div>
 

@@ -1,8 +1,14 @@
+import ProductListComponent from "../../components/product/ProductListComponent.tsx";
+import BasicLayout from "../../layouts/BasicLayout.tsx";
 
 
 function ProductListPage() {
     return (
-        <div>ProductList</div>
+        <div>
+            <BasicLayout>
+                <ProductListComponent></ProductListComponent>
+            </BasicLayout>
+        </div>
     );
 }
 
