@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {ICustomer, ISignUpParam} from "../types/customer.ts";
 import {Cookies} from "react-cookie";
-import {postSignUp} from "../api/customerAPI.ts";
+import {postSignUp} from "../api/CustomerAPI.ts";
 
 
 const cookies = new Cookies();
