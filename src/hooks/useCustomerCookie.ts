@@ -1,5 +1,6 @@
 import { useCookies } from "react-cookie";
 
+// 새로고침 시 상태 날라가는 거 방지하기 위해 쿠키 사용
 export const useCustomerCookie = () => {
     const [cookies, setCookie, removeCookie] = useCookies([
         "accessToken",
@@ -9,6 +10,7 @@ export const useCustomerCookie = () => {
         "martID",
     ]);
 
+    // 로그인시 쿠키 생성
     const setCustomerCookies = (
         accessToken: string,
         refreshToken: string,
@@ -27,6 +29,7 @@ export const useCustomerCookie = () => {
         console.log("Document Cookies:", document.cookie);
     };
 
+    // 로그아웃시 쿠키 지우기
     const removeCustomerCookies = () => {
         removeCookie("accessToken");
         removeCookie("refreshToken");

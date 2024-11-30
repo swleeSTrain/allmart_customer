@@ -13,6 +13,7 @@ interface CustomerState {
     logout: () => void;
 }
 
+// zustand는 여기 로직 내에서 쿠키 처리가 안됨 따로 해줘야 함
 export const useCustomerStore = create<CustomerState>()(
     devtools((set) => ({
         accessToken: null,
@@ -21,14 +22,16 @@ export const useCustomerStore = create<CustomerState>()(
         customerID: null,
         martID: null,
 
+        // 로그인 시 zustand에 밀어넣기
         setTokens: (accessToken, refreshToken) => {
             set({ accessToken, refreshToken });
         },
-        setName: (name) => {
-            set({ name })
-        },
         setCustomerInfo: (name, customerID, martID) => {
             set({ name, customerID, martID });
+        },
+        // 얘는 사이드바에 이름 뜨게 하려고 설정
+        setName: (name) => {
+            set({ name })
         },
 
         logout: () => {

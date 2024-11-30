@@ -18,6 +18,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
         }
     }, [name, getCustomerCookies, setName]);
 
+    // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
 
         // 쿠키 삭제
@@ -40,6 +41,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
         { name: "포인트", link: "/points" },
     ];
 
+    // navigate로 라우터 처리하려고 추가
     const handleNavigate = (link: string) => {
         if (link !== "#") {
             navigate(link); // navigate로 페이지 이동

@@ -6,6 +6,7 @@ function CustomerInfoComponent() {
     const { name, martID, customerID, setCustomerInfo } = useCustomerStore(); // Zustand에서 상태 관리 함수 가져오기
     const { getCustomerCookies } = useCustomerCookie(); // 쿠키에서 고객 정보 가져오기
 
+    // 쿠키랑 상태가 연동이 안되어있어서 여기를 통해 동기화 시켜주는 것
     // `getCustomerCookies` 결과 캐싱
     const customerData = useMemo(() => getCustomerCookies(), [getCustomerCookies]);
 
