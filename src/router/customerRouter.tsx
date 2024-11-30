@@ -1,14 +1,16 @@
 import {lazy, Suspense} from "react";
 import LoadingComponent from "../components/common/LoadingComponent.tsx";
 
-
-
-
 const Loading = <LoadingComponent/>
+const CustomerIndex = lazy(()=> import("../pages/customer/CustomerIndexPage.tsx"))
 const QrImage = lazy(()=> import("../pages/customer/QrResultModalPage.tsx"))
 const Signup = lazy(() => import("../pages/customer/SignUpPage.tsx"))
+const SignIn = lazy(() => import("../pages/customer/CustomerPhoneSignInPage.tsx"))
+
+
 const customerRouter = {
     path: "/customer",
+    element: <Suspense fallback={Loading}><CustomerIndex/></Suspense>,
     children: [
         {
             path: "signup",
@@ -17,6 +19,10 @@ const customerRouter = {
         {
             path: "qrImage",
             element:<Suspense fallback={Loading}><QrImage></QrImage></Suspense>
+        },
+        {
+            path: "signIn",
+            element: <Suspense fallback={Loading}><SignIn/></Suspense>,
         }
     ]
 }

@@ -120,7 +120,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                         ))}
                         <li>
                             <button
-                                onClick={() => navigate("/login")}
+                                onClick={() => navigate("/customer/signIn")}
                                 className="block w-full h-12 text-2xl font-semibold bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                             >
                                 로그인
