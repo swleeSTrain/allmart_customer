@@ -1,10 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
+import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
+import { useCustomerCookie } from "../hooks/useCustomerCookie"; // 쿠키 관련 훅
 
 function BasicLayout({ children }: { children: React.ReactNode }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const { name, setName, logout } = useCustomerStore();
+    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
+
+    // 쿠키 기반으로 상태 초기화
+    useEffect(() => {
+        const customerData = getCustomerCookies();
+        if (customerData && customerData.name !== name) { // 기존 상태와 비교
+            setName(customerData.name); // Zustand 상태 업데이트
+        }
+    }, [name, getCustomerCookies, setName]);
+
+    const handleLogout = () => {
+
+        // 쿠키 삭제
+        removeCustomerCookies();
+        // 상태 초기화 (옵션)
+        logout();
+        // 사이드바 닫기
+        setMenuOpen(false);
+
+    };
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -12,10 +35,16 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
         { name: "최근 본 상품", link: "#" },
         { name: "주문 상품", link: "/order/list" },
         { name: "배송지", link: "/address" },
-        { name: "회원정보", link: "#" },
+        { name: "회원정보", link: "/customer/info" },
         { name: "고객센터", link: "#" },
         { name: "포인트", link: "/points" },
     ];
+
+    const handleNavigate = (link: string) => {
+        if (link !== "#") {
+            navigate(link); // navigate로 페이지 이동
+        }
+    };
 
     return (
         <>
@@ -108,26 +137,48 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                     }`}
                 >
                     <ul className="pt-16 px-4 space-y-6">
+                        {/* 사용자 이름 */}
+                        {name && (
+                            <li>
+                                <span className="block text-2xl font-semibold text-gray-900">
+                                    {name}님
+                                </span>
+                            </li>
+                        )}
+
+                        {/* 메뉴 아이템 */}
                         {menuItems.map((item, index) => (
                             <li key={index}>
-                                <a
-                                    href={item.link}
+                                <button
+                                    onClick={() => handleNavigate(item.link)}
                                     className="block text-2xl font-semibold text-gray-900 hover:text-blue-600"
                                 >
                                     {item.name}
-                                </a>
+                                </button>
                             </li>
                         ))}
+
+                        {/* 로그인/로그아웃 버튼 */}
                         <li>
-                            <button
-                                onClick={() => navigate("/customer/signIn")}
-                                className="block w-full h-12 text-2xl font-semibold bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                            >
-                                로그인
-                            </button>
+                            {name ? (
+                                <button
+                                    onClick={handleLogout}
+                                    className="block w-full h-12 text-2xl font-semibold bg-red-500 text-white rounded-lg hover:bg-red-600"
+                                >
+                                    로그아웃
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => navigate("/customer/signIn")}
+                                    className="block w-full h-12 text-2xl font-semibold bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                                >
+                                    로그인
+                                </button>
+                            )}
                         </li>
                     </ul>
                 </nav>
+
 
             </header>
 

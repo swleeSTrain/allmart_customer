@@ -19,6 +19,7 @@ export const postPhoneSignIn = async (phoneNumber: string): Promise<ICustomer> =
         );
 
         console.log(res.data);
+        console.log("--------------------");
 
         return res.data;
     } catch (error: any) {

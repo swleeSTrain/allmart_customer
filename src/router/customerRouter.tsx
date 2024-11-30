@@ -6,6 +6,7 @@ const CustomerIndex = lazy(()=> import("../pages/customer/CustomerIndexPage.tsx"
 const QrImage = lazy(()=> import("../pages/customer/QrResultModalPage.tsx"))
 const Signup = lazy(() => import("../pages/customer/SignUpPage.tsx"))
 const SignIn = lazy(() => import("../pages/customer/CustomerPhoneSignInPage.tsx"))
+const Info = lazy(() => import("../pages/customer/CustomerInfoPage.tsx"))
 
 
 const customerRouter = {
@@ -23,7 +24,11 @@ const customerRouter = {
         {
             path: "signIn",
             element: <Suspense fallback={Loading}><SignIn/></Suspense>,
-        }
+        },
+        {
+            path: "info",
+            element: <Suspense fallback={Loading}><Info/></Suspense>,
+        },
     ]
 }
 

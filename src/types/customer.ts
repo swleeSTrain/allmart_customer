@@ -2,6 +2,8 @@
 export interface ICustomer{
     name: string;
     phoneNumber: string;
+    customerID: number;
+    martID: number;
     loyaltyPoints: number;
     social: boolean;
     accessToken: string;
@@ -11,6 +13,3 @@ export interface ICustomer{
 export interface ISignUpParam{
     phoneNumber: string;
 }
-
-
-

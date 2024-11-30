@@ -3,10 +3,14 @@ import { postPhoneSignIn } from "../../api/CustomerAPI.ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useCustomerStore } from "../../stores/customerStore.ts";
+import { useCustomerCookie } from "../../hooks/useCustomerCookie"; // useCustomerCookie 훅 추가
 
 function CustomerPhoneSignInComponent() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const navigate = useNavigate();
+    const { setTokens, setCustomerInfo } = useCustomerStore();
+    const { setCustomerCookies } = useCustomerCookie(); // 쿠키 설정 함수 추가
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -20,26 +24,35 @@ function CustomerPhoneSignInComponent() {
         try {
             const response = await postPhoneSignIn(trimmedPhoneNumber);
 
-            navigate("/")
+            // 상태 저장
+            setTokens(response.accessToken, response.refreshToken);
+            setCustomerInfo(response.name, response.customerID, response.martID);
+
+            // 쿠키에 정보 저장
+            setCustomerCookies(
+                response.accessToken,
+                response.refreshToken,
+                response.name,
+                response.customerID,
+                response.martID      
+            );
+
+            // 로그인 성공 후 페이지 이동
+            navigate("/");
 
             toast.success(`로그인 성공: ${response.name}님 환영합니다!`, {
                 autoClose: 1500,
                 className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
                 bodyClassName: "text-center",
             });
-
         } catch (error) {
-            toast.error('로그인 실패: 등록되지 않은 번호입니다' , {
+            toast.error("로그인 실패: 등록되지 않은 번호입니다", {
                 autoClose: 1500,
                 className: "bg-red-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
                 bodyClassName: "text-center",
             });
             console.error("Error during sign-in:", error);
         }
-    };
-
-    const handleKakaoLogin = () => {
-        toast.info("카카오 로그인은 준비 중입니다.", { autoClose: 1500 });
     };
 
     return (
@@ -67,21 +80,8 @@ function CustomerPhoneSignInComponent() {
                         로그인
                     </button>
                 </form>
-                <div className="mt-6 border-t pt-6">
-                    <button
-                        type="button"
-                        onClick={handleKakaoLogin}
-                        className="w-full flex items-center rounded-lg justify-center"
-                    >
-                        <img
-                            src="/logo/kakao_login_large_wide.png" // public 폴더에 있는 이미지 경로
-                            alt="카카오 로그인"
-                            className="w-full"
-                        />
-                    </button>
-                </div>
             </div>
-            <ToastContainer position="top-center" autoClose={2000} /> {/* ToastContainer 위치 */}
+            <ToastContainer position="top-center" autoClose={2000} />
         </div>
     );
 }
