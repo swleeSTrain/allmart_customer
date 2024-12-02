@@ -9,6 +9,9 @@ import orderRouter from "./orderRouter.tsx";
 import productRouter from "./productRouter.tsx";
 import flyerRouter from "./flyerRouter.tsx"; // pointRouter를 import
 import martRouter from "./martRouter.tsx";
+import tossRouter from "./tossRouter.tsx";
+
+
 
 const MainPage = lazy(() => import("../pages/MainPage"));
 
@@ -27,6 +30,8 @@ const mainRouter = createBrowserRouter([
     productRouter,
     flyerRouter,
     martRouter,
+    tossRouter
+
 ]);
 
 export default mainRouter;
