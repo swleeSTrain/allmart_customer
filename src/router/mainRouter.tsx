@@ -4,11 +4,10 @@ import LoadingPage from "../pages/LoadingPage.tsx";
 
 import customerRouter from "./customerRouter.tsx"; // pointRouter를 import
 import pointRouter from "./pointRouter";
-import orderRouter from "./orderRouter.tsx";
-import templateRouter from "./templateRouter.tsx";
 import addressRouter from "./addressRouter.tsx";
 import orderRouter from "./orderRouter.tsx";
-import productRouter from "./productRouter.tsx"; // pointRouter를 import
+import productRouter from "./productRouter.tsx";
+import flyerRouter from "./flyerRouter.tsx"; // pointRouter를 import
 import martRouter from "./martRouter.tsx";
 
 const MainPage = lazy(() => import("../pages/MainPage"));
@@ -25,8 +24,8 @@ const mainRouter = createBrowserRouter([
     customerRouter,
     orderRouter,
     addressRouter,
-    orderRouter,
     productRouter,
+    flyerRouter,
     martRouter,
 ]);
 
