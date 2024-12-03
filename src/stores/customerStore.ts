@@ -9,6 +9,7 @@ interface CustomerState {
     martID: number | null;
     setTokens: (accessToken: string, refreshToken: string) => void;
     setName: (name: string) => void;
+    setMartID: (martID: number) => void;
     setCustomerInfo: (name: string, customerID: number, martID: number) => void;
     logout: () => void;
 }
@@ -32,6 +33,9 @@ export const useCustomerStore = create<CustomerState>()(
         // 얘는 사이드바에 이름 뜨게 하려고 설정
         setName: (name) => {
             set({ name })
+        },
+        setMartID: (martID) => {
+            set({ martID })
         },
 
         logout: () => {
