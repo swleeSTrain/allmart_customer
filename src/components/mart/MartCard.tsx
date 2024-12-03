@@ -1,12 +1,17 @@
 import React from 'react';
 import { IMart } from '../../types/mart';
 import Swal from 'sweetalert2';
+import {useNavigate} from "react-router-dom";
 
 interface MartCardProps {
     mart: IMart;
 }
 
+
 const MartCard: React.FC<MartCardProps> = ({ mart }) => {
+
+    const navigate = useNavigate();
+
     const handleMartClick = () => {
         Swal.fire({
             title: `${mart.martName}를 선택하시겠습니까?`,
@@ -16,15 +21,8 @@ const MartCard: React.FC<MartCardProps> = ({ mart }) => {
             cancelButtonColor: '#d33',
             confirmButtonText: '선택',
             cancelButtonText: '취소',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: '선택 완료!',
-                    text: `${mart.martName}가 선택되었습니다.`,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                });
-            }
+        }).then(() => {
+            navigate(`/${mart.martID}`);
         });
     };
 

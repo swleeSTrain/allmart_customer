@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import BasicLayout from "../layouts/BasicLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
-import {handleAllowNotification} from "../firebase/getToken.ts";
 import {Link, useParams} from "react-router-dom";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -24,8 +23,7 @@ function MainPage() {
             window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
         };
     }, []);
-    // FCM 토큰 가져오기
-    handleAllowNotification()
+
     const handleInstallClick = () => {
         if (installPrompt) {
             installPrompt.prompt();
