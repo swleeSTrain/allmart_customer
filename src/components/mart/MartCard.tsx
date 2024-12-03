@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IMart } from '../../types/mart';
 import Swal from 'sweetalert2';
 
@@ -7,6 +7,21 @@ interface MartCardProps {
 }
 
 const MartCard: React.FC<MartCardProps> = ({ mart }) => {
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+    useEffect(() => {
+        const handleBeforeInstallPrompt = (e: Event) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+
+        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        };
+    }, []);
+
     const handleMartClick = () => {
         Swal.fire({
             title: `${mart.martName}를 추가하시겠습니까?`,
@@ -18,12 +33,25 @@ const MartCard: React.FC<MartCardProps> = ({ mart }) => {
             cancelButtonText: "취소",
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: "추가 완료!",
-                    text: `${mart.martName}가 추가되었습니다.`,
-                    icon: "success",
-                    confirmButtonColor: "#3085d6",
-                });
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult: { outcome: string }) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log(`${mart.martName} PWA installed successfully.`);
+                            Swal.fire({
+                                title: "추가 완료!",
+                                text: `${mart.martName}가 추가되었습니다.`,
+                                icon: "success",
+                                confirmButtonColor: "#3085d6",
+                            });
+                        } else {
+                            console.log(`${mart.martName} PWA installation declined.`);
+                        }
+                        setDeferredPrompt(null);
+                    });
+                } else {
+                    console.log(`${mart.martName} PWA is already installed or not available.`);
+                }
             }
         });
     };

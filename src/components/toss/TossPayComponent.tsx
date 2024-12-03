@@ -14,7 +14,7 @@ const TossPayComponent: React.FC = () => {
                 successUrl: `${window.location.origin}/toss/success`,
                 failUrl: `${window.location.origin}/toss/fail`,
             })
-            .catch((error) => {
+            .catch((error: { code: string; }) => {
                 if (error.code === 'USER_CANCEL') {
                     console.log('사용자가 결제를 취소했습니다.');
                 } else {
