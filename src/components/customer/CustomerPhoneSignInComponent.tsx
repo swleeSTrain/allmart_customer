@@ -56,6 +56,10 @@ function CustomerPhoneSignInComponent() {
         }
     };
 
+    const handleKakaoLogin = () => {
+        toast.info("카카오 로그인은 준비 중입니다.", { autoClose: 1500 });
+    };
+
     return (
         <div className="min-h-screen bg-white flex items-center justify-center">
             <div className="w-full max-w-md rounded-lg shadow-lg p-6">
@@ -80,9 +84,22 @@ function CustomerPhoneSignInComponent() {
                     >
                         로그인
                     </button>
+                    <div className="mt-6 border-t pt-6">
+                        <button
+                            type="button"
+                            onClick={handleKakaoLogin}
+                            className="w-full flex items-center rounded-lg justify-center"
+                        >
+                            <img
+                                src="/logo/kakao_login_large_wide.png" // public 폴더에 있는 이미지 경로
+                                alt="카카오 로그인"
+                                className="w-full"
+                            />
+                        </button>
+                    </div>
                 </form>
             </div>
-            <ToastContainer position="top-center" autoClose={2000} />
+            <ToastContainer position="top-center" autoClose={2000}/>
         </div>
     );
 }
