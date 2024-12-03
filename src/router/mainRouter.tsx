@@ -23,6 +23,10 @@ const mainRouter = createBrowserRouter([
         path: "/",
         element: <Suspense fallback={Loading}><MainPage /></Suspense>,
     },
+    {
+        path: "/:martId",
+        element: <Suspense fallback={Loading}><MainPage /></Suspense>,
+    },
     // pointRouter 추가
     pointRouter,
     customerRouter,
