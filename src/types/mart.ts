@@ -6,6 +6,8 @@ export interface IMart {
     phoneNumber: string;     // 전화번호
     address: string;         // 주소
     thumbnailImage: string;  // 썸네일 이미지 URL
+    lat: number;
+    lng: number;
 }
 
 export interface IMartMap {
