@@ -10,6 +10,9 @@ export const getProductList = async (
     size: number = 10,
     searchParams: { keyword?: string; type?: string; categoryID?: number } = {}
 ) => {
+
+
+
     const { keyword, type, categoryID } = searchParams;
 
     // Zustand에서 martID 가져오기

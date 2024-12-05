@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import BasicLayout from "../layouts/BasicLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
+import {Link, useParams} from "react-router-dom";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -9,7 +10,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-
+    const { martId } = useParams<{ martId: string }>();
     useEffect(() => {
         const handleBeforeInstallPrompt = (event: Event) => {
             event.preventDefault();
@@ -39,7 +40,14 @@ function MainPage() {
 
     return (
         <BasicLayout>
-            <h1>메인 페이지</h1>
+            <h1>메인Mart {martId}</h1>
+            <ul>
+                {[1, 2, 3, 4, 5].map((martId) => (
+                    <li key={martId}>
+                        <Link to={`/${martId}`}>Mart {martId}</Link>
+                    </li>
+                ))}
+            </ul>
             {installPrompt ? (
                 <button
                     id="install"
@@ -49,7 +57,7 @@ function MainPage() {
                     Install App
                 </button>
             ) : (
-                <CategoryListComponent />
+                <CategoryListComponent/>
             )}
         </BasicLayout>
     );
