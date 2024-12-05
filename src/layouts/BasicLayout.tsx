@@ -2,9 +2,47 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
-import { useCustomerCookie } from "../hooks/useCustomerCookie"; // 쿠키 관련 훅
+import { useCustomerCookie } from "../hooks/useCustomerCookie";
+import InstallPopupComponents from "../components/common/InstallPopupComponents.tsx"; // 쿠키 관련 훅
+
+interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<void>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
 
 function BasicLayout({ children }: { children: React.ReactNode }) {
+
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+
+    useEffect(() => {
+        const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+            setIsOpen(true);
+        };
+
+        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
+
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
+        };
+    }, []);
+
+    const handleInstall = () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('사용자가 설치를 수락했습니다.');
+                }
+                setDeferredPrompt(null);
+            });
+        }
+        setIsOpen(false);
+    };
+
+
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
     const { name, setName, logout } = useCustomerStore();
@@ -241,6 +279,11 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                     </svg>
                     <span>주문목록</span>
                 </button>
+                <InstallPopupComponents
+                    isOpen={isOpen}
+                    onClose={() => setIsOpen(false)}
+                    onInstall={handleInstall}
+                />
             </div>
 
 
