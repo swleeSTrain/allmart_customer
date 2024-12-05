@@ -10,6 +10,7 @@ import productRouter from "./productRouter.tsx";
 import flyerRouter from "./flyerRouter.tsx"; // pointRouter를 import
 import martRouter from "./martRouter.tsx";
 import tossRouter from "./tossRouter.tsx";
+import qnaRouter from "./qnaRouter.tsx";
 
 const MainPage = lazy(() => import("../pages/MainPage"));
 const SocialLoginMainPage = lazy(() => import("../pages/SocialLoginMainPage"));
@@ -33,7 +34,9 @@ const mainRouter = createBrowserRouter([
     productRouter,
     flyerRouter,
     martRouter,
-    tossRouter
+    tossRouter,
+    qnaRouter
+
 
 ]);
 

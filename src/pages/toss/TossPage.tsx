@@ -1,5 +1,5 @@
-import React from 'react';
-import TossPayComponent from '../../components/toss/TossPayComponent';
+import React from "react";
+import TossPayComponent from "../../components/toss/TossPayComponent.tsx";
 
 const TossPage: React.FC = () => {
     return (

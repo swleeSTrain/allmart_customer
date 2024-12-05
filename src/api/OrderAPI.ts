@@ -1,33 +1,22 @@
+import axios from 'axios';
+import {IOrder} from "../types/order.ts";
 
-// import axios from "axios";
-// import { OrderList } from "../types/order";
-//
-// export const fetchOrders = async (): Promise<OrderList[]> => {
-//     const response = await axios.get("http://localhost:8080/api/v1/orders/list");
-//     return response.data.data; // PageResponseDTO의 data
-// };
-// interface SearchParams {
-//     keyword?: string;
-//     type?: string;
-//     orderId?: string;
-// }
+const host = 'http://localhost:8080/api/v1/orders';
 
+export const getReadOrder = async (): Promise<IOrder> => {
+    try {
+        const res = await axios.get(`${host}/1`);
 
+        console.log("===============================");
 
-// export const getListOrder = async (page: number, searchParams: SearchParams = {})=> {
-//     const { keyword, type, orderId } = searchParams;
-//
-//     const res = await axios.get(`${host}/list`, {
-//         params: {
-//             page: page,
-//             size: 10,
-//             keyword: keyword || null,
-//             type: type || null,
-//             orderId: orderId || null,
-//         },
-//     });
-//
-//     return res.data;
-// };
+        console.log(res.data);
+
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching order:', error);
+        throw error; // 필요하면 에러를 다시 던지거나 다른 처리를 할 수 있습니다.
+    }
+};
+
 
 
