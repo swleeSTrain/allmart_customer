@@ -1,3 +1,4 @@
+import {handleFetchTokens} from "../../api/CustomerAPI.ts";
 
 interface ResultModalProps {
     // msg:string,
@@ -5,6 +6,8 @@ interface ResultModalProps {
 }
 
 function QrResultModal({ callback}: ResultModalProps) {
+    handleFetchTokens();
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
             <div className="bg-blue-600 p-8 rounded-lg shadow-lg w-96">
