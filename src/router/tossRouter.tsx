@@ -1,17 +1,22 @@
 import { lazy, Suspense } from "react";
 import { RouteObject } from "react-router-dom";
-import LoadingPage from "../pages/LoadingPage.tsx";
+import LoadingPage from "../pages/LoadingPage";
 
+const TossIndex = lazy(() => import("../pages/toss/TossIndexPage"))
 const TossPage = lazy(() => import("../pages/toss/TossPage"));
-const SuccessPage = lazy(() => import("../pages/toss/SuccessPage"));
-const FailPage = lazy(() => import("../pages/toss/FailPage"));
+const SuccessPage = lazy(() => import("../pages/toss/TossSuccessPage.tsx"));
+const FailPage = lazy(() => import("../pages/toss/TossFailPage.tsx"));
 
 const Loading = <LoadingPage />;
 
 const tossRouter: RouteObject = {
     path: "toss",
-    element: <Suspense fallback={Loading}><TossPage /></Suspense>,
+    element: <Suspense fallback={Loading}><TossIndex /></Suspense>,
     children: [
+        {
+            path: "",
+            element: <Suspense fallback={Loading}><TossPage /></Suspense>,
+        },
         {
             path: "success",
             element: <Suspense fallback={Loading}><SuccessPage /></Suspense>,

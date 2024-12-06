@@ -1,7 +1,6 @@
+import React from "react";
 
-import React from 'react';
-
-const FailPage: React.FC = () => {
+const TossFailPage: React.FC = () => {
     return (
         <div>
             <h1>결제가 실패했습니다.</h1>
@@ -10,4 +9,4 @@ const FailPage: React.FC = () => {
     );
 };
 
-export default FailPage;
+export default TossFailPage;
