@@ -12,6 +12,7 @@ const QnaAddComponent: React.FC = () => {
     // Zustand 상태 가져오기
     const customerID = useCustomerStore((state) => state.customerID);
     const martID = useCustomerStore((state) => state.martID);
+    const name = useCustomerStore((state) => state.name);
     const setCustomerInfo = useCustomerStore((state) => state.setCustomerInfo);
 
     const navigate = useNavigate();
@@ -38,16 +39,16 @@ const QnaAddComponent: React.FC = () => {
                 });
             }
         }
-    }, [customerID, martID, setCustomerInfo]);
+    }, [name, customerID, martID, setCustomerInfo]);
 
     useEffect(() => {
-        console.log("zustand 상태 확인", { customerID, martID });
-    }, [customerID, martID]);
+        console.log("zustand 상태 확인", { name, martID });
+    }, [name, martID]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!customerID || !martID) {
+        if (!name || !martID) {
             alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
             return;
         }
@@ -55,7 +56,7 @@ const QnaAddComponent: React.FC = () => {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
-        formData.append("writerID", customerID.toString());
+        formData.append("writer", name);
         formData.append("martID", martID.toString());
 
 

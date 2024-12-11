@@ -226,7 +226,8 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
             <div className="flex flex-1">
 
                 {/* Main Content */}
-                <main className="pt-20 px-4">
+                <main className="w-full max-w-screen-lg mx-auto px-4 my-8">
+
                     {children}
 
                 </main>
