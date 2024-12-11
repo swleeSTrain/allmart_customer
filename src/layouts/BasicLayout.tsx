@@ -93,7 +93,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                     {/* 모바일 돋보기 버튼 */}
                     <button
                         aria-label="검색"
-                        onClick={() => console.log("Search clicked")}
+                        onClick={() => navigate("/product/search")}
                         className="p-2 md:hidden"
                     >
                         <svg
