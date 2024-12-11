@@ -6,7 +6,7 @@ const Info = lazy(() => import("../pages/customer/CustomerInfoPage.tsx"))
 
 
 const customerRouter = {
-    path: "/customer",
+    path: "customer",
     element: <Suspense><CustomerIndex/></Suspense>,
     children: [
         {

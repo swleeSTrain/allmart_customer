@@ -1,6 +1,4 @@
 import axios from 'axios';
-import {useCustomerStore} from "../stores/customerStore.ts";
-
 
 const host = 'http://localhost:8080/api/v1/product';
 
@@ -8,19 +6,10 @@ const host = 'http://localhost:8080/api/v1/product';
 export const getProductList = async (
     page: number = 1,
     size: number = 10,
-    searchParams: { keyword?: string; type?: string; categoryID?: number } = {}
+    searchParams: { keyword?: string; type?: string; categoryID?: number, martID?: number } = {}
 ) => {
 
-
-
-    const { keyword, type, categoryID } = searchParams;
-
-    // Zustand에서 martID 가져오기
-    const { martID } = useCustomerStore.getState();
-
-    if (!martID) {
-        throw new Error('마트 ID가 설정되어 있지 않습니다.');
-    }
+    const { keyword, type, categoryID, martID } = searchParams;
 
     const res = await axios.get(`${host}/${martID}/list`, {
         params: {
