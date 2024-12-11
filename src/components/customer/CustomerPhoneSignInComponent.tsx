@@ -1,16 +1,26 @@
-import React, { useState } from "react";
-import { postPhoneSignIn } from "../../api/CustomerAPI.ts";
+import { useState } from "react";
+import {kakaoSignInRequest, postPhoneSignIn} from "../../api/CustomerAPI.ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import {replace, useNavigate} from "react-router-dom";
 import { useCustomerStore } from "../../stores/customerStore.ts";
 import { useCustomerCookie } from "../../hooks/useCustomerCookie"; // useCustomerCookie 훅 추가
+import axios from "axios";
 
 function CustomerPhoneSignInComponent() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const navigate = useNavigate();
     const { setTokens, setCustomerInfo } = useCustomerStore();
     const { setCustomerCookies } = useCustomerCookie(); // 쿠키 설정 함수 추가
+
+    const {email,setEmail} = useState("");
+
+    const handleKakaoLogin = async () => {
+            // 카카오 OAuth2 로그인 URL로 이동
+            const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
+            window.location.href = `${kakaoURL}`;
+
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -56,9 +66,7 @@ function CustomerPhoneSignInComponent() {
         }
     };
 
-    const handleKakaoLogin = () => {
-        toast.info("카카오 로그인은 준비 중입니다.", { autoClose: 1500 });
-    };
+
 
     return (
         <div className="min-h-screen bg-white flex items-center justify-center">

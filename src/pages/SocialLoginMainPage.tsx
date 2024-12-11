@@ -3,6 +3,8 @@ import { IMartMap } from "../types/mart";
 import { getMarts, getMapScriptUrl } from "../api/KakaoMapAPI";
 import MartList from "../components/mart/MartList.tsx";
 
+
+
 interface Location {
     lat: number | null;
     lng: number | null;

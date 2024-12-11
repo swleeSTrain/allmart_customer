@@ -1,4 +1,5 @@
 import {lazy, Suspense} from "react";
+import QrResultModal from "../components/customer/SingUpResultModal.tsx";
 
 const CustomerIndex = lazy(()=> import("../pages/customer/CustomerIndexPage.tsx"))
 const SignIn = lazy(() => import("../pages/customer/CustomerPhoneSignInPage.tsx"))
@@ -17,6 +18,10 @@ const customerRouter = {
             path: "info",
             element: <Suspense><Info/></Suspense>,
         },
+        {
+            path:"qr",
+            element: <Suspense><QrResultModal callback={}/></Suspense>
+        }
     ]
 }
 
