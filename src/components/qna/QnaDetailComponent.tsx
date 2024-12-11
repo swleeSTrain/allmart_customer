@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { fetchAnswersByQno } from "../../api/answerAPI";
 import { IQuestion, IAnswer } from "../../types/qna";
-import {deleteQuestion, fetchQuestionById} from "../../api/qnaAPi.ts";
+import { deleteQuestion, fetchQuestionById } from "../../api/qnaAPi.ts";
 
 const QnaDetailComponent = () => {
     const { qno } = useParams<{ qno: string }>();
@@ -26,6 +26,7 @@ const QnaDetailComponent = () => {
                 fetchAnswersByQno(Number(qno)), // 답변 데이터 가져오기
             ])
                 .then(([questionData, answerData]) => {
+                    console.log("질문 데이터:", questionData); // 디버깅
                     setQuestion(questionData);
                     setAnswers(answerData); // 답변 상태 설정
                 })
