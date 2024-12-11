@@ -24,7 +24,7 @@ const mainRouter = createBrowserRouter([
         element: <Suspense fallback={Loading}><SocialLoginMainPage /></Suspense>,
     },
     {
-        path: "/:martId",
+        path: "/:martID",
         element: <Suspense fallback={Loading}><MainPage /></Suspense>,
     },
     pointRouter,

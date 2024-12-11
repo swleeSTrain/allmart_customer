@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { IProduct, IPageResponse } from "../../types/product";
+import { useCustomerCookie } from "../../hooks/useCustomerCookie";
+import { useCustomerStore } from "../../stores/customerStore";
 import { getProductList } from "../../api/ProductAPI";
+import { IProduct, IPageResponse } from "../../types/product";
 import LoadingComponent from "../LoadingComponent";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -19,8 +21,6 @@ const initialState: IPageResponse = {
 
 function ProductListComponent() {
     const navigate = useNavigate();
-
-    // 상태 변수들
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
     const [pageResponse, setPageResponse] = useState<IPageResponse>(initialState);
@@ -30,13 +30,21 @@ function ProductListComponent() {
 
     const observer = useRef<IntersectionObserver | null>(null);
 
-    // 데이터 로드 함수
+    // Zustand와 쿠키에서 martID 가져오기
+    const { martID: cookieMartID } = useCustomerCookie().getCustomerCookies();
+    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
+
     const loadPageData = useCallback(
         async (pageToLoad: number) => {
+            if (!martID) return; // martID가 없으면 요청 중단
             setLoading(true);
 
+
             try {
-                const data = await getProductList(pageToLoad, 10, { categoryID: categoryID ? Number(categoryID) : undefined });
+                const data = await getProductList(pageToLoad, 10, {
+                    categoryID: categoryID ? Number(categoryID) : undefined,
+                    martID: Number(martID),
+                });
                 setPageResponse((prevData) => ({
                     ...data,
                     dtoList:
@@ -51,7 +59,7 @@ function ProductListComponent() {
                 setLoading(false);
             }
         },
-        [categoryID]
+        [categoryID, martID]
     );
 
     const lastElementRef = useCallback(
@@ -101,16 +109,12 @@ function ProductListComponent() {
 
     return (
         <div className="container mx-auto p-4">
-
-            {/* 상품 리스트 - 작고 균형 잡힌 2열 그리드 */}
             <ul className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-4">
                 {productItems}
             </ul>
-
             {loading && <LoadingComponent />}
         </div>
     );
-
 }
 
 export default ProductListComponent;

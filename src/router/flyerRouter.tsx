@@ -7,7 +7,7 @@ const FlyerIndex = lazy(() => import("../pages/flyer/FlyerIndexPage"))
 const FlyerPage = lazy(() => import("../pages/flyer/FlyerReadPage"))
 
 const flyerRouter = {
-    path: '/flyer',
+    path: 'flyer',
     element: <Suspense fallback={Loading}><FlyerIndex/></Suspense>,
     children: [
         {

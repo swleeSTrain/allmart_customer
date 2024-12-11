@@ -10,7 +10,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-    const { martId } = useParams<{ martId: string }>();
+    const { martID } = useParams<{ martID: string }>();
     useEffect(() => {
         const handleBeforeInstallPrompt = (event: Event) => {
             event.preventDefault();
@@ -40,11 +40,11 @@ function MainPage() {
 
     return (
         <BasicLayout>
-            <h1>메인Mart {martId}</h1>
+            <h1>메인Mart {martID}</h1>
             <ul>
-                {[1, 2, 3, 4, 5].map((martId) => (
-                    <li key={martId}>
-                        <Link to={`/${martId}`}>Mart {martId}</Link>
+                {[1, 2, 3, 4, 5].map((martID) => (
+                    <li key={martID}>
+                        <Link to={`/${martID}`}>Mart {martID}</Link>
                     </li>
                 ))}
             </ul>

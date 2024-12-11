@@ -6,7 +6,7 @@ const ProductIndex = lazy(() => import("../pages/product/ProductIndexPage"))
 const ProductListPage = lazy(() => import("../pages/product/ProductListPage"))
 
 const productRouter = {
-    path: '/product',
+    path: 'product',
     element: <Suspense fallback={Loading}><ProductIndex/></Suspense>,
     children: [
         {
