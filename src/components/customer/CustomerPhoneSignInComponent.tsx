@@ -1,19 +1,22 @@
 import { useState } from "react";
-import {kakaoSignInRequest, postPhoneSignIn} from "../../api/CustomerAPI.ts";
+// import {kakaoSignInRequest, postPhoneSignIn} from "../../api/CustomerAPI.ts";
+import {postPhoneSignIn, postSocialSignIn} from "../../api/CustomerAPI.ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {replace, useNavigate} from "react-router-dom";
+// import {replace, useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { useCustomerStore } from "../../stores/customerStore.ts";
 import { useCustomerCookie } from "../../hooks/useCustomerCookie"; // useCustomerCookie 훅 추가
-import axios from "axios";
+// import axios from "axios";
 
 function CustomerPhoneSignInComponent() {
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const { setTokens, setCustomerInfo } = useCustomerStore();
     const { setCustomerCookies } = useCustomerCookie(); // 쿠키 설정 함수 추가
 
-    const {email,setEmail} = useState("");
+    // const {email,setEmail} = useState("");
 
     const handleKakaoLogin = async () => {
             // 카카오 OAuth2 로그인 URL로 이동
@@ -45,11 +48,11 @@ function CustomerPhoneSignInComponent() {
                 response.refreshToken,
                 response.name,
                 response.customerID,
-                response.martID      
+                response.martID
             );
 
             // 로그인 성공 후 페이지 이동
-            navigate("/");
+            navigate("/1");
 
             toast.success(`로그인 성공: ${response.name}님 환영합니다!`, {
                 autoClose: 1500,
@@ -66,6 +69,32 @@ function CustomerPhoneSignInComponent() {
         }
     };
 
+    const handleEmailSignIn = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const trimmedEmail = email.trim();
+        if (!trimmedEmail) {
+            toast.error("이메일을 입력해주세요.", { autoClose: 1500 });
+            return;
+        }
+
+        try {
+            const response = await postSocialSignIn(trimmedEmail);
+            setTokens(response.accessToken, response.refreshToken);
+            setCustomerInfo(response.name, response.customerID, response.martID);
+            setCustomerCookies(
+                response.accessToken,
+                response.refreshToken,
+                response.name,
+                response.customerID,
+                response.martID
+            );
+            navigate("/1");
+            toast.success(`로그인 성공: ${response.name}님 환영합니다!`, { autoClose: 1500 });
+        } catch (error) {
+            toast.error("로그인 실패: 등록되지 않은 이메일입니다", { autoClose: 1500 });
+            console.error("Error during email sign-in:", error);
+        }
+    };
 
 
     return (
@@ -92,6 +121,28 @@ function CustomerPhoneSignInComponent() {
                     >
                         로그인
                     </button>
+
+                    {/* 이메일 로그인 */}
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                            이메일
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="example@example.com"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleEmailSignIn}
+                            className="w-full mt-2 bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition duration-200"
+                        >
+                            이메일로 로그인
+                        </button>
+                    </div>
                     <div className="mt-6 border-t pt-6">
                         <button
                             type="button"

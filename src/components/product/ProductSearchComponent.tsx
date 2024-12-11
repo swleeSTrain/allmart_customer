@@ -1,10 +1,21 @@
+import { useEffect, useRef } from "react";
+
 function ProductSearchComponent() {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus(); // 검색창에 자동으로 포커스
+        }
+    }, []);
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">상품 검색</h1>
             <div className="flex items-center border border-gray-300 rounded-full p-2 shadow-sm mb-6">
                 <input
                     type="text"
+                    ref={inputRef} // 검색창에 포커스 설정을 위한 ref
                     placeholder="검색어를 입력해주세요"
                     className="flex-grow px-4 py-2 text-sm text-gray-700 outline-none rounded-l-full"
                 />
