@@ -82,14 +82,14 @@ function ProductListComponent() {
         loadPageData(page);
     }, [page, loadPageData]);
 
-    const moveToDetail = (productID: number) => {
-        navigate(`/product/detail/${productID}`);
+    const moveToRead = (productID: number) => {
+        navigate(`/product/read/${productID}`);
     };
 
     const productItems = pageResponse.dtoList.map((product: IProduct, index) => (
         <li
             key={product.productID}
-            onClick={() => moveToDetail(product.productID)}
+            onClick={() => moveToRead(product.productID)}
             ref={index === pageResponse.dtoList.length - 1 ? lastElementRef : null}
             className="border rounded-lg shadow-md p-2 space-y-2"
         >

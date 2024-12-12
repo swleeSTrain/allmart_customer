@@ -1,6 +1,14 @@
 import axios from 'axios';
+import {IProduct} from "../types/product.ts";
 
 const host = 'http://localhost:8080/api/v1/product';
+
+export const getReadProduct = async (martID: number, productID: number): Promise<IProduct> => {
+
+    const res = await axios.get(`${host}/${martID}/${productID}`);
+
+    return res.data;
+}
 
 // 엘라스틱서치
 export const getElasticList = async (
