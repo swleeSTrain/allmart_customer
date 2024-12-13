@@ -26,6 +26,8 @@ const mainRouter = createBrowserRouter([
     {
         path: "/:martID",
         element: <Suspense fallback={Loading}><MainPage /></Suspense>,
+
+
     },
     pointRouter,
     customerRouter,
@@ -33,9 +35,10 @@ const mainRouter = createBrowserRouter([
     addressRouter,
     productRouter,
     flyerRouter,
-    martRouter,
     tossRouter,
-    qnaRouter
+    qnaRouter,
+    martRouter
+
 
 
 
