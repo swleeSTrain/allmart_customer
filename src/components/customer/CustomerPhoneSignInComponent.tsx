@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 // import {kakaoSignInRequest, postPhoneSignIn} from "../../api/CustomerAPI.ts";
 import {postPhoneSignIn, postSocialSignIn} from "../../api/CustomerAPI.ts";
 import { ToastContainer, toast } from "react-toastify";
@@ -24,6 +24,19 @@ function CustomerPhoneSignInComponent() {
             window.location.href = `${kakaoURL}`;
 
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch('http://localhost:8080/oauth2/authorization/kakao', {
+                method: 'GET',
+                credentials: 'include', // 세션 기반 인증 사용 시 필요
+            });
+            const data = await response.json();
+            console.log("==============================");
+            console.log('User info:', data); // 받은 JSON 출력
+        };
+        fetchData();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
