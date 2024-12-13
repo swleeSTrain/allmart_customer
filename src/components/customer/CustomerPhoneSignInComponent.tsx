@@ -23,6 +23,7 @@ function CustomerPhoneSignInComponent() {
             const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
             window.location.href = `${kakaoURL}`;
 
+
     };
 
     useEffect(() => {
