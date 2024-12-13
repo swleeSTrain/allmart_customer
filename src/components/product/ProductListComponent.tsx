@@ -4,7 +4,10 @@ import { useCustomerStore } from "../../stores/customerStore";
 import { getProductList } from "../../api/ProductAPI";
 import { IProduct, IPageResponse } from "../../types/product";
 import LoadingComponent from "../LoadingComponent";
+import ProductModalComponent from "../../components/product/ProductModalComponent"; // 모달 컴포넌트
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import {useCartStore} from "../../stores/cartStore.ts";
 
 const initialState: IPageResponse = {
     dtoList: [],
@@ -20,6 +23,7 @@ const initialState: IPageResponse = {
 };
 
 function ProductListComponent() {
+    const { addToCart } = useCartStore(); // Zustand의 addToCart 가져오기
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
@@ -27,6 +31,8 @@ function ProductListComponent() {
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [searchParams] = useSearchParams();
     const categoryID = searchParams.get("categoryID");
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+    const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null); // 선택된 상품
 
     const observer = useRef<IntersectionObserver | null>(null);
 
@@ -38,7 +44,6 @@ function ProductListComponent() {
         async (pageToLoad: number) => {
             if (!martID) return; // martID가 없으면 요청 중단
             setLoading(true);
-
 
             try {
                 const data = await getProductList(pageToLoad, 10, {
@@ -82,37 +87,75 @@ function ProductListComponent() {
         loadPageData(page);
     }, [page, loadPageData]);
 
-    const moveToDetail = (productID: number) => {
-        navigate(`/product/detail/${productID}`);
+    const openModal = (product: IProduct) => {
+        setSelectedProduct(product);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setSelectedProduct(null);
+        setIsModalOpen(false);
     };
 
     const productItems = pageResponse.dtoList.map((product: IProduct, index) => (
         <li
             key={product.productID}
-            onClick={() => moveToDetail(product.productID)}
+            onClick={() => navigate(`/product/read/${product.productID}`)}
             ref={index === pageResponse.dtoList.length - 1 ? lastElementRef : null}
-            className="border rounded-lg shadow-md p-2 space-y-2"
+            className="relative flex items-center border rounded-lg shadow-md p-4 bg-white hover:shadow-lg hover:scale-[1.02] transition-transform duration-300 cursor-pointer"
         >
             {product.thumbnailImage && (
                 <img
                     src={`http://localhost:8080/uploads/${product.thumbnailImage}`}
                     alt={product.name}
-                    className="w-full h-36 object-cover rounded-md"
+                    className="w-24 h-24 object-cover rounded-md mr-4"
                 />
             )}
-            <div className="text-center">
-                <h3 className="font-semibold text-sm">{product.name}</h3>
-                <p className="font-medium text-blue-600 text-sm">{product.price}원</p>
+            <div className="flex-1">
+                <h3 className="font-bold text-lg text-gray-800">
+                    {product.name}
+                </h3>
+                <p className="text-orange-500 font-bold text-base mt-2">
+                    {product.price.toLocaleString()}원
+                </p>
+                {/* 상품 카드용 플로팅 장바구니 버튼 */}
+                <button
+                    className="absolute bottom-4 right-4 bg-orange-500 text-white rounded-full shadow-lg p-2 hover:bg-orange-600 transition-transform hover:scale-110"
+                    onClick={(e) => {
+                        e.stopPropagation(); // 부모 클릭 이벤트 방지
+                        openModal(product); // 모달 열기
+                    }}
+                >
+                    <FaShoppingCart className="w-5 h-5"/>
+                </button>
             </div>
         </li>
+
     ));
 
     return (
-        <div className="container mx-auto p-4">
-            <ul className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-4">
-                {productItems}
-            </ul>
-            {loading && <LoadingComponent />}
+        <div className="container mx-auto pt-16 pb-20 p-4">
+            <ul className="space-y-4">{productItems}</ul>
+            {loading && <LoadingComponent/>}
+            {isModalOpen && selectedProduct && (
+                <ProductModalComponent
+                    productName={selectedProduct.name}
+                    productPrice={selectedProduct.price}
+                    onClose={closeModal}
+                    onAddToCart={(quantity) => {
+                        addToCart({
+                            productID: selectedProduct.productID,
+                            name: selectedProduct.name,
+                            quantity,
+                            totalPrice: selectedProduct.price * quantity,
+                        });
+                        console.log(
+                            `${quantity}개 추가됨: ${selectedProduct.name}`
+                        );
+                        closeModal();
+                    }}
+                />
+            )}
         </div>
     );
 }

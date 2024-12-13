@@ -6,6 +6,7 @@ const ProductIndex = lazy(() => import("../pages/product/ProductIndexPage"))
 const ProductListPage = lazy(() => import("../pages/product/ProductListPage"))
 const ProductSearchPage = lazy(() => import("../pages/product/ProductSearchPage"))
 const ProductReadPage = lazy(() => import("../pages/product/ProductReadPage"))
+const CartPage = lazy(() => import("../pages/product/CartPage"))
 
 const productRouter = {
     path: 'product',
@@ -22,6 +23,10 @@ const productRouter = {
         {
             path: "read/:productID",
             element: <Suspense fallback={Loading}><ProductReadPage/></Suspense>,
+        },
+        {
+            path: "cart",
+            element: <Suspense fallback={Loading}><CartPage/></Suspense>,
         },
     ]
 

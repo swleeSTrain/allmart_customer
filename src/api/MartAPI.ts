@@ -8,3 +8,4 @@ export const getMartList = async (): Promise<IMart[]> => {
     const res = await axios.get(`${host}/list`);
     return res.data.dtoList; // dtoList를 반환
 };
+``
