@@ -7,10 +7,11 @@ interface CustomerState {
     name: string | null;
     customerID: number | null;
     martID: number | null;
+    loginType: "phone" | "email" | null; // 로그인 타입 추가
     setTokens: (accessToken: string, refreshToken: string) => void;
     setName: (name: string) => void;
     setMartID: (martID: number) => void;
-    setCustomerInfo: (name: string, customerID: number, martID: number) => void;
+    setCustomerInfo: (name: string, customerID: number, martID: number, loginType: "phone" | "email") => void;
     logout: () => void;
 }
 
@@ -22,13 +23,14 @@ export const useCustomerStore = create<CustomerState>()(
         name: null,
         customerID: null,
         martID: null,
+        loginType: null, // 초기값 추가
 
         // 로그인 시 zustand에 밀어넣기
         setTokens: (accessToken, refreshToken) => {
             set({ accessToken, refreshToken });
         },
-        setCustomerInfo: (name, customerID, martID) => {
-            set({ name, customerID, martID });
+        setCustomerInfo: (name, customerID, martID, loginType) => {
+            set({ name, customerID, martID, loginType });
         },
         // 얘는 사이드바에 이름 뜨게 하려고 설정
         setName: (name) => {
@@ -45,6 +47,7 @@ export const useCustomerStore = create<CustomerState>()(
                 name: null,
                 customerID: null,
                 martID: null,
+                loginType: null,
             });
         },
     }))

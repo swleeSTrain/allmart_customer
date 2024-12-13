@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import BasicLayout from "../layouts/BasicLayout";
+import GeneralLayout from "../layouts/GeneralLayout"; // 일반 사용자 레이아웃
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
-import {Link, useParams} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useCustomerStore } from "../stores/customerStore";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -11,6 +13,8 @@ interface BeforeInstallPromptEvent extends Event {
 function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const { martID } = useParams<{ martID: string }>();
+    const { loginType } = useCustomerStore(); // 로그인 타입 가져오기
+
     useEffect(() => {
         const handleBeforeInstallPrompt = (event: Event) => {
             event.preventDefault();
@@ -38,9 +42,12 @@ function MainPage() {
         }
     };
 
+    // 로그인 타입에 따라 레이아웃 선택
+    const Layout = loginType === "phone" ? BasicLayout : GeneralLayout;
+
     return (
-        <BasicLayout>
-            <h1>메인Mart {martID}</h1>
+        <Layout>
+            <h1>메인 Mart {martID}</h1>
             <ul>
                 {[1, 2, 3, 4, 5].map((martID) => (
                     <li key={martID}>
@@ -57,9 +64,9 @@ function MainPage() {
                     Install App
                 </button>
             ) : (
-                <CategoryListComponent/>
+                <CategoryListComponent />
             )}
-        </BasicLayout>
+        </Layout>
     );
 }
 

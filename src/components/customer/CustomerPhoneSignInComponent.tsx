@@ -53,7 +53,7 @@ function CustomerPhoneSignInComponent() {
             // 로그인 시 상태, 쿠키 저장을 위한 부분
             // 상태 저장
             setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID);
+            setCustomerInfo(response.name, response.customerID, response.martID,"phone");
 
             // 쿠키에 정보 저장
             setCustomerCookies(
@@ -93,7 +93,7 @@ function CustomerPhoneSignInComponent() {
         try {
             const response = await postSocialSignIn(trimmedEmail);
             setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID);
+            setCustomerInfo(response.name, response.customerID, response.martID, "email");
             setCustomerCookies(
                 response.accessToken,
                 response.refreshToken,
