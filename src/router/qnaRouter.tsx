@@ -13,7 +13,7 @@ const QnaEditPage = lazy(() => import("../pages/qna/QnaEditPage.tsx"));
 
 // QnA 라우터 설정
 const qnaRouter = {
-    path: "/qna",
+    path: "qna",
     element: <Suspense fallback={Loading}><QnaIndexPage /></Suspense>,
     children: [
         {

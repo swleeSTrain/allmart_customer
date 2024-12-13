@@ -19,8 +19,8 @@ const customerRouter = {
             element: <Suspense><Info/></Suspense>,
         },
         {
-            path: "update",
-            element: < Suspense><CustomerUpdate/></Suspense>
+            path:"qr",
+            element: <Suspense><QrResultModal callback={}/></Suspense>
         }
     ]
 }

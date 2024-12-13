@@ -1,32 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useCustomerCookie } from "../../hooks/useCustomerCookie";
-import {addQuestion} from "../../api/qnaAPi.ts";
+import { addQuestion } from "../../api/qnaAPi";
+import { useCustomerStore } from "../../stores/customerStore.ts";
 
 const QnaAddComponent: React.FC = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [tags, setTags] = useState("");
     const [files, setFiles] = useState<FileList | null>(null);
 
-    const { getCustomerCookies } = useCustomerCookie(); // 쿠키에서 정보 가져오기
-    const [customerName, setCustomerName] = useState<string | null>(null);
-    const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
+    // Zustand 상태 가져오기
+    const customerID = useCustomerStore((state) => state.customerID);
+    const martID = useCustomerStore((state) => state.martID);
+    const name = useCustomerStore((state) => state.name);
+    const setCustomerInfo = useCustomerStore((state) => state.setCustomerInfo);
+
+    const navigate = useNavigate();
+
+    // 새로고침 시 상태 복구 (쿠키 기반)
+    useEffect(() => {
+        if (!customerID || !martID) {
+            const cookies = document.cookie.split("; ").reduce((acc, cookie) => {
+                const [key, value] = cookie.split("=");
+                acc[key] = decodeURIComponent(value);
+                return acc;
+            }, {} as Record<string, string>);
+
+            if (cookies.customerID && cookies.martID && cookies.name) {
+                setCustomerInfo(
+                    cookies.name,
+                    parseInt(cookies.customerID, 10),
+                    parseInt(cookies.martID, 10)
+                );
+                console.log("쿠키에서 상태 복구 완료", {
+                    name: cookies.name,
+                    customerID: cookies.customerID,
+                    martID: cookies.martID,
+                });
+            }
+        }
+    }, [name, customerID, martID, setCustomerInfo]);
 
     useEffect(() => {
-        const cookies = getCustomerCookies(); // 쿠키에서 사용자 정보 가져옴
-        if (cookies.name) {
-            setCustomerName(cookies.name);
-        } else {
-            setCustomerName(null);
-        }
-    }, [getCustomerCookies]);
+        console.log("zustand 상태 확인", { name, martID });
+    }, [name, martID]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!customerName) {
+        if (!name || !martID) {
             alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
             return;
         }
@@ -34,19 +56,28 @@ const QnaAddComponent: React.FC = () => {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
-        formData.append("tags", tags);
-        formData.append("writer", customerName); // 쿠키에서 가져온 작성자 정보 추가
+        formData.append("writer", name);
+        formData.append("martID", martID.toString());
+
 
         if (files) {
             Array.from(files).forEach((file) => formData.append("files", file));
         }
 
         try {
-            const response = await addQuestion(formData); // API 호출
-            alert(`질문 등록 성공! ID: ${response.id}`);
+            const response = await addQuestion(formData);
+            console.log("API 응답:", response);
 
-            // 질문 등록 후 /qna/list로 이동
-            navigate("/qna/list");
+            // 응답이 단순 값인지 확인
+            if (typeof response === "number") {
+                alert(`질문 등록 성공! ID: ${response}`);
+                navigate("/qna/list");
+            } else if (response.id) {
+                alert(`질문 등록 성공! ID: ${response.id}`);
+                navigate("/qna/list");
+            } else {
+                alert("질문 등록 성공했지만 ID를 받지 못했습니다.");
+            }
         } catch (error) {
             console.error("질문 등록 실패:", error);
             alert("질문 등록 실패!");
@@ -70,13 +101,6 @@ const QnaAddComponent: React.FC = () => {
                 placeholder="내용"
                 rows={5}
                 required
-                className="w-full p-2 border rounded mb-4"
-            />
-            <input
-                type="text"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                placeholder="태그 (쉼표 구분)"
                 className="w-full p-2 border rounded mb-4"
             />
             <input

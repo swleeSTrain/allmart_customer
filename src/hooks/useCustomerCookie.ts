@@ -53,5 +53,6 @@ export const useCustomerCookie = () => {
         };
     };
 
+
     return { setCustomerCookies, removeCustomerCookies, getCustomerCookies, cookies };
 };

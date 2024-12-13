@@ -8,7 +8,7 @@ const FlyerBannerPage = lazy(() => import("../pages/flyer/FlyerBannerPage.tsx"))
 const FlyerLinkVideoPage = lazy(() => import("../pages/flyer/FlyerBannerPage.tsx"))
 
 const flyerRouter = {
-    path: '/flyer',
+    path: 'flyer',
     element: <Suspense fallback={Loading}><FlyerIndex/></Suspense>,
     children: [
         {

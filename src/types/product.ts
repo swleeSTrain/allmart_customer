@@ -4,6 +4,7 @@ export interface IProduct {
     sku: string;
     price: number;
     thumbnailImage: string;
+    attachImages: string[];
 }
 
 export interface IPageRequestDTO {
