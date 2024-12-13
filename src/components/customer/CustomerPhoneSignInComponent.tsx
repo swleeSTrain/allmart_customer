@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate} from "react-router-dom";
 import { useCustomerStore } from "../../stores/customerStore.ts";
 import { useCustomerCookie } from "../../hooks/useCustomerCookie"; // useCustomerCookie 훅 추가
+//import { handleFCMTokenUpdate } from '../../firebase/fcmUtil.ts';
 // import axios from "axios";
 
 function CustomerPhoneSignInComponent() {
@@ -67,6 +68,7 @@ function CustomerPhoneSignInComponent() {
 
             // 로그인 성공 후 페이지 이동
             navigate("/1");
+            //await handleFCMTokenUpdate(response.customerID, response.martID);
 
             toast.success(`로그인 성공: ${response.name}님 환영합니다!`, {
                 autoClose: 1500,

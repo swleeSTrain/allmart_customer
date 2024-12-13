@@ -75,7 +75,7 @@ function ProductReadComponent() {
                             onTouchStart={handleTouchStart}
                         >
                             <img
-                                src={`http://localhost:8080/uploads/${product.attachImages[currentIndex]}`}
+                                src={`${product.attachImages[currentIndex]}`}
                                 alt="첨부 이미지"
                                 className="w-full h-auto object-cover"
                             />

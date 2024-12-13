@@ -34,7 +34,7 @@ const MartCard: React.FC<MartCardProps> = ({ mart }) => {
             {/* 왼쪽: 이미지 */}
             <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center overflow-hidden rounded-md">
                 <img
-                    src={`http://localhost:8080/uploads/s_${mart.thumbnailImage}`}
+                    src={`${mart.thumbnailImage}`}
                     alt={`${mart.martName} Thumbnail`}
                     className="max-w-full max-h-full object-contain"
                 />
