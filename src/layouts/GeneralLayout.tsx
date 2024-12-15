@@ -40,7 +40,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
         { name: "주문 상품", link: "/order/list" },
         { name: "배송지", link: "/address" },
         { name: "회원정보", link: "/customer/info" },
-        { name: "고객센터", link: "#" },
+        { name: "고객센터", link: "/qna/list" },
         { name: "포인트", link: "/points" },
     ];
 
@@ -93,7 +93,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                         {/* 장바구니 버튼 */}
                         <button
                             aria-label="장바구니"
-                            onClick={() => navigate("/cart")}
+                            onClick={() => navigate("/product/cart")}
                             className="p-1 focus:outline-none transform transition-transform hover:scale-110"
                         >
                             <AiOutlineShoppingCart className="w-6 h-6 text-gray-600"/>

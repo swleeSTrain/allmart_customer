@@ -85,7 +85,7 @@ const QnaAddComponent: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white shadow rounded">
+        <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white shadow rounded mt-6">
             <h2 className="text-xl font-bold mb-4">질문 등록</h2>
             <input
                 type="text"
