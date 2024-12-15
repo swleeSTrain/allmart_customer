@@ -15,7 +15,7 @@ function KakaoMap() {
     const [error, setError] = useState<string | null>(null);
     const [scriptUrl, setScriptUrl] = useState<string | null>(null);
     const [marts, setMarts] = useState<IMartMap[]>([]);
-
+    console.log()
     useEffect(() => {
         // 현재 위치 가져오기
         if (navigator.geolocation) {

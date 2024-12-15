@@ -3,9 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import {RouterProvider} from "react-router-dom";
 import mainRouter from "./router/mainRouter.tsx";
-// import "./firebase/settingFCM.ts";
-// import "./firebase/getToken.ts"
-// import {handleAllowNotification} from "./firebase/getToken.ts";
+
 createRoot(document.getElementById('root')!).render(
 
 

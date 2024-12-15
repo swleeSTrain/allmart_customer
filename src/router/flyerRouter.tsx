@@ -4,16 +4,21 @@ import {lazy, Suspense} from "react";
 
 const Loading = <LoadingPage></LoadingPage>
 const FlyerIndex = lazy(() => import("../pages/flyer/FlyerIndexPage"))
-const FlyerPage = lazy(() => import("../pages/flyer/FlyerReadPage"))
+const FlyerBannerPage = lazy(() => import("../pages/flyer/FlyerBannerPage.tsx"))
+const FlyerLinkVideoPage = lazy(() => import("../pages/flyer/FlyerBannerPage.tsx"))
 
 const flyerRouter = {
     path: 'flyer',
     element: <Suspense fallback={Loading}><FlyerIndex/></Suspense>,
     children: [
         {
-            path: "read",
-            element: <Suspense fallback={Loading}><FlyerPage/></Suspense>,
+            path: "banner",
+            element: <Suspense fallback={Loading}><FlyerBannerPage/></Suspense>,
         },
+        {
+            path: "video",
+            element: <Suspense fallback={Loading}><FlyerLinkVideoPage/></Suspense>
+        }
     ]
 
 }
