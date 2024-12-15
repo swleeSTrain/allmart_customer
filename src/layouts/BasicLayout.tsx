@@ -71,11 +71,9 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
     const menuItems = [
-        { name: "최근 본 상품", link: "#" },
         { name: "주문 상품", link: "/order/list" },
         { name: "배송지", link: "/address" },
         { name: "회원정보", link: "/customer/info" },
-        { name: "고객센터", link: "#" },
         { name: "포인트", link: "/points" },
     ];
 
@@ -262,7 +260,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 {/* 주문 목록 버튼 */}
                 <button
                     className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
-                    onClick={() => navigate("/product/cart")}
+                    onClick={() => navigate("/product/oldcart")}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

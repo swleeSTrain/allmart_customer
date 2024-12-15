@@ -104,7 +104,7 @@ const QnaListComponent = () => {
     ));
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 mt-6">
             {/* 상단 로고와 질문 등록 버튼 */}
             <header className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold text-indigo-600 cursor-pointer" onClick={() => navigate("/")}>

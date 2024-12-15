@@ -1,5 +1,6 @@
 import LoadingPage from "../pages/LoadingPage.tsx";
 import { lazy, Suspense } from "react";
+import OldCartPage from "../pages/product/OldCartPage.tsx";
 
 const Loading = <LoadingPage></LoadingPage>
 const ProductIndex = lazy(() => import("../pages/product/ProductIndexPage"))
@@ -27,6 +28,10 @@ const productRouter = {
         {
             path: "cart",
             element: <Suspense fallback={Loading}><CartPage/></Suspense>,
+        },
+        {
+            path: "oldcart",
+            element: <Suspense fallback={Loading}><OldCartPage/></Suspense>,
         },
     ]
 

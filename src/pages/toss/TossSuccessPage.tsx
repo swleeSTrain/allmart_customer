@@ -1,8 +1,13 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { confirmPayment } from "../../api/tosspaymentAPI";
+import {useCustomerStore} from "../../stores/customerStore.ts";
+import BasicLayout from "../../layouts/BasicLayout.tsx";
+import GeneralLayout from "../../layouts/GeneralLayout.tsx";
 
 function TossSuccessPage() {
+    const { loginType } = useCustomerStore(); // Zustand 상태로 로그인 타입 가져오기
+    const Layout = loginType === "phone" ? BasicLayout : GeneralLayout;
     const [searchParams] = useSearchParams();
 
     useEffect(() => {
@@ -46,7 +51,9 @@ function TossSuccessPage() {
     const orderId = searchParams.get("orderId") || "정보 없음";
     const amount = Number(searchParams.get("amount") || 0).toLocaleString();
 
+
     return (
+        <Layout>
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
             <div className="max-w-lg w-full bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold text-center text-blue-600 mb-4">
@@ -74,6 +81,7 @@ function TossSuccessPage() {
                 </div>
             </div>
         </div>
+        </Layout>
     );
 }
 

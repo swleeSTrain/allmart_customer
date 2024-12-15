@@ -82,18 +82,18 @@ const OrderVoiceButton: React.FC = () => {
             {/* 주문 버튼 */}
             <button
                 onClick={handleClick}
-                className={`fixed bottom-4 flex flex-col items-center justify-center w-40 h-40 rounded-full shadow-lg focus:outline-none transition-all duration-300 ${
+                className={`fixed bottom-4 flex flex-col items-center justify-center w-36 h-36 rounded-full shadow-2xl transition-all duration-300 ease-in-out ${
                     isRecording
-                        ? "bg-red-500 hover:bg-red-600"
-                        : "bg-green-500 hover:bg-green-600"
+                        ? "bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800"
+                        : "bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800"
                 } ${isLoading ? "opacity-70 cursor-wait" : ""}`}
-                aria-label={isRecording ? "주문 종료" : "음성 주문"}
                 disabled={isLoading}
+                aria-label={isRecording ? "주문 종료" : "음성 주문"}
             >
                 <div className="flex flex-col items-center justify-center h-full w-full">
                     {isLoading ? (
                         <svg
-                            className="animate-spin w-20 h-20 text-white"
+                            className="animate-spin w-12 h-12 text-white"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -119,7 +119,7 @@ const OrderVoiceButton: React.FC = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="w-20 h-20 text-white"
+                            className="w-14 h-14 text-white"
                         >
                             <path
                                 strokeLinecap="round"
@@ -129,24 +129,23 @@ const OrderVoiceButton: React.FC = () => {
                         </svg>
                     )}
                     <span
-                        className={`text-3xl font-extrabold mt-5 ${
+                        className={`text-lg font-bold mt-2 ${
                             isRecording ? "text-red-100" : "text-white"
                         }`}
                     >
-                    {isRecording ? "주문 종료" : "음성 주문"}
-                </span>
+            {isRecording ? "주문 종료" : "음성 주문"}
+        </span>
                 </div>
             </button>
+
 
             {/* 오버레이 창 */}
             {isOverlayVisible && (
                 <div
-                    className="fixed inset-x-4 top-16 bottom-44 bg-gray-100 z-50 flex flex-col border border-gray-300 rounded-xl shadow-xl overflow-hidden"
+                    className="fixed inset-x-4 top-16 bottom-44 z-50 flex flex-col bg-white bg-opacity-80 backdrop-blur-md border border-gray-300 rounded-xl shadow-xl overflow-hidden"
                 >
                     {/* 채팅창 헤더 */}
-                    <div
-                        className="sticky top-0 left-0 right-0 h-12 bg-blue-500 text-white flex items-center justify-between px-4 rounded-t-xl"
-                    >
+                    <div className="sticky top-0 left-0 right-0 h-12 bg-blue-500 text-white flex items-center justify-between px-4 rounded-t-xl">
                         <h2 className="font-bold text-lg">음성 주문중</h2>
                         <button
                             onClick={() => setIsOverlayVisible(false)}
