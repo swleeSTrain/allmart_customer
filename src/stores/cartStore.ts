@@ -16,9 +16,9 @@ export interface CartState {
     products: CartItem[];
     addToCart: (item: CartItem) => void;
     removeFromCart: (productID: number) => void;
+    updateProductQuantity: (productID: number, newQuantity: number) => void; // 수량 업데이트 함수 추가
     clearCart: () => void;
 }
-
 
 export const useCartStore = create<CartState>()(
     persist(
@@ -48,6 +48,19 @@ export const useCartStore = create<CartState>()(
                     set((state) => {
                         const updatedProducts = state.products.filter((p) => p.productID !== productID);
                         return { products: updatedProducts }; // persist middleware가 저장 처리
+                    }),
+                updateProductQuantity: (productID, newQuantity) =>
+                    set((state) => {
+                        const updatedProducts = state.products.map((p) =>
+                            p.productID === productID
+                                ? {
+                                    ...p,
+                                    quantity: newQuantity,
+                                    totalPrice: (p.totalPrice / p.quantity) * newQuantity, // 단가 기준으로 총 가격 재계산
+                                }
+                                : p
+                        );
+                        return { products: updatedProducts };
                     }),
                 clearCart: () => set(() => ({ products: [] })), // persist middleware가 저장 처리
             })

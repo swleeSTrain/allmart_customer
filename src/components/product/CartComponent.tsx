@@ -10,7 +10,6 @@ function CartComponent() {
     useEffect(() => {
         // 장바구니 상태 변경 시 선택된 상품 초기화
         setSelectedProducts(products.map((product) => product.productID));
-        console.log("장바구니 상태:", products);
     }, [products]);
 
     // 상품 선택/해제 핸들러
@@ -25,12 +24,17 @@ function CartComponent() {
     // 전체 선택/해제 핸들러
     const handleSelectAll = () => {
         if (selectedProducts.length === products.length) {
-            // 모두 선택된 상태라면 선택 해제
-            setSelectedProducts([]);
+            setSelectedProducts([]); // 모두 선택 해제
         } else {
-            // 모두 선택
-            setSelectedProducts(products.map((product) => product.productID));
+            setSelectedProducts(products.map((product) => product.productID)); // 모두 선택
         }
+    };
+
+    // 수량 변경 핸들러
+    const handleQuantityChange = (productID: number, newQuantity: number) => {
+        if (newQuantity < 1) return; // 수량은 최소 1
+        const cartStore = useCartStore.getState();
+        cartStore.updateProductQuantity(productID, newQuantity);
     };
 
     // 선택 삭제 핸들러
@@ -47,7 +51,6 @@ function CartComponent() {
         const selectedItems = products.filter((product) =>
             selectedProducts.includes(product.productID)
         );
-        console.log("결제할 상품:", selectedItems);
         alert(`총 ${selectedItems.length}개의 상품을 결제합니다.`);
     };
 
@@ -101,9 +104,33 @@ function CartComponent() {
                                 />
                                 <div className="flex-grow">
                                     <p className="text-sm text-gray-700 mb-1">{product.name}</p>
-                                    <p className="text-lg text-gray-800 font-medium">
-                                        수량: {product.quantity}
-                                    </p>
+                                    <div className="flex items-center space-x-2">
+                                        <button
+                                            className="px-2 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+                                            onClick={() =>
+                                                handleQuantityChange(
+                                                    product.productID,
+                                                    product.quantity - 1
+                                                )
+                                            }
+                                        >
+                                            -
+                                        </button>
+                                        <span className="text-lg text-gray-800 font-medium">
+                                            {product.quantity}
+                                        </span>
+                                        <button
+                                            className="px-2 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+                                            onClick={() =>
+                                                handleQuantityChange(
+                                                    product.productID,
+                                                    product.quantity + 1
+                                                )
+                                            }
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                     <p className="text-lg text-gray-800 font-medium">
                                         가격: {product.totalPrice.toLocaleString()}원
                                     </p>
@@ -125,13 +152,6 @@ function CartComponent() {
             {/* 하단 총합 및 결제하기 버튼 */}
             {selectedProducts.length > 0 && (
                 <div className="fixed bottom-16 left-0 w-full bg-gray-100 p-4 shadow-md text-center">
-                    {/* 선택된 상품 기준 총 수량 및 총 가격 계산 */}
-                    <p className="text-lg font-medium text-gray-800 mb-0.5">
-                        총 상품:{" "}
-                        {products
-                            .filter((p) => selectedProducts.includes(p.productID))
-                            .reduce((sum, p) => sum + p.quantity, 0)}개
-                    </p>
                     <p className="text-lg font-medium text-gray-800 mb-2">
                         총 가격:{" "}
                         {products
@@ -147,7 +167,6 @@ function CartComponent() {
                     </button>
                 </div>
             )}
-
         </div>
     );
 }
