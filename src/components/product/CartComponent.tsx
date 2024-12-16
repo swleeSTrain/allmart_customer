@@ -3,14 +3,18 @@ import { useEffect, useState } from "react";
 
 function CartComponent() {
     const { products } = useCartStore();
-    const [selectedProducts, setSelectedProducts] = useState([]);
+    const [selectedProducts, setSelectedProducts] = useState(
+        products.map((product) => product.productID) // 기본적으로 전체 선택
+    );
 
     useEffect(() => {
+        // 장바구니 상태 변경 시 선택된 상품 초기화
+        setSelectedProducts(products.map((product) => product.productID));
         console.log("장바구니 상태:", products);
     }, [products]);
 
     // 상품 선택/해제 핸들러
-    const handleSelectProduct = (productID) => {
+    const handleSelectProduct = (productID: number) => {
         setSelectedProducts((prev) =>
             prev.includes(productID)
                 ? prev.filter((id) => id !== productID) // 이미 선택된 상품은 해제
@@ -76,7 +80,6 @@ function CartComponent() {
                 </button>
             </div>
 
-
             {/* 장바구니 내용 */}
             <div className="overflow-y-auto max-h-[calc(100vh-280px)] pb-24">
                 {products.length === 0 ? (
@@ -120,23 +123,31 @@ function CartComponent() {
             </div>
 
             {/* 하단 총합 및 결제하기 버튼 */}
-            {products.length > 0 && (
+            {selectedProducts.length > 0 && (
                 <div className="fixed bottom-16 left-0 w-full bg-gray-100 p-4 shadow-md text-center">
+                    {/* 선택된 상품 기준 총 수량 및 총 가격 계산 */}
                     <p className="text-lg font-medium text-gray-800 mb-0.5">
-                        총 상품: {products.reduce((sum, p) => sum + p.quantity, 0)}개
+                        총 상품:{" "}
+                        {products
+                            .filter((p) => selectedProducts.includes(p.productID))
+                            .reduce((sum, p) => sum + p.quantity, 0)}개
                     </p>
                     <p className="text-lg font-medium text-gray-800 mb-2">
-                        총 가격: {products.reduce((sum, p) => sum + p.totalPrice, 0).toLocaleString()}원
+                        총 가격:{" "}
+                        {products
+                            .filter((p) => selectedProducts.includes(p.productID))
+                            .reduce((sum, p) => sum + p.totalPrice, 0)
+                            .toLocaleString()}원
                     </p>
                     <button
                         onClick={handleCheckout}
                         className="w-full bg-orange-400 hover:bg-orange-400 text-white py-2 rounded-md text-lg font-medium"
-                        disabled={selectedProducts.length === 0}
                     >
                         결제하기
                     </button>
                 </div>
             )}
+
         </div>
     );
 }
