@@ -27,6 +27,7 @@ const QnaAddComponent: React.FC = () => {
             }, {} as Record<string, string>);
 
             if (cookies.customerID && cookies.martID && cookies.name) {
+                // @ts-ignore
                 setCustomerInfo(
                     cookies.name,
                     parseInt(cookies.customerID, 10),

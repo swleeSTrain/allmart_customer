@@ -6,12 +6,12 @@ const chatbotHost = 'http://localhost:8086/api/v1/chatbot';
 const orderHost = 'http://localhost:8080/api/v1/orders/voice';
 
 // 챗봇 요청 보내기 함수
-export const sendChatbotRequest = async (descriptionText: string): Promise<string> => {
+export const sendChatbotRequest = async (userId: number,descriptionText: string): Promise<string> => {
 
     // 챗봇 API에 전송할 JSON 형식 데이터
     const chatbotRequestData = {
         "version": "v2",
-        "userId": "1asd2",
+        "userId": userId,
         "timestamp": Date.now(),
         "bubbles": [
             {

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { convertSTT, convertTTS } from "../../api/VoiceAPI"; // 적절한 경로 수정
 import { sendChatbotRequest } from "../../api/ChatbotAPI";
+import {useCustomerStore} from "../../stores/customerStore.ts";
 
 type ErrorState = string | null;
 
@@ -14,7 +15,7 @@ const OrderVoiceButton: React.FC = () => {
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
     const chatContainerRef = useRef<HTMLDivElement>(null);
-
+    const customerID = useCustomerStore((state) => state.customerID);
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -47,15 +48,18 @@ const OrderVoiceButton: React.FC = () => {
                         const transcription = await convertSTT(audioFile);
                         setChatMessages((prev) => [...prev, { sender: "사용자", text: transcription }]);
 
-                        const chatbotResponse = await sendChatbotRequest(transcription);
-                        setChatMessages((prev) => [...prev, { sender: "챗봇", text: chatbotResponse }]);
+                        if (customerID != null) {
+                            const chatbotResponse = await sendChatbotRequest(customerID, transcription);
+                            setChatMessages((prev) => [...prev, { sender: "챗봇", text: chatbotResponse }]);
 
-                        const ttsBlob = await convertTTS(chatbotResponse);
-                        const ttsUrl = URL.createObjectURL(ttsBlob);
+                            const ttsBlob = await convertTTS(chatbotResponse);
+                            const ttsUrl = URL.createObjectURL(ttsBlob);
 
-                        const audio = new Audio(ttsUrl);
-                        await audio.play();
-                        audio.onended = () => URL.revokeObjectURL(ttsUrl);
+                            const audio = new Audio(ttsUrl);
+                            await audio.play();
+                            audio.onended = () => URL.revokeObjectURL(ttsUrl);
+                        }
+
                     } catch (err) {
                         setError("음성 주문 처리 중 문제가 발생했습니다. 다시 시도해 주세요.");
                         console.error(err);

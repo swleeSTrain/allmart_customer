@@ -10,8 +10,11 @@ function AccessibleCartComponent() {
     }, [products]);
 
     // 상품 선택/해제 핸들러
+    // @ts-ignore
     const handleSelectProduct = (productID) => {
+        // @ts-ignore
         setSelectedProducts((prev) =>
+            // @ts-ignore
             prev.includes(productID)
                 ? prev.filter((id) => id !== productID)
                 : [...prev, productID]
@@ -23,6 +26,7 @@ function AccessibleCartComponent() {
         if (selectedProducts.length === products.length) {
             setSelectedProducts([]);
         } else {
+            // @ts-ignore
             setSelectedProducts(products.map((product) => product.productID));
         }
     };
@@ -39,6 +43,7 @@ function AccessibleCartComponent() {
     // 결제하기 버튼 클릭 핸들러
     const handleCheckout = () => {
         const selectedItems = products.filter((product) =>
+            // @ts-ignore
             selectedProducts.includes(product.productID)
         );
         console.log("결제할 상품:", selectedItems);
@@ -90,6 +95,7 @@ function AccessibleCartComponent() {
                                 <input
                                     type="checkbox"
                                     className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    // @ts-ignore
                                     checked={selectedProducts.includes(product.productID)}
                                     onChange={() => handleSelectProduct(product.productID)}
                                 />

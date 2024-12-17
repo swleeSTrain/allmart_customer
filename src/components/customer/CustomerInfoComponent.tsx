@@ -17,6 +17,7 @@ function CustomerInfoComponent() {
             customerData.martID !== martID ||
             customerData.customerID !== customerID
         ) {
+            // @ts-ignore
             setCustomerInfo(customerData.name, customerData.customerID, customerData.martID); // 변수 이름 수정
         }
     }, [name, martID, customerID, customerData, setCustomerInfo]);
