@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 
-const host = 'http://localhost:8080/api/v1/qna/question';
+const host = 'https://allmartservice.shop/api/v1/qna/question';
 
 // 질문 리스트 가져오기
 

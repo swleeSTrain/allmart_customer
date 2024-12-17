@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const host = 'https://0962-58-235-119-39.ngrok-free.app/api/v1/voice';
-const host = 'http://localhost:8086/api/v1/voice';
+const host = 'https://allmartservice.shop/api/v1/voice';
 
 // STT
 export const convertSTT = async (voiceFile: File): Promise<string> => {

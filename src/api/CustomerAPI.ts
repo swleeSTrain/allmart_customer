@@ -10,7 +10,7 @@ const config:AxiosRequestConfig = {
 
 }
 
-const host = 'http://localhost:8080/api/v1/customer'
+const host = 'https://allmartservice.shop/api/v1/customer'
 
 export const postPhoneSignIn = async (phoneNumber: string): Promise<ICustomer> => {
 
