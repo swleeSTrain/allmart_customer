@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import { useCustomerStore } from "../../stores/customerStore";
 import { useCustomerCookie } from "../../hooks/useCustomerCookie";
@@ -49,21 +48,9 @@ const TossPayComponent: React.FC = () => {
         fetchOrderData();
     }, [customerName]);
 
+
     const handlePayment = async () => {
-        if (!customerName) {
-            alert("로그인 후 결제를 진행해주세요.");
-            return;
-        }
-
-        if (!orderId) {
-            alert("주문 정보가 없습니다. 주문 데이터를 다시 확인해주세요.");
-            return;
-        }
-
         try {
-            setLoading(true);
-            console.log("결제 요청 데이터:", { amount, orderId, orderName, customerName });
-
             const tossPayments = await loadTossPayments("test_ck_ma60RZblrqR6ROZp0Bze8wzYWBn1");
 
             await tossPayments.requestPayment("카드", {
@@ -75,19 +62,18 @@ const TossPayComponent: React.FC = () => {
                 failUrl: `${window.location.origin}/toss/fail`,
             });
 
-            setLoading(false);
+            onSuccess && onSuccess();
         } catch (error) {
-            setLoading(false);
             console.error("결제 요청 중 오류 발생:", error);
-            alert("결제 요청에 실패했습니다. 다시 시도해주세요.");
+            onError && onError(error);
         }
     };
 
-    return (
-        <button onClick={handlePayment} disabled={loading}>
-            {loading ? "결제 처리 중..." : "결제하기"}
-        </button>
-    );
+    useEffect(() => {
+        handlePayment();
+    }, []);
+
+    return null; // UI 없음
 };
 
 export default TossPayComponent;
