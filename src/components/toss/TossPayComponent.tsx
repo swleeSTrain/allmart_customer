@@ -3,7 +3,8 @@ import { loadTossPayments } from "@tosspayments/payment-sdk";
 import { useCustomerStore } from "../../stores/customerStore";
 import { useCustomerCookie } from "../../hooks/useCustomerCookie";
 import { getReadOrder } from "../../api/OrderAPI";
-import { v4 as uuidv4 } from "uuid"; // uuid import
+import { v4 as uuidv4 } from "uuid";
+import {sendOrderFcm} from "../../api/FcmAPI.ts"; // uuid import
 
 const TossPayComponent: React.FC = () => {
     const [amount, setAmount] = useState<number>(0);
@@ -36,6 +37,7 @@ const TossPayComponent: React.FC = () => {
 
                 if (customerName) {
                     setOrderName(`${customerName}-${generatedOrderId}`); // 고객 이름과 결합
+                    await sendOrderFcm(customerName, generatedOrderId); // FCM 전송
                 } else {
                     console.error("고객 이름이 없습니다. 상태를 확인하세요.");
                 }
