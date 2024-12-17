@@ -4,12 +4,14 @@ import { confirmPayment } from "../../api/tosspaymentAPI";
 import {useCustomerStore} from "../../stores/customerStore.ts";
 import BasicLayout from "../../layouts/BasicLayout.tsx";
 import GeneralLayout from "../../layouts/GeneralLayout.tsx";
+import {sendPayFcm} from "../../api/FcmAPI.ts";
 
 function TossSuccessPage() {
     const { loginType } = useCustomerStore(); // Zustand 상태로 로그인 타입 가져오기
     const Layout = loginType === "phone" ? BasicLayout : GeneralLayout;
     const [searchParams] = useSearchParams();
-
+    const customerId = useCustomerStore((state) => state.customerID);
+    const martId = useCustomerStore((state) => state.martID);
     useEffect(() => {
         if (!searchParams) {
             console.error("Search parameters가 초기화되지 않았습니다.");
@@ -37,7 +39,9 @@ function TossSuccessPage() {
                 console.log("결제 데이터 확인 중:", requestData);
                 const response = await confirmPayment(requestData);
                 console.log("결제 검증 성공:", response);
-
+                if (customerId != null) {
+                    sendPayFcm(customerId, martId);
+                }
                 alert("결제 검증에 성공했습니다.");
             } catch (error: any) {
                 console.error("결제 검증 실패:", error.message);
