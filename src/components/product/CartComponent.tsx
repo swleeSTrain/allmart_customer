@@ -1,11 +1,17 @@
-import { useCartStore } from "../../stores/cartStore.ts";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useCartStore } from "../../stores/cartStore";
+import { useCustomerStore } from "../../stores/customerStore";
+import TossPayComponent from "../toss/TossPayComponent";
+import { v4 as uuidv4 } from "uuid";
 
 function CartComponent() {
     const { products } = useCartStore();
+    const customerName = useCustomerStore((state) => state.name);
     const [selectedProducts, setSelectedProducts] = useState(
         products.map((product) => product.productID) // 기본적으로 전체 선택
     );
+    const [showPayment, setShowPayment] = useState(false); // 결제 창 트리거
+    const [orderData, setOrderData] = useState<any>(null); // 결제 데이터 저장
 
     useEffect(() => {
         // 장바구니 상태 변경 시 선택된 상품 초기화
@@ -46,12 +52,41 @@ function CartComponent() {
         setSelectedProducts([]); // 삭제 후 선택 초기화
     };
 
-    // 결제하기 버튼 클릭 핸들러
-    const handleCheckout = () => {
+    // 총 결제 금액 계산
+    const calculateTotalAmount = (): number =>
+        products
+            .filter((product) => selectedProducts.includes(product.productID))
+            .reduce((sum, product) => sum + product.totalPrice, 0);
+
+    // 주문 이름 생성
+    const createOrderName = (): string => {
         const selectedItems = products.filter((product) =>
             selectedProducts.includes(product.productID)
         );
-        alert(`총 ${selectedItems.length}개의 상품을 결제합니다.`);
+        const itemNames = selectedItems.map((item) => item.name).join(", ");
+        return `${customerName || "고객"} - ${itemNames}`;
+    };
+
+    // 결제하기 버튼 클릭 핸들러
+    const handleCheckout = () => {
+        if (!customerName) {
+            alert("로그인 후 결제를 진행해주세요.");
+            return;
+        }
+
+        if (selectedProducts.length === 0) {
+            alert("결제할 상품을 선택해주세요.");
+            return;
+        }
+
+        // 결제 정보 생성
+        const amount = calculateTotalAmount();
+        const orderId = uuidv4().replace(/-/g, "").slice(0, 36);
+        const orderName = createOrderName();
+
+        // 결제 데이터를 상태에 저장
+        setOrderData({ amount, orderId, orderName, customerName });
+        setShowPayment(true); // 결제 트리거 활성화
     };
 
     return (
@@ -149,7 +184,7 @@ function CartComponent() {
                 )}
             </div>
 
-            {/* 하단 총합 및 결제하기 버튼 */}
+            {/* 하단 결제하기 버튼 */}
             {selectedProducts.length > 0 && (
                 <div className="fixed bottom-16 left-0 w-full bg-gray-100 p-4 shadow-md text-center">
                     <p className="text-lg font-medium text-gray-800 mb-2">
@@ -166,6 +201,25 @@ function CartComponent() {
                         결제하기
                     </button>
                 </div>
+            )}
+
+            {/* TossPayComponent를 조건부 렌더링 */}
+            {showPayment && orderData && (
+                <TossPayComponent
+                    amount={orderData.amount}
+                    orderId={orderData.orderId}
+                    orderName={orderData.orderName}
+                    customerName={orderData.customerName}
+                    onSuccess={() => {
+                        alert("결제가 성공적으로 완료되었습니다!");
+                        setShowPayment(false);
+                    }}
+                    onError={(error) => {
+                        alert("결제에 실패했습니다. 다시 시도해주세요.");
+                        console.error(error);
+                        setShowPayment(false);
+                    }}
+                />
             )}
         </div>
     );
