@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IMart } from '../types/mart';
 
-const host = 'http://localhost:8080/api/v1/kakao/marts';
+const host = 'https://allmartservice.shop/api/v1/kakao/marts';
 
 export const getMartList = async (
     lat: number, lng: number, keyword?: string, type?: string

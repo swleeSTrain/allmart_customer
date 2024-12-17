@@ -152,7 +152,7 @@ function ProductSearchComponent() {
         >
             {product.thumbnailImage && (
                 <img
-                    src={`http://localhost:8080/uploads/${product.thumbnailImage}`}
+                    src={`${product.thumbnailImage}`}
                     alt={product.name}
                     className="w-24 h-24 object-cover rounded-md mr-4"
                 />
