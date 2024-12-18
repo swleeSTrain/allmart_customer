@@ -7,8 +7,10 @@ export const getMartList = async (
     lat: number, lng: number, keyword?: string, type?: string
 ): Promise<IMart[]> => {
     const res = await axios.get(`${host}/list`, {
+
         params: { lat, lng, keyword, type },
         withCredentials: true,
+        headers:{ 'Access-Control-Allow-Origin' : 'https://allmartsystem.shop' }
     });
     return res.data.dtoList; // dtoList를 반환
 };
