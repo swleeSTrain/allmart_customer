@@ -7,7 +7,7 @@ export const confirmPayment = async (paymentData: { paymentKey: string; orderId:
     console.log("백엔드로 전송할 데이터:", paymentData); // 요청 전에 데이터 확인
 
     try {
-        const response = await axios.post(`${BASE_URL}/confirm`, paymentData);
+        const response = await axios.post(`${BASE_URL}/confirm`, paymentData,{withCredentials: true,});
         console.log("백엔드 응답 데이터:", response.data); // 성공 시 응답 데이터 확인
         return response.data;
     } catch (error: any) {

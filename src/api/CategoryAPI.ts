@@ -9,6 +9,7 @@ export const getCategoryList = async (page: number = 1, size: number = 10) => {
             page,
             size,
         },
+        withCredentials: true,
     });
 
     return res.data;

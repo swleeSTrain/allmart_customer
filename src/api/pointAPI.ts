@@ -6,7 +6,7 @@ const host: string = "https://allmartsystem.shop/api/v1/points";
 
 
 export const getDetail = async (customerID: number) : Promise<IPoint>  => {
-    const res = await axios.get(`${host}/${customerID}`);
+    const res = await axios.get(`${host}/${customerID}`,{withCredentials: true,});
 
     console.log(res.data);
     return res.data;

@@ -28,7 +28,8 @@ export const sendChatbotRequest = async (userId: number,descriptionText: string)
         const response = await axios.post(chatbotHost, chatbotRequestData, {
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            withCredentials: true,
         });
 
         console.log("챗봇 응답 데이터:", response.data);

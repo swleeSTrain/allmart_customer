@@ -14,6 +14,7 @@ export const convertSTT = async (voiceFile: File): Promise<string> => {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
+            withCredentials: true,
         });
 
         return res.data;
@@ -39,6 +40,7 @@ export const convertTTS = async (text: string): Promise<Blob> => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            withCredentials: true,
         });
 
         // 서버에서 받은 byte[] 데이터를 Blob으로 변환

@@ -17,7 +17,7 @@ export const postPhoneSignIn = async (phoneNumber: string): Promise<ICustomer> =
     try {
         const res = await axios.post(
             `${host}/signIn/phoneNumber`,
-            { phoneNumber }, // POST 요청 body에 phoneNumber 포함
+            { phoneNumber,withCredentials: true, }, // POST 요청 body에 phoneNumber 포함
             config
         );
 
@@ -36,7 +36,7 @@ export const postSocialSignIn = async (email: string): Promise<ICustomer> => {
     try {
         const res = await axios.post(
             `${host}/signIn/social`,
-            { email }, // POST 요청 body에 phoneNumber 포함
+            { email,withCredentials: true }, // POST 요청 body에 phoneNumber 포함
             config
         );
 
@@ -57,7 +57,7 @@ export const postSignUp = async (param:ISignUpParam ):Promise<ICustomer> => {
     try {
         const res = await axios.post(
             `${host}/signUp/phoneNumber/${phoneNumber}`,
-            null,
+            {withCredentials: true},
             config
         );
         return res.data;
@@ -72,7 +72,8 @@ export const postSignUp = async (param:ISignUpParam ):Promise<ICustomer> => {
 export const refreshRequest = async (accessToken:string, refreshToken:string):Promise<ICustomer> => {
 
     const res = await axios.get(`${host}/refresh?refreshToken=${refreshToken}`, {
-        headers:{Authorization: `Bearer ${accessToken}`}
+        headers:{Authorization: `Bearer ${accessToken}`},
+        withCredentials: true,
     });
     return res.data
 

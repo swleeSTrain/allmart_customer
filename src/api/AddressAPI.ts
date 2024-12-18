@@ -9,8 +9,10 @@ export const saveAddress = async (addressData: AddressForm): Promise<Address> =>
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+
         },
         body: JSON.stringify(addressData),
+        credentials: "include",
     });
 
     if (!res.ok) {
