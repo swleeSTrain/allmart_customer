@@ -7,7 +7,7 @@ const BannerComponent = () => {
     // Fetch banners from the API
     const fetchBanners = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/v1/banners/getAll");
+            const response = await axios.get("https://allmartsystem.shop/api/v1/banners/getAll");
             setBanners(response.data.slice(0, 2)); // 처음 2개 배너만 표시
         } catch (error) {
             console.error("Error fetching banners:", error);
@@ -27,7 +27,7 @@ const BannerComponent = () => {
     };
 
     const getImageUrl = (imagePath) => {
-        return imagePath.startsWith("http") ? imagePath : `http://localhost:8080/files/image/${imagePath}`;
+        return imagePath.startsWith("http") ? imagePath : `https://allmartsystem.shop/files/image/${imagePath}`;
     };
 
     return (

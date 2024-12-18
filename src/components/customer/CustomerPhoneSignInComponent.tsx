@@ -21,7 +21,7 @@ function CustomerPhoneSignInComponent() {
 
     const handleKakaoLogin = async () => {
             // 카카오 OAuth2 로그인 URL로 이동
-            const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
+            const kakaoURL = `https://allmartsystem.shop/oauth2/authorization/kakao`;
             window.location.href = `${kakaoURL}`;
 
 
@@ -29,7 +29,7 @@ function CustomerPhoneSignInComponent() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://localhost:8080/oauth2/authorization/kakao', {
+            const response = await fetch('https://allmartsystem.shop/oauth2/authorization/kakao', {
                 method: 'GET',
                 credentials: 'include', // 세션 기반 인증 사용 시 필요
             });
