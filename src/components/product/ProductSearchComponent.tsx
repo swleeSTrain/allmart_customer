@@ -152,7 +152,7 @@ function ProductSearchComponent() {
         >
             {product.thumbnailImage && (
                 <img
-                    src={`http://localhost:8080/uploads/${product.thumbnailImage}`}
+                    src={`${product.thumbnailImage}`}
                     alt={product.name}
                     className="w-24 h-24 object-cover rounded-md mr-4"
                 />
@@ -181,41 +181,46 @@ function ProductSearchComponent() {
 
     return (
         <div className="container mx-auto pt-16 pb-20 p-4">
-            <div className="flex items-center border border-gray-300 rounded-full p-2 shadow-sm mb-6">
-                <input
-                    type="text"
-                    ref={inputRef}
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    placeholder="검색어를 입력해주세요"
-                    className="flex-grow px-4 py-2 text-sm text-gray-700 outline-none rounded-l-full"
-                />
-                <button
-                    onClick={handleSearch}
-                    aria-label="검색"
-                    className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-6 h-6"
+            <div className="container mx-auto p-4">
+                <div
+                    className="flex items-center border border-gray-300 rounded-full p-1 shadow-sm mb-6 bg-white max-w-4xl mx-auto">
+                    <input
+                        type="text"
+                        ref={inputRef}
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                        placeholder="검색어를 입력해주세요"
+                        className="w-full px-4 py-2 text-sm text-gray-700 outline-none rounded-l-full"
+                    />
+                    <button
+                        onClick={handleSearch}
+                        aria-label="검색"
+                        className="w-12 h-12 bg-orange-500 text-white flex items-center justify-center rounded-full hover:bg-orange-600 transition"
                     >
-                        <path
-                            fillRule="evenodd"
-                            d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
-                            clipRule="evenodd"
-                        />
-                    </svg>
-                </button>
-                <button
-                    onClick={handleCancelSearch}
-                    aria-label="취소"
-                    className="p-2 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 transition"
-                >
-                    취소
-                </button>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-6 h-6"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    </button>
+                    <button
+                        onClick={handleCancelSearch}
+                        aria-label="취소"
+                        className="ml-2 w-12 h-12 bg-gray-200 text-gray-700 flex items-center justify-center rounded-full hover:bg-gray-300 transition"
+                    >
+                        X
+                    </button>
+                </div>
             </div>
+
+
             {!isSearchMode && (
                 <div>
                     <h2 className="text-lg font-semibold text-gray-800 mb-4">최근 검색어</h2>
