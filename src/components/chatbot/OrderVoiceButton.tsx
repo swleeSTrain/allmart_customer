@@ -86,36 +86,17 @@ const OrderVoiceButton: React.FC = () => {
             {/* 주문 버튼 */}
             <button
                 onClick={handleClick}
-                className={`fixed bottom-4 flex flex-col items-center justify-center w-36 h-36 rounded-full shadow-2xl transition-all duration-300 ease-in-out ${
+                className={`fixed bottom-6 z-50 flex flex-col items-center justify-center w-36 h-36 rounded-full shadow-lg transition-transform transform duration-300 ease-in-out ${
                     isRecording
-                        ? "bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800"
-                        : "bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800"
+                        ? "bg-gradient-to-r from-red-500 to-red-700 hover:scale-110"
+                        : "bg-gradient-to-r from-green-500 to-green-700 hover:scale-110"
                 } ${isLoading ? "opacity-70 cursor-wait" : ""}`}
                 disabled={isLoading}
                 aria-label={isRecording ? "주문 종료" : "음성 주문"}
             >
                 <div className="flex flex-col items-center justify-center h-full w-full">
                     {isLoading ? (
-                        <svg
-                            className="animate-spin w-12 h-12 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                            ></circle>
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                            ></path>
-                        </svg>
+                        <div className="animate-spin w-12 h-12 border-4 border-white border-t-transparent rounded-full"></div>
                     ) : (
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -137,41 +118,44 @@ const OrderVoiceButton: React.FC = () => {
                             isRecording ? "text-red-100" : "text-white"
                         }`}
                     >
-            {isRecording ? "주문 종료" : "음성 주문"}
-        </span>
+                    {isRecording ? "주문 종료" : "음성 주문"}
+                </span>
                 </div>
             </button>
-
 
             {/* 오버레이 창 */}
             {isOverlayVisible && (
                 <div
-                    className="fixed inset-x-4 top-16 bottom-44 z-50 flex flex-col bg-white bg-opacity-80 backdrop-blur-md border border-gray-300 rounded-xl shadow-xl overflow-hidden"
+                    className="fixed inset-x-4 top-24 bottom-36 z-40 flex flex-col bg-white border border-gray-300 rounded-xl shadow-2xl overflow-hidden"
                 >
                     {/* 채팅창 헤더 */}
-                    <div className="sticky top-0 left-0 right-0 h-12 bg-blue-500 text-white flex items-center justify-between px-4 rounded-t-xl">
+                    <div
+                        className="sticky top-0 left-0 right-0 h-14 bg-blue-600 text-white flex items-center justify-between px-4 rounded-t-xl">
                         <h2 className="font-bold text-lg">음성 주문중</h2>
                         <button
                             onClick={() => setIsOverlayVisible(false)}
-                            className="text-lg hover:text-gray-200 transition-colors duration-200"
+                            className="text-2xl hover:text-gray-200 transition-colors duration-200"
                         >
-                            X
+                            ×
                         </button>
                     </div>
 
                     {/* 채팅 메시지 리스트 */}
-                    <div ref={chatContainerRef} className="p-4 overflow-y-auto flex-1 bg-white">
+                    <div
+                        ref={chatContainerRef}
+                        className="p-4 overflow-y-auto flex-1 h-[80vh] bg-white"
+                    >
                         {chatMessages.map((msg, index) => (
                             <div
                                 key={index}
-                                className={`mb-4 p-3 rounded-lg shadow-md max-w-[70%] ${
+                                className={`mb-6 py-6 px-4 rounded-lg shadow-sm max-w-[70%] ${
                                     msg.sender === "사용자"
                                         ? "ml-auto bg-blue-100 text-blue-900"
                                         : "mr-auto bg-gray-200 text-gray-800"
                                 }`}
                             >
-                                <p className="text-sm font-semibold mb-1 text-gray-600">{msg.sender}</p>
-                                <p className="text-base">{msg.text}</p>
+                                <p className="text-lg font-bold mb-2 text-gray-600">{msg.sender}</p>
+                                <p className="text-2xl leading-10">{msg.text}</p>
                             </div>
                         ))}
                     </div>

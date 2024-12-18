@@ -170,31 +170,34 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
                 {/* 모바일 네비게이션 */}
                 <nav
-                    className={`fixed top-0 left-0 z-40 h-full w-64 bg-white transform transition-transform duration-300 ease-in-out shadow-md md:hidden ${
+                    className={`fixed left-0 z-40 w-64 bg-white transform transition-transform duration-300 ease-in-out shadow-md md:hidden ${
                         menuOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
+                    style={{ top: '4rem', bottom: '4rem' }} // 상단과 하단 여백 설정
                 >
-                    <ul className="pt-16 px-4 space-y-6">
+                    <ul className="h-full flex flex-col justify-between px-4 pt-8 pb-4 space-y-6 overflow-y-auto">
                         {/* 사용자 이름 */}
                         {name && (
                             <li>
-                                <span className="block text-2xl font-semibold text-gray-900">
-                                    {name}님
-                                </span>
+                <span className="block text-2xl font-semibold text-gray-900">
+                    {name}님
+                </span>
                             </li>
                         )}
 
                         {/* 메뉴 아이템 */}
-                        {menuItems.map((item, index) => (
-                            <li key={index}>
-                                <button
-                                    onClick={() => handleNavigate(item.link)}
-                                    className="block text-2xl font-semibold text-gray-900 hover:text-blue-600"
-                                >
-                                    {item.name}
-                                </button>
-                            </li>
-                        ))}
+                        <div className="space-y-6">
+                            {menuItems.map((item, index) => (
+                                <li key={index}>
+                                    <button
+                                        onClick={() => handleNavigate(item.link)}
+                                        className="block text-2xl font-semibold text-gray-900 hover:text-blue-600"
+                                    >
+                                        {item.name}
+                                    </button>
+                                </li>
+                            ))}
+                        </div>
 
                         {/* 로그인/로그아웃 버튼 */}
                         <li>
@@ -216,6 +219,9 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                         </li>
                     </ul>
                 </nav>
+
+
+
 
 
             </header>
@@ -255,8 +261,9 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 </button>
 
                 {/* 음성 주문 버튼 */}
-                <OrderVoiceButton/>
-
+                <div className="absolute inset-x-0 bottom-0 flex justify-center">
+                    <OrderVoiceButton/>
+                </div>
                 {/* 주문 목록 버튼 */}
                 <button
                     className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
