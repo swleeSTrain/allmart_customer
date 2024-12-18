@@ -5,7 +5,7 @@ const host = "https://allmartsystem.shop/api/v1/kakao";
 
 export const getMapScriptUrl = async (): Promise<string> => {
     try {
-        const res = await axios.get<{ scriptUrl: string }>(`${host}/script`);
+        const res = await axios.get<{ scriptUrl: string }>(`${host}/script`,{ withCredentials: true });
 
         console.log(res.data.scriptUrl);
 
