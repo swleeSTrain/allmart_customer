@@ -1,21 +1,14 @@
 import axios from "axios";
-import { IMartMap } from "../types/mart.ts";
+import {IMartMap} from "../types/mart.ts";
 
 const host = "https://allmartsystem.shop/api/v1/kakao";
 
-const axiosInstance = axios.create({
-    baseURL: host,
-    withCredentials: true,
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    }
-});
-
 export const getMapScriptUrl = async (): Promise<string> => {
     try {
-        const res = await axiosInstance.get<{ scriptUrl: string }>("/script");
+        const res = await axios.get<{ scriptUrl: string }>(`${host}/script`,{ withCredentials: true });
+
         console.log(res.data.scriptUrl);
+
         return res.data.scriptUrl;
     } catch (error) {
         console.error("Failed to get Kakao Map Script URL", error);
@@ -25,8 +18,9 @@ export const getMapScriptUrl = async (): Promise<string> => {
 
 export const getMarts = async (lat: number, lng: number): Promise<IMartMap[]> => {
     try {
-        const res = await axiosInstance.get<IMartMap[]>("/marts", {
-            params: { lat, lng }
+        const res = await axios.get<IMartMap[]>(`${host}/marts`, {
+            params: { lat, lng }, // 위치 정보를 쿼리 파라미터로 전달
+            withCredentials: true,
         });
         return res.data;
     } catch (error) {
@@ -34,3 +28,5 @@ export const getMarts = async (lat: number, lng: number): Promise<IMartMap[]> =>
         throw error;
     }
 };
+
+
