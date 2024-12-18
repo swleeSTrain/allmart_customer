@@ -17,10 +17,10 @@ const BannerSlider = () => {
         <div className="mt-7"> {/* Tailwind CSS의 상단 마진 */}
             <Slider {...settings}>
                 <div>
-                    <img src="/images/banner1.png" alt="Banner 1" />
+                    <img src="/src/images/banner1.png" alt="Banner 1" />
                 </div>
                 <div>
-                    <img src="/images/banner2.png" alt="Banner 2" />
+                    <img src="/src/images/banner2.png" alt="Banner 2" />
                 </div>
 
             </Slider>

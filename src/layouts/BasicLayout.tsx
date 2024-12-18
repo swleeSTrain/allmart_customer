@@ -110,7 +110,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
                     {/* 로고 */}
                     <img
-                        src="/images/a.png"
+                        src="/src/images/a.png"
                         alt="마트 로고"
                         className="h-20 md:h-16 lg:h-20 object-contain cursor-pointer mx-auto md:mx-0"
                         onClick={() => navigate("/")}

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
 import { useCustomerCookie } from "../hooks/useCustomerCookie";
-import homeIcon from '../../public/images/home.png'; // PNG 아이콘 경로 (필요시)
-import leafletIcon from '../../public/images/flyer.png'; // PNG 아이콘 경로 (필요시)
+import homeIcon from '../images/home.png'; // PNG 아이콘 경로 (필요시)
+import leafletIcon from '../images/flyer.png'; // PNG 아이콘 경로 (필요시)
 import FloatingCartButton from "../components/FloatingCartButton"; // 플로팅 버튼 import
 import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
 
@@ -61,7 +61,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     {/* 왼쪽: 로고 */}
                     <div className="flex items-center">
                         <img
-                            src="/images/a.png"
+                            src="/src/images/a.png"
                             alt="마트 로고"
                             className="h-12 object-contain cursor-pointer"
                             onClick={() => navigate("/")}
