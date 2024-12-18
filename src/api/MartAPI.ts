@@ -13,6 +13,7 @@ export const getMartList = async (
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
+                "Access-Control-Allow-Origin": "*"
             }
         });
         return res.data.dtoList;
