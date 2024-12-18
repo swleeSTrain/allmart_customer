@@ -8,7 +8,7 @@ export const getMartList = async (
 ): Promise<IMart[]> => {
     const res = await axios.get(`${host}/list`, {
         params: { lat, lng, keyword, type },
-        withCredentials: true,
+
     });
     return res.data.dtoList; // dtoList를 반환
 };
