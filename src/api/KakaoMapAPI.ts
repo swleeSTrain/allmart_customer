@@ -5,11 +5,7 @@ const host = "https://allmartsystem.shop/api/v1/kakao";
 
 export const getMapScriptUrl = async (): Promise<string> => {
     try {
-        const res = await axios.get<{ scriptUrl: string }>(`${host}/script`,{
-            headers: {
-                "Access-Control-Allow-Origin": "*"
-            },
-            withCredentials: true });
+        const res = await axios.get<{ scriptUrl: string }>(`${host}/script`,{ withCredentials: true });
 
         console.log(res.data.scriptUrl);
 
@@ -24,9 +20,6 @@ export const getMarts = async (lat: number, lng: number): Promise<IMartMap[]> =>
     try {
         const res = await axios.get<IMartMap[]>(`${host}/marts`, {
             params: { lat, lng }, // 위치 정보를 쿼리 파라미터로 전달
-            headers: {
-                "Access-Control-Allow-Origin": "*"
-            },
             withCredentials: true,
         });
         return res.data;
