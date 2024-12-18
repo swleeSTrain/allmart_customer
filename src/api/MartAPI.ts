@@ -10,7 +10,6 @@ export const getMartList = async (
 
         params: { lat, lng, keyword, type },
         withCredentials: true,
-        headers:{ 'Access-Control-Allow-Origin' : 'https://allmartsystem.shop' }
     });
     return res.data.dtoList; // dtoList를 반환
 };
