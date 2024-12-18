@@ -57,7 +57,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
             <FloatingCartButton />
 
             <header className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
-                <div className="container mx-auto px-4 flex items-center justify-between h-16">
+                <div className="container mx-auto px-4 flex items-center justify-between h-20 md:justify-start">
                     {/* 왼쪽: 로고 */}
                     <div className="flex items-center">
                         <img
@@ -158,11 +158,14 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 {/* 모바일 네비게이션 */}
                 <nav
-                    className={`fixed top-0 left-0 z-40 h-full w-64 bg-gradient-to-b from-gray-600 to-gray-500 transform transition-transform duration-300 ease-in-out shadow-xl md:hidden ${
+                    className={`fixed left-0 z-40 w-64 bg-gradient-to-b from-gray-600 to-gray-500 transform transition-transform duration-300 ease-in-out shadow-xl md:hidden overflow-y-auto ${
                         menuOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
+                    style={{ top: '9vh', bottom: '9vh' }} /* 상단과 하단 여백 설정 */
                 >
-                    <ul className="pt-16 px-4 space-y-6">
+
+
+                <ul className="pt-16 px-4 space-y-6">
                         {/* 사용자 정보 */}
                         {name && (
                             <li className="bg-white p-4 rounded-lg shadow-md flex items-center">
@@ -197,19 +200,19 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                                     onClick={handleLogout}
                                     className="block w-full h-12 text-lg font-semibold bg-orange-400 text-white rounded-lg hover:bg-orange-400 shadow-md transform transition-transform hover:scale-105"
                                 >
-                                로그아웃
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={() => navigate("/customer/signIn")}
-                                        className="block w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform transition-transform hover:scale-105"
-                                    >
-                                        로그인
-                                    </button>
-                                )}
-                            </li>
-                        </ul>
-                    </nav>
+                                    로그아웃
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => navigate("/customer/signIn")}
+                                    className="block w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform transition-transform hover:scale-105"
+                                >
+                                    로그인
+                                </button>
+                            )}
+                        </li>
+                    </ul>
+                </nav>
 
 
             </header>
