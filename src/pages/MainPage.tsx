@@ -5,7 +5,8 @@ import CategoryListComponent from "../components/CategoryListComponent.tsx";
 
 import {  useParams } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore";
-import BannerComponent from "../components/flyer/FlyerBannerComponent.tsx";
+
+import BannerSlider from "../components/banner/BannerSlider.tsx";
 
 
 interface BeforeInstallPromptEvent extends Event {
@@ -55,8 +56,7 @@ function MainPage() {
         <Layout>
             <section className="container mx-auto px-4 py-6 mt-6">
                 {/* 배너 영역 */}
-                <BannerComponent />
-
+                <BannerSlider/>
 
                 {/* 메인 콘텐츠 */}
                 <div className="mt-6">

@@ -158,58 +158,61 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 {/* 모바일 네비게이션 */}
                 <nav
-                    className={`fixed top-0 left-0 z-40 h-full w-64 bg-gradient-to-b from-gray-600 to-gray-500 transform transition-transform duration-300 ease-in-out shadow-xl md:hidden ${
+                    className={`fixed left-0 z-40 w-64 h-[calc(100%-4rem)] bg-gradient-to-b from-gray-600 to-gray-500 transform transition-transform duration-300 ease-in-out shadow-xl md:hidden ${
                         menuOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
+                    style={{ top: '4rem', bottom: '0' }} // 상단 네비게이션 여백 설정
                 >
-                    <ul className="pt-16 px-4 space-y-6">
+                    <ul className="h-full flex flex-col px-4 pt-6 pb-6 space-y-6 overflow-y-auto">
                         {/* 사용자 정보 */}
                         {name && (
-                            <li className="bg-white p-4 rounded-lg shadow-md flex items-center">
-                <span className="block text-xl font-semibold text-gray-900">
+                            <li className="bg-white py-3 px-4 rounded-lg shadow-md flex items-center justify-center mb-4">
+                <span className="text-xl font-semibold text-gray-900 text-center">
                     안녕하세요, <span className="text-orange-400">{name}</span>님!
                 </span>
                             </li>
                         )}
 
                         {/* 메뉴 아이템 */}
-                        {menuItems.map((item, index) => (
-                            <li
-                                key={index}
-                                className="flex items-center space-x-4 px-3 py-2 rounded-lg hover:bg-blue-400 transition-colors"
-                            >
-                                {/* 아이콘 */}
-                                <span className="text-white text-2xl">{item.icon || "⭐"}</span>
-                                {/* 텍스트 */}
-                                <button
-                                    onClick={() => handleNavigate(item.link)}
-                                    className="block text-lg font-medium text-white hover:text-gray-100 transition-transform hover:scale-105"
+                        <div className="flex-1 space-y-4">
+                            {menuItems.map((item, index) => (
+                                <li
+                                    key={index}
+                                    className="flex items-center space-x-4 py-2 px-3 rounded-lg hover:bg-blue-400 transition-colors"
                                 >
-                                    {item.name}
-                                </button>
-                            </li>
-                        ))}
+                                    {/* 아이콘 */}
+                                    <span className="text-yellow-400 text-2xl">{item.icon || "⭐"}</span>
+                                    {/* 메뉴 텍스트 */}
+                                    <button
+                                        onClick={() => handleNavigate(item.link)}
+                                        className="text-lg font-medium text-white hover:text-gray-100 transition-transform transform hover:scale-105"
+                                    >
+                                        {item.name}
+                                    </button>
+                                </li>
+                            ))}
+                        </div>
 
                         {/* 로그인/로그아웃 버튼 */}
-                        <li className="mt-6">
+                        <li className="mt-auto">
                             {name ? (
                                 <button
                                     onClick={handleLogout}
-                                    className="block w-full h-12 text-lg font-semibold bg-orange-400 text-white rounded-lg hover:bg-orange-400 shadow-md transform transition-transform hover:scale-105"
+                                    className="w-full h-12 text-lg font-semibold bg-orange-500 text-white rounded-lg hover:bg-orange-600 shadow-md transform hover:scale-105 transition-transform"
                                 >
-                                로그아웃
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={() => navigate("/customer/signIn")}
-                                        className="block w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform transition-transform hover:scale-105"
-                                    >
-                                        로그인
-                                    </button>
-                                )}
-                            </li>
-                        </ul>
-                    </nav>
+                                    로그아웃
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => navigate("/customer/signIn")}
+                                    className="w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform hover:scale-105 transition-transform"
+                                >
+                                    로그인
+                                </button>
+                            )}
+                        </li>
+                    </ul>
+                </nav>
 
 
             </header>
