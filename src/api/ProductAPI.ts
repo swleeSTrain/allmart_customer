@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {IProduct} from "../types/product.ts";
 
-const host = 'https://allmartservice.shop/api/v1/product';
+const host = 'https://allmartsystem.shop/api/v1/product';
 
 export const getReadProduct = async (martID: number, productID: number): Promise<IProduct> => {
 
