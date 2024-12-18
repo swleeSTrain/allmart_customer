@@ -112,7 +112,6 @@ function CategoryListComponent() {
 
     const categoryItems = pageResponse.dtoList.map((category: ICategory, index) => {
 
-        console.log(category.name); // 실제 값 확인
         return (
             <li
                 key={category.categoryID}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { IMart } from '../../types/mart';
 import {useNavigate} from "react-router-dom";
+import { useMartStore } from '../../stores/martStore.ts';
 
 interface MartCardProps {
     mart: IMart;
@@ -10,7 +11,11 @@ interface MartCardProps {
 const MartCard: React.FC<MartCardProps> = ({ mart, refProp }) => {
     const navigate = useNavigate();
 
-    const handleMartClick = () => {
+    const handleMartClick = async () => {
+
+        const { fetchMartByID } = useMartStore.getState();
+        await fetchMartByID(mart.martID);
+
         navigate(`/${mart.martID}`);
     };
 

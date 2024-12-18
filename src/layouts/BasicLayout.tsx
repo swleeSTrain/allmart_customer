@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
-import { useCustomerCookie } from "../hooks/useCustomerCookie";
 import InstallPopupComponents from "../components/common/InstallPopupComponents.tsx"; // 쿠키 관련 훅
+import { useMartStore } from "../stores/martStore.ts";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -14,6 +14,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+    const { martInfo } = useMartStore();
 
     useEffect(() => {
         const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
@@ -45,27 +46,15 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, setName, logout } = useCustomerStore();
-    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
+    const { name, logout } = useCustomerStore();
 
-    // 쿠키 기반으로 상태 초기화
-    useEffect(() => {
-        const customerData = getCustomerCookies();
-        if (customerData && customerData.name !== name) { // 기존 상태와 비교
-            setName(customerData.name); // Zustand 상태 업데이트
-        }
-    }, [name, getCustomerCookies, setName]);
 
     // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
 
-        // 쿠키 삭제
-        removeCustomerCookies();
-        // 상태 초기화 (옵션)
-        logout();
-        // 사이드바 닫기
-        setMenuOpen(false);
+        logout(); // Zustand 상태 및 쿠키 모두 초기화
 
+        setMenuOpen(false); // 메뉴 닫기
     };
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -110,7 +99,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
                     {/* 로고 */}
                     <img
-                        src="/images/a.png"
+                        src={martInfo?.logoURL || "/images/a.png"}
                         alt="마트 로고"
                         className="h-20 md:h-16 lg:h-20 object-contain cursor-pointer mx-auto md:mx-0"
                         onClick={() => navigate("/")}
