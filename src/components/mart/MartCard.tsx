@@ -2,6 +2,8 @@ import React from 'react';
 import { IMart } from '../../types/mart';
 import Swal from 'sweetalert2';
 import {useNavigate} from "react-router-dom";
+import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts";
+import {useCustomerStore} from "../../stores/customerStore.ts";
 
 interface MartCardProps {
     mart: IMart;
@@ -11,7 +13,8 @@ interface MartCardProps {
 const MartCard: React.FC<MartCardProps> = ({ mart }) => {
 
     const navigate = useNavigate();
-
+    const { setCustomerCookies } = useCustomerCookie();
+    const { martID, setMartID } = useCustomerStore();
     const handleMartClick = () => {
         Swal.fire({
             title: `${mart.martName}를 선택하시겠습니까?`,
@@ -22,6 +25,12 @@ const MartCard: React.FC<MartCardProps> = ({ mart }) => {
             confirmButtonText: '선택',
             cancelButtonText: '취소',
         }).then(() => {
+            setCustomerCookies(null, null, null, null, mart.martID)
+
+            // Zustand 상태 업데이트 (중복 확인 후)
+            if (martID !== mart.martID) {
+                setMartID(mart.martID);
+            }
             navigate(`/${mart.martID}`);
         });
     };

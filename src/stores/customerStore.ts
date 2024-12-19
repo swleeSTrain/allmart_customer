@@ -10,9 +10,10 @@ interface CustomerState {
     loginType: "phone" | "email" | null; // 로그인 타입 추가
     setTokens: (accessToken: string, refreshToken: string) => void;
     setName: (name: string) => void;
-    setMartID: (martID: number) => void;
-    setCustomerInfo: (name: string, customerID: number, martID: number, loginType: "phone" | "email") => void;
+    setMartID: (martID: string | undefined) => void;
+    setCustomerInfo: (name: string, customerID: number, martID: number, loginType: undefined, email: string | null) => void;
     logout: () => void;
+    email: string | null;
 }
 
 // zustand는 여기 로직 내에서 쿠키 처리가 안됨 따로 해줘야 함
@@ -29,8 +30,8 @@ export const useCustomerStore = create<CustomerState>()(
         setTokens: (accessToken, refreshToken) => {
             set({ accessToken, refreshToken });
         },
-        setCustomerInfo: (name, customerID, martID, loginType) => {
-            set({ name, customerID, martID, loginType });
+        setCustomerInfo: (name, customerID, martID, loginType, email) => {
+            set({ name, customerID, martID, loginType, email });
         },
         // 얘는 사이드바에 이름 뜨게 하려고 설정
         setName: (name) => {

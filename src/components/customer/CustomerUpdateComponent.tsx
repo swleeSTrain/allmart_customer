@@ -1,58 +1,74 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts";
 import {useCustomerStore} from "../../stores/customerStore.ts";
+import {updateCustomer} from "../../api/CustomerAPI.ts";
+import {Simulate} from "react-dom/test-utils";
+import {toast} from "react-toastify";
+import {ICustomer} from "../../types/customer.ts";
+import axios, {name} from "axios";
+import {Cookies} from "react-cookie";
+
 
 const CustomerUpdate = () => {
-    const [customer, setCustomer] = useState({
-        customerID: "",
-        phoneNumber: "",
+
+    const [customer, setCustomer] = useState<ICustomer | null>({
+        accessToken: "",
+        customerID: 0,
         email: "",
-        name: "",
         loyaltyPoints: 0,
-        loginType: "",
+        martID: 0,
+        name: "",
+        phoneNumber: "",
+        refreshToken: "",
+        social: false,
+
     });
     const navigate = useNavigate();
     const{setTokens, setCustomerInfo} = useCustomerStore();
     const {setCustomerCookies, getCustomerCookies} = useCustomerCookie()
 
+    // 마트id 사용하는 곳
+    const {martID: cookieMartID} = useCustomerCookie().getCustomerCookies();
+    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
 
     const [isLoading, setIsLoading] = useState(false);
 
     const [searchParams] = useSearchParams();
 
-    // 쿼리 파라미터 값 읽기
-    const name : string | undefined = searchParams.get("name");
-    const email : string | null = searchParams.get('email');
-    const id : string | null = searchParams.get('phoneNumber');
-    const accessToken :  string | null= searchParams.get('accessToken');
-    const refreshToken : string | null= searchParams.get('refreshToken');
 
-    // 값이 없을 경우 기본값 설정
-    const defaultValue = searchParams.get('value') || '기본값';
+
+
+    // 카카오 로그인으로 인해서 정보수정 화면으로 넘어 온건지 아니면 일반적으로 회원수정 화면에 접속한건지 구분해주는 값
+    // kakao 값이 넘어옴
+    const frag = searchParams.get('frag') || 'normal';
 
     // 고객 정보 가져오기
     const fetchCustomer = async () => {
+        // 쿼리 파라미터 값 읽기
+        if(frag === 'kakao'){
+            console.log("frag :" + frag)
+            setCustomerCookies(null, null, null, searchParams.get('customerID'), martID)
+            const email = searchParams.get('email');
 
-        setCustomerCookies(
-            accessToken, refreshToken, name, customerID , martID
-        )
+            // customer 상태에 email과 customerID 설정
+            setCustomer((prev) => ({
+                ...prev,
+                email: email || "",
+                customerID: Number(searchParams.get('customerID')) || 0,
+            }));
 
-        console.log("Param name:" + email)
-        console.log("Param id:" + id)
-        console.log("Param accessToken:" + accessToken)
-        console.log("Param refreshToken:" + refreshToken)
-
+        }
         try {
             setIsLoading(true);
-            const response = await axios.get("http://localhost:8080/api/v1/customer/get");
-            setCustomer(response.data);
+            const Response = await axios.get(`http://localhost:8080/api/v1/customer/update/${getCustomerCookies().customerID}`);
+            setCustomer(Response.data);
             setIsLoading(false);
         } catch (error) {
             console.error("고객 정보 가져오기 오류:", error);
             setIsLoading(false);
         }
+
     };
 
     useEffect(() => {
@@ -63,24 +79,51 @@ const CustomerUpdate = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCustomer({
-            ...customer,
-            [name]: value,
-        });
+          ...customer,
+          [name]: value,
+        })
     };
+
+    if (!customer) {
+        return <div>로딩 중...</div>;
+    }
 
     // 회원 정보 수정 요청
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(
-                `http://localhost:8080/api/v1/customers/update/${customer.customerID}`,
-                customer
-            );
-            alert("회원 정보가 성공적으로 수정되었습니다.");
-            navigate(`${martId}/details`)
+
+            const response = await updateCustomer(customer);
+                setTokens(response.accessToken, response.refreshToken);
+                setCustomerInfo(response.name, response.customerID, martID, "social", response.email);
+                setCustomerCookies(
+                    response.accessToken,
+                    response.refreshToken,
+                    response.name,
+                    response.customerID,
+                    martID
+                );
+
+                console.log('고객 정보가 성공적으로 업데이트되었습니다.')
+                toast.success(`고객 정보가 성공적으로 업데이트되었습니다.`, {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
+
+                navigate(`/${martID}`)
+
         } catch (error) {
-            console.error("회원 정보 수정 오류:", error);
-            alert("회원 정보 수정에 실패했습니다.");
+
+                console.error('회원정보 수정 오류 : ' + error)
+                toast.error("회원정보 수정 오류: 다시 시도 해주세요", {
+                    autoClose: 1500,
+                    className: "bg-red-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center"
+                });
+
+                navigate(`/${martID}/customer/update`)
+
         }
     };
 
@@ -92,14 +135,25 @@ const CustomerUpdate = () => {
         <div className="container mx-auto p-6">
             <h1 className="text-3xl font-bold mb-6 text-center">회원정보 수정</h1>
             <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-lg shadow-md">
+
+                <div className="mb-4">
+                    <label className="block text-lg font-medium text-gray-700">이름</label>
+                    <input
+                        type="text"
+                        name="name"
+                        value={customer?.name || ""}
+                        onChange={handleChange}
+                        className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
+                    />
+                </div>
+
                 <div className="mb-4">
                     <label className="block text-lg font-medium text-gray-700">전화번호</label>
                     <input
                         type="text"
                         name="phoneNumber"
-                        value={customer.phoneNumber}
+                        value={customer?.phoneNumber || undefined}
                         onChange={handleChange}
-                        disabled={customer.loginType === "PHONE"}
                         className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
                     />
                 </div>
@@ -109,32 +163,9 @@ const CustomerUpdate = () => {
                     <input
                         type="email"
                         name="email"
-                        value={email}
+                        // value={frag === null ? customer?.email || ""  : email}
+                        value= {customer?.email || "" }
                         onChange={handleChange}
-                        disabled={customer.loginType === "PHONE"}
-                        className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-lg font-medium text-gray-700">이름</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={customer.name || ""}
-                        onChange={handleChange}
-                        className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-lg font-medium text-gray-700">로열티 포인트</label>
-                    <input
-                        type="number"
-                        name="loyaltyPoints"
-                        value={customer.loyaltyPoints}
-                        onChange={handleChange}
-                        disabled
                         className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
                     />
                 </div>

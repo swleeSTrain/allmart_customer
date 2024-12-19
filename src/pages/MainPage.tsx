@@ -4,6 +4,7 @@ import GeneralLayout from "../layouts/GeneralLayout"; // 일반 사용자 레이
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
 import { Link, useParams } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore";
+import {useCustomerCookie} from "../hooks/useCustomerCookie.ts";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -13,9 +14,14 @@ interface BeforeInstallPromptEvent extends Event {
 function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const { martID } = useParams<{ martID: string }>();
-    const { loginType } = useCustomerStore(); // 로그인 타입 가져오기
+    const { loginType,setMartID } = useCustomerStore(); // 로그인 타입 가져오기
+    const {setCustomerCookies, getCustomerCookies} = useCustomerCookie()
+
 
     useEffect(() => {
+        setCustomerCookies( null, null, null, null , martID)
+        setMartID(martID)
+        console.log(martID)
         const handleBeforeInstallPrompt = (event: Event) => {
             event.preventDefault();
             setInstallPrompt(event as BeforeInstallPromptEvent);

@@ -5,7 +5,7 @@ import LoadingPage from "../pages/LoadingPage"; // 로딩 화면 컴포넌트
 const AddressPage = lazy(() => import("../pages/address/AddressPage.tsx")); // 주소 입력 페이지
 
 const addressRouter: RouteObject = {
-    path: "address",
+    path: "/:martID/address",
     element: (
         <Suspense fallback={<LoadingPage />}>
             <AddressPage />

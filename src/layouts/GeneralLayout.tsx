@@ -12,8 +12,8 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, setName, logout } = useCustomerStore();
-    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
+    const { name, setName, logout, martID, setMartID } = useCustomerStore();
+    const { getCustomerCookies, removeCustomerCookies,cookies } = useCustomerCookie(); // 쿠키 삭제 함수
 
     // 쿠키 기반으로 상태 초기화
     useEffect(() => {
@@ -21,7 +21,14 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
         if (customerData && customerData.name !== name) { // 기존 상태와 비교
             setName(customerData.name); // Zustand 상태 업데이트
         }
-    }, [name, getCustomerCookies, setName]);
+
+        if(customerData && customerData.martID !== martID) {
+            console.log("getCustomerCookies(martId) : " + customerData.martID)
+            setMartID(customerData.martID);
+        }
+
+
+    }, [name, getCustomerCookies, setName, setMartID, martID]);
 
     // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
@@ -37,11 +44,11 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const menuItems = [
         { name: "최근 본 상품", link: "#" ,icon: <AiOutlineHome /> },
-        { name: "주문 상품", link: "/order/list" },
-        { name: "배송지", link: "/address" },
-        { name: "회원정보", link: "/customer/info" },
+        { name: "주문 상품", link: `/${martID}/order/list` },
+        { name: "배송지", link: `/${martID}/address` },
+        { name: "회원정보", link: `/${martID}/customer/info` },
         { name: "고객센터", link: "#" },
-        { name: "포인트", link: "/points" },
+        { name: "포인트", link: `/${martID}/points` },
     ];
 
     // navigate로 라우터 처리하려고 추가
@@ -64,7 +71,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                             src="/images/a.png"
                             alt="마트 로고"
                             className="h-12 object-contain cursor-pointer"
-                            onClick={() => navigate("/")}
+                            onClick={() => navigate(`/${martID}`)}
                         />
                     </div>
 
@@ -73,7 +80,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                         {/* 검색 버튼 */}
                         <button
                             aria-label="검색"
-                            onClick={() => navigate("/product/search")}
+                            onClick={() => navigate(`${martID}/product/search`)}
                             className="p-1 focus:outline-none transform transition-transform hover:scale-110"
                         >
                             <svg
@@ -93,7 +100,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                         {/* 장바구니 버튼 */}
                         <button
                             aria-label="장바구니"
-                            onClick={() => navigate("/cart")}
+                            onClick={() => navigate(`${martID}/cart`)}
                             className="p-1 focus:outline-none transform transition-transform hover:scale-110"
                         >
                             <AiOutlineShoppingCart className="w-6 h-6 text-gray-600"/>
@@ -201,7 +208,10 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                                     </button>
                                 ) : (
                                     <button
-                                        onClick={() => navigate("/customer/signIn")}
+                                        onClick={() => {
+                                            console.log(`signin url: /${martID}/customer/signIn`)
+                                            navigate(`/${martID}/customer/signIn`)
+                                        }}
                                         className="block w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform transition-transform hover:scale-105"
                                     >
                                         로그인

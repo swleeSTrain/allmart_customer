@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { IMartMap } from "../types/mart";
 import { getMarts, getMapScriptUrl } from "../api/KakaoMapAPI";
 import MartList from "../components/mart/MartList.tsx";
+import {useCustomerCookie} from "../hooks/useCustomerCookie.ts";
 
 
 
@@ -15,6 +16,7 @@ function KakaoMap() {
     const [error, setError] = useState<string | null>(null);
     const [scriptUrl, setScriptUrl] = useState<string | null>(null);
     const [marts, setMarts] = useState<IMartMap[]>([]);
+    const {cookies} = useCustomerCookie();
     console.log()
     useEffect(() => {
         // 현재 위치 가져오기
@@ -71,7 +73,8 @@ function KakaoMap() {
                 try {
                     // null 일수도 있으니
                     const response = await getMarts(location.lat!, location.lng!);
-                    setMarts(response);
+                        setMarts(response);
+
                 } catch (error) {
                     setError("Failed to fetch mart information.");
 

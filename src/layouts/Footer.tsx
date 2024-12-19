@@ -10,7 +10,7 @@ export const Footer = ()=>{
      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around items-center h-20">
          <button
              className="flex flex-col items-center justify-center w-1/3 text-xl text-gray-600 hover:text-blue-500 focus:outline-none"
-             onClick={() => navigate("/points")} // 포인트 페이지로 이동
+             onClick={() => navigate(`/points`)} // 포인트 페이지로 이동
          >
              <svg
                  xmlns="http://www.w3.org/2000/svg"

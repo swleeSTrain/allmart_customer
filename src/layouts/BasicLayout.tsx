@@ -45,8 +45,8 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, setName, logout } = useCustomerStore();
-    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
+    const { martID, setMartID, name, setName, logout, customerID} = useCustomerStore();
+    const { getCustomerCookies, removeCustomerCookies,cookies } = useCustomerCookie(); // 쿠키 삭제 함수
 
     // 쿠키 기반으로 상태 초기화
     useEffect(() => {
@@ -54,7 +54,9 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
         if (customerData && customerData.name !== name) { // 기존 상태와 비교
             setName(customerData.name); // Zustand 상태 업데이트
         }
-    }, [name, getCustomerCookies, setName]);
+        console.log("cookies.martID : " + cookies.martID);
+        setMartID(cookies.martID)
+    }, [name, getCustomerCookies, setName, setMartID]);
 
     // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
@@ -72,11 +74,12 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const menuItems = [
         { name: "최근 본 상품", link: "#" },
-        { name: "주문 상품", link: "/order/list" },
-        { name: "배송지", link: "/address" },
-        { name: "회원정보", link: "/customer/info" },
-        { name: "고객센터", link: "#" },
-        { name: "포인트", link: "/points" },
+        { name: "주문 상품", link: `/${getCustomerCookies().customerID}/order/list` },
+        { name: "배송지", link: `/${getCustomerCookies().martID}/address` },
+        { name: "회원정보", link: `/${getCustomerCookies().martID}/customer/info` },
+        { name: "회원정보수정", link: `/${getCustomerCookies().martID}/customer/update` },
+        { name: "고객센터", link: `#/${getCustomerCookies().martID}` },
+        { name: "포인트", link: `/${getCustomerCookies().martID}/points` },
     ];
 
     // navigate로 라우터 처리하려고 추가
@@ -93,7 +96,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                     {/* 모바일 돋보기 버튼 */}
                     <button
                         aria-label="검색"
-                        onClick={() => navigate("/product/search")}
+                        onClick={() => navigate(`/${martID}/product/search`)}
                         className="p-2 md:hidden"
                     >
                         <svg
@@ -200,7 +203,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
                         {/* 로그인/로그아웃 버튼 */}
                         <li>
-                            {name ? (
+                            {customerID ? (
                                 <button
                                     onClick={handleLogout}
                                     className="block w-full h-12 text-2xl font-semibold bg-red-500 text-white rounded-lg hover:bg-red-600"
@@ -209,7 +212,9 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() => navigate("/customer/signIn")}
+                                    onClick={() =>{
+                                        console.log("Navigating to:", `/${martID}/customer/signIn`)
+                                        navigate(`/${martID}/customer/signIn`)}}
                                     className="block w-full h-12 text-2xl font-semibold bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                                 >
                                     로그인
@@ -238,7 +243,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 {/* 전단지 버튼 */}
                 <button
                     className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
-                    onClick={() => navigate("/flyer/read")}
+                    onClick={() => navigate(`${martID}/flyer/read`)}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -262,7 +267,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 {/* 주문 목록 버튼 */}
                 <button
                     className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
-                    onClick={() => navigate("/product/cart")}
+                    onClick={() => navigate(`${martID}/product/cart`)}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

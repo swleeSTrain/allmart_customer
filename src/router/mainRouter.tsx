@@ -11,6 +11,11 @@ import flyerRouter from "./flyerRouter.tsx"; // pointRouter를 import
 import martRouter from "./martRouter.tsx";
 import tossRouter from "./tossRouter.tsx";
 import qnaRouter from "./qnaRouter.tsx";
+import CustomerIndexPage from "../pages/customer/CustomerIndexPage.tsx";
+import CustomerPhoneSignInPage from "../pages/customer/CustomerInfoPage.tsx";
+import * as path from "node:path";
+import KakaoOAuthHandler from "../components/customer/KakaoOAuthHandler .tsx";
+import OAuthCallbackComponent from "../components/customer/OAuthCallbackComponent.tsx";
 
 const MainPage = lazy(() => import("../pages/MainPage"));
 const SocialLoginMainPage = lazy(() => import("../pages/SocialLoginMainPage"));
@@ -20,13 +25,27 @@ const Loading = <LoadingPage />;
 const mainRouter = createBrowserRouter([
     {
         path: "/",
-        // element: <Suspense fallback={Loading}><MainPage /></Suspense>,
         element: <Suspense fallback={Loading}><SocialLoginMainPage /></Suspense>,
+        //element: <Suspense fallback={Loading}><CustomerIndexPage></CustomerIndexPage></Suspense>
+        //element: <Suspense fallback={Loading}><CustomerPhoneSignInPage></CustomerPhoneSignInPage></Suspense>
+    },
+    {
+        path: "/socialMap",
+        element: <Suspense fallback={Loading}><SocialLoginMainPage></SocialLoginMainPage></Suspense>
     },
     {
         path: "/:martID",
         element: <Suspense fallback={Loading}><MainPage /></Suspense>,
+        children:[
+
+
+        ]
     },
+    {
+        path : "/oauth/kakao",
+        element:<Suspense fallback={Loading}><OAuthCallbackComponent /></Suspense>
+    },
+
     pointRouter,
     customerRouter,
     orderRouter,
@@ -36,7 +55,6 @@ const mainRouter = createBrowserRouter([
     martRouter,
     tossRouter,
     qnaRouter
-
 
 
 ]);

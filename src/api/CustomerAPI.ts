@@ -77,6 +77,27 @@ export const refreshRequest = async (accessToken:string, refreshToken:string):Pr
     return res.data
 
 }
+
+export const updateCustomer = async (customerData: ICustomer): Promise<ICustomer> => {
+    const res = await axios.put(
+        `${host}/update`,
+        customerData,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+
+    return res.data;
+}
+
+
+
+
+
+
+
 //
 // export const kakaoSignInRequest = async () : Promise<ICustomer> => {
 //
