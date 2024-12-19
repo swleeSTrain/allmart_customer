@@ -114,22 +114,33 @@ function KakaoMap() {
                         marker.setMap(map);
                     }
 
-                    // 마트 마커 표시
+                    // 마트에 대한 커스텀 오버레이 생성
                     marts.forEach((mart) => {
                         const martPosition = new kakao.maps.LatLng(mart.lat, mart.lng);
 
-                        const markerImage = new kakao.maps.MarkerImage(
-                            "/logo/mart.png",
-                            new kakao.maps.Size(32, 32)
-                        );
+                        // 커스텀 오버레이 내용 생성
+                        const overlayContent = document.createElement("div");
+                        overlayContent.style.cssText = `
+                        background-color: white; 
+                        border: 1px solid gray; 
+                        border-radius: 8px; 
+                        padding: 4px 8px; 
+                        font-size: 12px; 
+                        font-weight: bold;
+                        text-align: center;
+                        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+                        cursor: pointer;
+                    `;
+                        overlayContent.innerText = mart.martName;
 
-                        const marker = new kakao.maps.Marker({
+                        // 커스텀 오버레이 생성
+                        new kakao.maps.CustomOverlay({
                             position: martPosition,
-                            image: markerImage,
+                            content: overlayContent,
                             map: map,
                         });
-
-                        kakao.maps.event.addListener(marker, "click", () => {
+                        // 클릭 이벤트 추가
+                        overlayContent.addEventListener("click", () => {
                             console.log(`Mart ID: ${mart.martID}`);
                             setSearchParams({ keyword: mart.martID.toString(), type: "martID" });
                         });

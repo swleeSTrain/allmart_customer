@@ -99,9 +99,9 @@ function CustomerPhoneSignInComponent() {
 
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="min-h-screen bg-white flex items-center justify-center ">
             <div className="w-full max-w-md rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">로그인</h2>
+                <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6 ">로그인</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">

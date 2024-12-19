@@ -48,7 +48,7 @@ function MainPage() {
     };
 
     // 레이아웃 선택 함수
-    const getLayout = () => (loginType === "phone" ? BasicLayout : GeneralLayout);
+    const getLayout = () => (loginType === "email" ? GeneralLayout : BasicLayout);
 
     const Layout = getLayout();
 

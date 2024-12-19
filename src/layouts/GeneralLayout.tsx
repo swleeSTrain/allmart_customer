@@ -52,14 +52,14 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
             <header className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
                 <div className="container mx-auto px-4 flex items-center justify-between h-16">
                     {/* 왼쪽: 로고 */}
-                    `<div className="flex items-center">
+                    <div className="flex items-center">
                         <img
                             src={martInfo?.logoURL || "/images/a.png"}
                             alt="마트 로고"
                             className="h-12 object-contain cursor-pointer"
                             onClick={() => navigate("/")}
                         />
-                    </div>`
+                    </div>
 
                     {/* 오른쪽: 검색, 장바구니, 햄버거 메뉴 */}
                     <div className="flex items-center space-x-4 md:hidden">
