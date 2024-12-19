@@ -183,7 +183,7 @@ function ProductSearchComponent() {
         <div className="container mx-auto pt-16 pb-20 p-4">
             <div className="container mx-auto p-4">
                 <div
-                    className="flex items-center border border-gray-300 rounded-full p-1 shadow-sm mb-6 bg-white max-w-lg mx-auto">
+                    className="flex items-center border border-gray-300 rounded-full p-1 shadow-sm mb-6 bg-white max-w-4xl mx-auto">
                     <input
                         type="text"
                         ref={inputRef}
@@ -215,10 +215,9 @@ function ProductSearchComponent() {
                         aria-label="취소"
                         className="ml-2 w-12 h-12 bg-gray-200 text-gray-700 flex items-center justify-center rounded-full hover:bg-gray-300 transition"
                     >
-                        취소
+                        X
                     </button>
                 </div>
-
             </div>
 
 

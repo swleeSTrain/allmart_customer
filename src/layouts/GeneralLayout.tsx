@@ -1,36 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
-import { useCustomerCookie } from "../hooks/useCustomerCookie";
-import homeIcon from '../images/home.png'; // PNG 아이콘 경로 (필요시)
-import leafletIcon from '../images/flyer.png'; // PNG 아이콘 경로 (필요시)
+import homeIcon from '../../public/images/home.png'; // PNG 아이콘 경로 (필요시)
+import leafletIcon from '../../public/images/flyer.png'; // PNG 아이콘 경로 (필요시)
 import FloatingCartButton from "../components/FloatingCartButton"; // 플로팅 버튼 import
 import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
-
+import { useMartStore } from "../stores/martStore.ts";
 
 function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, setName, logout } = useCustomerStore();
-    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
+    const { name, logout } = useCustomerStore();
+    const { martInfo } = useMartStore();
 
     // 쿠키 기반으로 상태 초기화
-    useEffect(() => {
-        const customerData = getCustomerCookies();
-        if (customerData && customerData.name !== name) { // 기존 상태와 비교
-            setName(customerData.name); // Zustand 상태 업데이트
-        }
-    }, [name, getCustomerCookies, setName]);
 
     // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
-        // 쿠키 삭제
-        removeCustomerCookies();
-        // 상태 초기화 (옵션)
-        logout();
-        // 사이드바 닫기
-        setMenuOpen(false);
+
+        logout(); // Zustand 상태 및 쿠키 모두 초기화
+
+        setMenuOpen(false); // 메뉴 닫기
+
+        navigate('/');
     };
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -61,7 +54,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     {/* 왼쪽: 로고 */}
                     <div className="flex items-center">
                         <img
-                            src="/src/images/a.png"
+                            src={martInfo?.logoURL || "/images/a.png"}
                             alt="마트 로고"
                             className="h-12 object-contain cursor-pointer"
                             onClick={() => navigate("/")}

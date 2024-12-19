@@ -85,6 +85,8 @@ export const useCartStore = create<CartState>()(
         ),
         {
             name: 'cart',
+
+            // @ts-ignore
             getStorage: (): PersistStorage<CartState> => ({
                 getItem: (name) => {
                     const savedCart = cookies.get(name);
