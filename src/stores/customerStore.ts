@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 
 interface CustomerState {
     accessToken: string | null;
@@ -15,40 +15,46 @@ interface CustomerState {
     logout: () => void;
 }
 
-// zustand는 여기 로직 내에서 쿠키 처리가 안됨 따로 해줘야 함
+// zustand 상태를 localStorage에 저장하고 복원
 export const useCustomerStore = create<CustomerState>()(
-    devtools((set) => ({
-        accessToken: null,
-        refreshToken: null,
-        name: null,
-        customerID: null,
-        martID: null,
-        loginType: null, // 초기값 추가
-
-        // 로그인 시 zustand에 밀어넣기
-        setTokens: (accessToken, refreshToken) => {
-            set({ accessToken, refreshToken });
-        },
-        setCustomerInfo: (name, customerID, martID, loginType) => {
-            set({ name, customerID, martID, loginType });
-        },
-        // 얘는 사이드바에 이름 뜨게 하려고 설정
-        setName: (name) => {
-            set({ name })
-        },
-        setMartID: (martID) => {
-            set({ martID })
-        },
-
-        logout: () => {
-            set({
+    devtools(
+        persist(
+            (set) => ({
                 accessToken: null,
                 refreshToken: null,
                 name: null,
                 customerID: null,
                 martID: null,
-                loginType: null,
-            });
-        },
-    }))
+                loginType: null, // 초기값 추가
+
+                // 로그인 시 zustand에 상태 설정
+                setTokens: (accessToken, refreshToken) => {
+                    set({ accessToken, refreshToken });
+                },
+                setCustomerInfo: (name, customerID, martID, loginType) => {
+                    set({ name, customerID, martID, loginType });
+                },
+                setName: (name) => {
+                    set({ name });
+                },
+                setMartID: (martID) => {
+                    set({ martID });
+                },
+                logout: () => {
+                    set({
+                        accessToken: null,
+                        refreshToken: null,
+                        name: null,
+                        customerID: null,
+                        martID: null,
+                        loginType: null,
+                    });
+                },
+            }),
+            {
+                name: "customer-store", // localStorage 키 이름
+                getStorage: () => localStorage, // 기본 localStorage 사용
+            }
+        )
+    )
 );

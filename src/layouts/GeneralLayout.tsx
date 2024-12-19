@@ -31,6 +31,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
         logout();
         // 사이드바 닫기
         setMenuOpen(false);
+        navigate('/');
     };
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
