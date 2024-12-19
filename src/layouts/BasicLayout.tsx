@@ -14,7 +14,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-
+    const {cookies} = useCustomerCookie()
     useEffect(() => {
         const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
             e.preventDefault();
@@ -71,10 +71,10 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
     const menuItems = [
-        { name: "주문 상품", link: "/order/list" },
-        { name: "배송지", link: "/address" },
-        { name: "회원정보", link: "/customer/info" },
-        { name: "포인트", link: "/points" },
+        { name: "주문 상품", link: `/${cookies.martID}/order/list` },
+        { name: "배송지", link: `/${cookies.martID}/address` },
+        { name: "회원정보", link: `/${cookies.martID}/customer/info` },
+        { name: "포인트", link: `/${cookies.martID}/points` },
     ];
 
     // navigate로 라우터 처리하려고 추가
@@ -91,7 +91,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                     {/* 모바일 돋보기 버튼 */}
                     <button
                         aria-label="검색"
-                        onClick={() => navigate("/product/search")}
+                        onClick={() => navigate(`/${cookies.martID}/product/search`)}
                         className="p-2 md:hidden"
                     >
                         <svg
@@ -210,7 +210,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() => navigate("/customer/signIn")}
+                                    onClick={() => navigate(`/${cookies.martID}/customer/signIn`)}
                                     className="block w-full h-12 text-2xl font-semibold bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                                 >
                                     로그인
@@ -242,7 +242,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 {/* 전단지 버튼 */}
                 <button
                     className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
-                    onClick={() => navigate("/flyer/read")}
+                    onClick={() => navigate(`${cookies.martID}/flyer/read`)}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -267,7 +267,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 {/* 주문 목록 버튼 */}
                 <button
                     className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
-                    onClick={() => navigate("/product/oldcart")}
+                    onClick={() => navigate(`${cookies.martID}/product/oldcart`)}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

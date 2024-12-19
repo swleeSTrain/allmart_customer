@@ -3,11 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useCustomerStore } from "../../stores/customerStore";
 import {fetchQuestionById, updateQuestion} from "../../api/qnaAPi.ts";
+import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts";
 
 const QnaEditComponent: React.FC = () => {
     const { qno } = useParams<{ qno: string }>();
     const navigate = useNavigate();
     const customerName = useCustomerStore((state) => state.name); // 작성자 이름 가져오기
+    const { martID: cookieMartID } = useCustomerCookie().getCustomerCookies();
+    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
 
     const [formData, setFormData] = useState({
         title: "",
@@ -64,7 +67,7 @@ const QnaEditComponent: React.FC = () => {
         try {
             await updateQuestion(Number(qno), formDataToSend);
             alert("질문 수정 성공!");
-            navigate(`/qna/${qno}`);
+            navigate(`${martID}/qna/${qno}`);
         } catch (error) {
             console.error("질문 수정 실패:", error);
             alert("질문 수정 실패!");

@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
+import {useCustomerCookie} from "../hooks/useCustomerCookie.ts";
+import {useCustomerStore} from "../stores/customerStore.ts";
 
 const FloatingCartButton = () => {
     const navigate = useNavigate();
+    const { martID: cookieMartID } = useCustomerCookie().getCustomerCookies();
+    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
 
     return (
         <button
             aria-label="장바구니"
-            onClick={() => navigate("/product/cart")}
+            onClick={() => navigate(`${martID}/product/cart`)}
             className="fixed bottom-28 right-6 bg-orange-500 hover:bg-orange-600 text-white rounded-full shadow-lg p-3 focus:outline-none transform transition-transform hover:scale-110 z-50"
         >
             <svg

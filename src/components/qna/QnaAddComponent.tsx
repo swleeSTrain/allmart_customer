@@ -72,10 +72,10 @@ const QnaAddComponent: React.FC = () => {
             // 응답이 단순 값인지 확인
             if (typeof response === "number") {
                 alert(`질문 등록 성공! ID: ${response}`);
-                navigate("/qna/list");
+                navigate(`${martID}/qna/list`);
             } else if (response.id) {
                 alert(`질문 등록 성공! ID: ${response.id}`);
-                navigate("/qna/list");
+                navigate(`${martID}/qna/list`);
             } else {
                 alert("질문 등록 성공했지만 ID를 받지 못했습니다.");
             }

@@ -34,6 +34,7 @@ function ProductListComponent() {
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null); // 선택된 상품
 
+
     const observer = useRef<IntersectionObserver | null>(null);
 
     // Zustand와 쿠키에서 martID 가져오기
@@ -100,7 +101,7 @@ function ProductListComponent() {
     const productItems = pageResponse.dtoList.map((product: IProduct, index) => (
         <li
             key={product.productID}
-            onClick={() => navigate(`/product/read/${product.productID}`)}
+            onClick={() => navigate(`${martID}/product/read/${product.productID}`)}
             ref={index === pageResponse.dtoList.length - 1 ? lastElementRef : null}
             className="relative flex items-center border rounded-lg shadow-md p-4 bg-white hover:shadow-lg hover:scale-[1.02] transition-transform duration-300 cursor-pointer"
         >

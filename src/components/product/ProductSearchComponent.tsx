@@ -146,7 +146,7 @@ function ProductSearchComponent() {
     const productItems = pageResponse.dtoList.map((product: IProduct, index) => (
         <li
             key={product.productID}
-            onClick={() => navigate(`/product/read/${product.productID}`)}
+            onClick={() => navigate(`${martID}/product/read/${product.productID}`)}
             ref={index === pageResponse.dtoList.length - 1 ? lastElementRef : null}
             className="relative flex items-center border rounded-lg shadow-md p-4 bg-white hover:shadow-lg hover:scale-[1.02] transition-transform duration-300 cursor-pointer"
         >

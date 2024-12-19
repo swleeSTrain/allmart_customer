@@ -7,7 +7,7 @@ const OrderIndex = lazy(() => import("../pages/order/OrderIndexPage"))
 const OrderVoice = lazy(() => import("../pages/order/OrderVoicePage"))
 const OrderList = lazy(() => import("../pages/order/OrderListPage"))
 const orderRouter = {
-    path: 'order',
+    path: '/:martID/order',
     element: <Suspense fallback={Loading}><OrderIndex/></Suspense>,
     children: [
         {

@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchAnswersByQno } from "../../api/answerAPI";
 import { IQuestion, IAnswer } from "../../types/qna";
 import { deleteQuestion, fetchQuestionById } from "../../api/qnaAPi.ts";
+import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts";
+import {useCustomerStore} from "../../stores/customerStore.ts";
 
 const QnaDetailComponent = () => {
     const { qno } = useParams<{ qno: string }>();
@@ -12,6 +14,8 @@ const QnaDetailComponent = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { martID: cookieMartID } = useCustomerCookie().getCustomerCookies();
+    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
 
     // 서버에서 제공되는 이미지 기본 경로
     // const BASE_IMAGE_URL = "http://localhost:8080/uploads";
@@ -43,7 +47,7 @@ const QnaDetailComponent = () => {
             try {
                 await deleteQuestion(Number(qno));
                 alert("질문이 삭제되었습니다.");
-                navigate("/qna/list");
+                navigate(`${martID}/qna/list`);
             } catch (err) {
                 console.error("Error deleting question:", err);
                 alert("질문 삭제 중 오류가 발생했습니다.");
@@ -52,7 +56,7 @@ const QnaDetailComponent = () => {
     };
 
     const handleEdit = () => {
-        navigate(`/qna/edit/${qno}`); // 수정 페이지로 이동
+        navigate(`${martID}/qna/edit/${qno}`); // 수정 페이지로 이동
     };
 
     if (loading) {

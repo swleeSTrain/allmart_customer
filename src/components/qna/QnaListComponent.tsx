@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { IQuestion } from "../../types/qna";
 import LoadingComponent from "../LoadingComponent";
 import { fetchQuestions } from "../../api/qnaAPi.ts";
+import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts";
+import {useCustomerStore} from "../../stores/customerStore.ts";
 
 const initialState = {
     dtoList: [],
@@ -25,6 +27,9 @@ const QnaListComponent = () => {
     const [pageResponse, setPageResponse] = useState(initialState);
     const [loading, setLoading] = useState<boolean>(false);
     const [hasMore, setHasMore] = useState<boolean>(true);
+
+    const { martID: cookieMartID } = useCustomerCookie().getCustomerCookies();
+    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
 
     // 현재 페이지 번호를 쿼리 스트링에서 가져오기
     const page = parseInt(searchParams.get("page") || "1", 10);
@@ -77,12 +82,12 @@ const QnaListComponent = () => {
 
     // 상세 페이지 이동 함수
     const moveToDetail = (qno: number) => {
-        navigate(`/qna/${qno}`);
+        navigate(`${martID}/qna/${qno}`);
     };
 
     // 질문 등록 페이지 이동 함수
     const moveToAddPage = () => {
-        navigate("/qna/add");
+        navigate(`${martID}/qna/add`);
     };
 
     // 질문 리스트 렌더링
@@ -107,7 +112,7 @@ const QnaListComponent = () => {
         <div className="container mx-auto p-4 mt-6">
             {/* 상단 로고와 질문 등록 버튼 */}
             <header className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-bold text-indigo-600 cursor-pointer" onClick={() => navigate("/")}>
+                <h1 className="text-2xl font-bold text-indigo-600 cursor-pointer" onClick={() => navigate(`/${martID}`)}>
                     ALL Mart
                 </h1>
                 <button

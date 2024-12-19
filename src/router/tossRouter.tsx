@@ -10,7 +10,7 @@ const FailPage = lazy(() => import("../pages/toss/TossFailPage.tsx"));
 const Loading = <LoadingPage />;
 
 const tossRouter: RouteObject = {
-    path: "toss",
+    path: "/:martID/toss",
     element: <Suspense fallback={Loading}><TossIndex /></Suspense>,
     children: [
         {

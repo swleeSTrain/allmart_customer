@@ -8,7 +8,7 @@ const MartPage = lazy(() => import("../pages/mart/MartPage.tsx"));
 const Loading = <LoadingPage />;
 
 const martRouter: RouteObject = {
-    path: "marts",
+    path: "/:martID/marts",
     element: (
         <Suspense fallback={Loading}>
             <MartPage />

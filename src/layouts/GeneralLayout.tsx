@@ -5,7 +5,8 @@ import { useCustomerCookie } from "../hooks/useCustomerCookie";
 import homeIcon from '../images/home.png'; // PNG 아이콘 경로 (필요시)
 import leafletIcon from '../images/flyer.png'; // PNG 아이콘 경로 (필요시)
 import FloatingCartButton from "../components/FloatingCartButton"; // 플로팅 버튼 import
-import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
+import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai";
+
 
 
 function GeneralLayout({ children }: { children: React.ReactNode }) {
@@ -14,7 +15,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
     const navigate = useNavigate();
     const { name, setName, logout } = useCustomerStore();
     const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
-
+    const {cookies}= useCustomerCookie()
     // 쿠키 기반으로 상태 초기화
     useEffect(() => {
         const customerData = getCustomerCookies();
@@ -37,11 +38,11 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const menuItems = [
         { name: "최근 본 상품", link: "#" ,icon: <AiOutlineHome /> },
-        { name: "주문 상품", link: "/order/list" },
-        { name: "배송지", link: "/address" },
-        { name: "회원정보", link: "/customer/info" },
-        { name: "고객센터", link: "/qna/list" },
-        { name: "포인트", link: "/points" },
+        { name: "주문 상품", link: `${cookies.martID}/order/list` },
+        { name: "배송지", link: `${cookies.martID}/address` },
+        { name: "회원정보", link: `${cookies.martID}/customer/info` },
+        { name: "고객센터", link: `${cookies.martID}/qna/list` },
+        { name: "포인트", link: `${cookies.martID}/points` },
     ];
 
     // navigate로 라우터 처리하려고 추가
@@ -73,7 +74,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                         {/* 검색 버튼 */}
                         <button
                             aria-label="검색"
-                            onClick={() => navigate("/product/search")}
+                            onClick={() => navigate(`${cookies.martID}/product/search`)}
                             className="p-1 focus:outline-none transform transition-transform hover:scale-110"
                         >
                             <svg
@@ -93,7 +94,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                         {/* 장바구니 버튼 */}
                         <button
                             aria-label="장바구니"
-                            onClick={() => navigate("/product/cart")}
+                            onClick={() => navigate(`${cookies.martID}/product/cart`)}
                             className="p-1 focus:outline-none transform transition-transform hover:scale-110"
                         >
                             <AiOutlineShoppingCart className="w-6 h-6 text-gray-600"/>
@@ -204,7 +205,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() => navigate("/customer/signIn")}
+                                    onClick={() => navigate(`${cookies.martID}/customer/signIn`)}
                                     className="w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform hover:scale-105 transition-transform"
                                 >
                                     로그인
@@ -232,7 +233,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/categories")}
+                    onClick={() => navigate(`${cookies.martID}/categories`)}
                 >
                     {/* 카테고리 아이콘: 3줄 수평선 */}
                     <svg
@@ -272,7 +273,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/flyer/read")}
+                    onClick={() => navigate(`${cookies.martID}/flyer/read`)}
                 >
                     {/*/!* 전단지 아이콘: 문서 모양 *!/*/}
                     {/*<svg*/}
@@ -293,7 +294,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/mypage")}
+                    onClick={() => navigate(`${cookies.martID}/mypage`)}
                 >
                     {/* 마이페이지 아이콘: 사람 모양 */}
                     <svg
