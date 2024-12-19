@@ -56,7 +56,7 @@ function MainPage() {
         setShowPrompt(false);
     };
 
-    const getLayout = () => (loginType === "phone" ? BasicLayout : GeneralLayout);
+    const getLayout = () => (loginType === "email" ? GeneralLayout : BasicLayout);
     const Layout = getLayout();
 
     return (
