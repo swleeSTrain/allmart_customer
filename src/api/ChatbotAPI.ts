@@ -3,8 +3,8 @@ import { IOrderRequest, ISlot  } from "../types/chatbot.ts";
 
 // const chatbotHost = 'https://0962-58-235-119-39.ngrok-free.app/api/v1/chatbot';
 
-const chatbotHost = 'https://allmartsystem.shop/api/v1/chatbot';
-const orderHost = 'https://allmartsystem.shop/api/v1/orders/voice';
+const chatbotHost = 'https://allmartsystem.shop/napi/v1/chatbot';
+const orderHost = 'https://allmartsystem.shop/napi/v1/orders/voice';
 
 
 // 챗봇 요청 보내기 함수
