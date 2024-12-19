@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
-import InstallPopupComponents from "../components/common/InstallPopupComponents.tsx"; // 쿠키 관련 훅
 import { useMartStore } from "../stores/martStore.ts";
 import martImage from "../../src/images/a.png";
 interface BeforeInstallPromptEvent extends Event {
@@ -269,11 +268,6 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                     </svg>
                     <span>결제내역</span>
                 </button>
-                <InstallPopupComponents
-                    isOpen={isOpen}
-                    onClose={() => setIsOpen(false)}
-                    onInstall={handleInstall}
-                />
             </div>
 
 
