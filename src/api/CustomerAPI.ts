@@ -12,6 +12,17 @@ const config:AxiosRequestConfig = {
 
 const host = 'http://localhost:8080/api/v1/customer'
 
+// martInfo 데이터를 가져오는 API 함수
+export const fetchMartInfo = async (data: { phoneNumber?: string; email?: string }) => {
+    try {
+        const response = await axios.post(`${host}/martinfo`, data, config);
+        return response.data; // API에서 받은 데이터를 반환
+    } catch (error) {
+        console.error("Mart info fetch error:", error);
+        throw error;
+    }
+};
+
 export const postPhoneSignIn = async (phoneNumber: string): Promise<ICustomer> => {
 
     try {

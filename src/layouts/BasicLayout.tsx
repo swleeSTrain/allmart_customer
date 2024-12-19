@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
-import { useCustomerCookie } from "../hooks/useCustomerCookie";
 import InstallPopupComponents from "../components/common/InstallPopupComponents.tsx"; // 쿠키 관련 훅
+import { useMartStore } from "../stores/martStore.ts";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -14,6 +14,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+    const { martInfo } = useMartStore();
 
     useEffect(() => {
         const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
@@ -45,28 +46,15 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, setName, logout } = useCustomerStore();
-    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
+    const { name, logout } = useCustomerStore();
 
-    // 쿠키 기반으로 상태 초기화
-    useEffect(() => {
-        const customerData = getCustomerCookies();
-        if (customerData && customerData.name !== name) { // 기존 상태와 비교
-            setName(customerData.name); // Zustand 상태 업데이트
-        }
-    }, [name, getCustomerCookies, setName]);
 
     // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
 
-        // 쿠키 삭제
-        removeCustomerCookies();
-        // 상태 초기화 (옵션)
-        logout();
-        // 사이드바 닫기
-        setMenuOpen(false);
-        navigate('/');
+        logout(); // Zustand 상태 및 쿠키 모두 초기화
 
+        setMenuOpen(false); // 메뉴 닫기
     };
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -111,7 +99,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
                     {/* 로고 */}
                     <img
-                        src="/images/a.png"
+                        src={martInfo?.logoURL || "/images/a.png"}
                         alt="마트 로고"
                         className="h-20 md:h-16 lg:h-20 object-contain cursor-pointer mx-auto md:mx-0"
                         onClick={() => navigate("/")}
@@ -142,7 +130,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                             <a
                                 key={index}
                                 href={item.link}
-                                className="text-lg font-bold text-gray-900 hover:text-blue-600"
+                                className="text-lg font-semibold text-gray-900 hover:text-blue-600"
                             >
                                 {item.name}
                             </a>
@@ -171,27 +159,28 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
                 {/* 모바일 네비게이션 */}
                 <nav
-                    className={`fixed left-0 top-0 bottom-0 z-50 w-2/3 bg-white transform transition-transform duration-300 ease-in-out shadow-md md:hidden ${
+                    className={`fixed left-0 z-40 w-64 bg-white transform transition-transform duration-300 ease-in-out shadow-md md:hidden ${
                         menuOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
+                    style={{ top: '4rem', bottom: '4rem' }} // 상단과 하단 여백 설정
                 >
-                    <ul className="h-full flex flex-col px-6 pt-8 pb-6 space-y-6">
+                    <ul className="h-full flex flex-col justify-between px-4 pt-8 pb-4 space-y-6 overflow-y-auto">
                         {/* 사용자 이름 */}
                         {name && (
-                            <li className="border-b pb-4 text-left">
-        <span className="text-xl font-semibold text-gray-800">
-          {name}님
-        </span>
+                            <li>
+                <span className="block text-2xl font-semibold text-gray-900">
+                    {name}님
+                </span>
                             </li>
                         )}
 
                         {/* 메뉴 아이템 */}
-                        <div className="flex-grow space-y-4">
+                        <div className="space-y-6">
                             {menuItems.map((item, index) => (
                                 <li key={index}>
                                     <button
                                         onClick={() => handleNavigate(item.link)}
-                                        className="block w-full text-lg font-medium text-gray-700 hover:text-blue-500 hover:bg-gray-100 px-4 py-3 rounded transition duration-200"
+                                        className="block text-2xl font-semibold text-gray-900 hover:text-blue-600"
                                     >
                                         {item.name}
                                     </button>
@@ -204,14 +193,14 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                             {name ? (
                                 <button
                                     onClick={handleLogout}
-                                    className="block w-full py-3 text-lg font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-200"
+                                    className="block w-full h-12 text-2xl font-semibold bg-red-500 text-white rounded-lg hover:bg-red-600"
                                 >
                                     로그아웃
                                 </button>
                             ) : (
                                 <button
                                     onClick={() => navigate("/customer/signIn")}
-                                    className="block w-full py-3 text-lg font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200"
+                                    className="block w-full h-12 text-2xl font-semibold bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                                 >
                                     로그인
                                 </button>
@@ -219,6 +208,9 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                         </li>
                     </ul>
                 </nav>
+
+
+
 
 
             </header>
