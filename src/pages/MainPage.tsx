@@ -88,7 +88,16 @@ function MainPage() {
                             <div className="bg-white rounded-lg p-4 shadow-inner">
                                 <p className="text-gray-800 font-semibold mb-2">iOS에서 설치하기:</p>
                                 <ol className="list-decimal list-inside text-gray-700">
-                                    <li className="mb-1">Safari 브라우저의 공유 버튼을 탭하세요.</li>
+                                    <li className="mb-1">Safari 브라우저의 공유
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                                             height="24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                                            <polyline points="16 6 12 2 8 6"/>
+                                            <line x1="12" y1="2" x2="12" y2="15"/>
+                                        </svg>
+                                        버튼을 탭하세요.
+                                    </li>
                                     <li>'홈 화면에 추가'를 선택하세요.</li>
                                 </ol>
                             </div>
