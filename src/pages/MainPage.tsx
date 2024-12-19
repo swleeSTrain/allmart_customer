@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import BasicLayout from "../layouts/BasicLayout";
 import GeneralLayout from "../layouts/GeneralLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
-import { useParams } from "react-router-dom";
-import { useCustomerStore } from "../stores/customerStore";
+import {useParams} from "react-router-dom";
+import {useCustomerStore} from "../stores/customerStore";
 import BannerSlider from "../components/banner/BannerSlider.tsx";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -15,8 +15,8 @@ function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isIOS, setIsIOS] = useState(false);
     const [showPrompt, setShowPrompt] = useState(true);
-    const { martID } = useParams<{ martID: string }>();
-    const { loginType } = useCustomerStore();
+    const {martID} = useParams<{ martID: string }>();
+    const {loginType} = useCustomerStore();
 
     useEffect(() => {
         const handleBeforeInstallPrompt = (event: Event) => {
@@ -65,20 +65,23 @@ function MainPage() {
                 <section className="container mx-auto px-4 py-6 mt-6">
                     <BannerSlider/>
                     <div className="mt-6">
-                        <CategoryListComponent />
+                        <CategoryListComponent/>
                     </div>
                 </section>
             </div>
             {showPrompt && (installPrompt || isIOS) && (
-                <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-blue-500 to-purple-600 p-6 z-50 rounded-t-2xl shadow-lg">
+                <div
+                    className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-blue-500 to-purple-600 p-6 z-50 rounded-t-2xl shadow-lg">
                     <div className="max-w-md mx-auto relative">
                         <button
                             onClick={handleCloseClick}
                             className="absolute top-0 right-0 text-white hover:text-gray-200 focus:outline-none"
                             aria-label="닫기"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"/>
                             </svg>
                         </button>
                         <h2 className="text-2xl font-bold text-white mb-4 text-center">
@@ -102,10 +105,22 @@ function MainPage() {
                 버튼을 탭하세요.
             </span>
                                     </li>
-                                    <li>'홈 화면에 추가'를 선택하세요.</li>
+                                    <li>
+            <span className="inline-flex items-center whitespace-nowrap">
+                '홈 화면에 추가'
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                     height="24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     className="inline-block ml-1 mr-1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+                를 선택하세요.
+            </span>
+                                    </li>
                                 </ol>
                             </div>
-
                         ) : (
                             <button
                                 id="install"
