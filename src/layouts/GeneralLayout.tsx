@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
-import homeIcon from '../../public/images/home.png'; // PNG 아이콘 경로 (필요시)
-import leafletIcon from '../../public/images/flyer.png'; // PNG 아이콘 경로 (필요시)
+import homeIcon from '../../src/images/home.png'; // PNG 아이콘 경로 (필요시)
+import leafletIcon from '../../src/images/flyer.png'; // PNG 아이콘 경로 (필요시)
 import FloatingCartButton from "../components/FloatingCartButton"; // 플로팅 버튼 import
 import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
 import { useMartStore } from "../stores/martStore.ts";
