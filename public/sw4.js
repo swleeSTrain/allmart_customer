@@ -1,6 +1,6 @@
-const CACHE_NAME = 'my-pwa-cache-v1';
+const CACHE_NAME = 'mart-4-cache-v1';
 const urlsToCache = [
-    '/',
+    '/4',
     '/index.html',
     '/styles/main.css',
     '/scripts/main.js',

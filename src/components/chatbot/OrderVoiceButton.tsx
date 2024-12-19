@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { convertSTT, convertTTS } from "../../api/VoiceAPI"; // 적절한 경로 수정
 import { sendChatbotRequest } from "../../api/ChatbotAPI";
+import {useCustomerStore} from "../../stores/customerStore.ts";
 
 type ErrorState = string | null;
 
@@ -14,7 +15,7 @@ const OrderVoiceButton: React.FC = () => {
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
     const chatContainerRef = useRef<HTMLDivElement>(null);
-
+    const customerID = useCustomerStore((state) => state.customerID);
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -47,15 +48,18 @@ const OrderVoiceButton: React.FC = () => {
                         const transcription = await convertSTT(audioFile);
                         setChatMessages((prev) => [...prev, { sender: "사용자", text: transcription }]);
 
-                        const chatbotResponse = await sendChatbotRequest(transcription);
-                        setChatMessages((prev) => [...prev, { sender: "챗봇", text: chatbotResponse }]);
+                        if (customerID != null) {
+                            const chatbotResponse = await sendChatbotRequest(customerID, transcription);
+                            setChatMessages((prev) => [...prev, { sender: "챗봇", text: chatbotResponse }]);
 
-                        const ttsBlob = await convertTTS(chatbotResponse);
-                        const ttsUrl = URL.createObjectURL(ttsBlob);
+                            const ttsBlob = await convertTTS(chatbotResponse);
+                            const ttsUrl = URL.createObjectURL(ttsBlob);
 
-                        const audio = new Audio(ttsUrl);
-                        await audio.play();
-                        audio.onended = () => URL.revokeObjectURL(ttsUrl);
+                            const audio = new Audio(ttsUrl);
+                            await audio.play();
+                            audio.onended = () => URL.revokeObjectURL(ttsUrl);
+                        }
+
                     } catch (err) {
                         setError("음성 주문 처리 중 문제가 발생했습니다. 다시 시도해 주세요.");
                         console.error(err);
@@ -82,36 +86,17 @@ const OrderVoiceButton: React.FC = () => {
             {/* 주문 버튼 */}
             <button
                 onClick={handleClick}
-                className={`fixed bottom-4 flex flex-col items-center justify-center w-40 h-40 rounded-full shadow-lg focus:outline-none transition-all duration-300 ${
+                className={`fixed bottom-6 z-50 flex flex-col items-center justify-center w-36 h-36 rounded-full shadow-lg transition-transform transform duration-300 ease-in-out ${
                     isRecording
-                        ? "bg-red-500 hover:bg-red-600"
-                        : "bg-green-500 hover:bg-green-600"
+                        ? "bg-gradient-to-r from-red-500 to-red-700 hover:scale-110"
+                        : "bg-gradient-to-r from-green-500 to-green-700 hover:scale-110"
                 } ${isLoading ? "opacity-70 cursor-wait" : ""}`}
-                aria-label={isRecording ? "주문 종료" : "음성 주문"}
                 disabled={isLoading}
+                aria-label={isRecording ? "주문 종료" : "음성 주문"}
             >
                 <div className="flex flex-col items-center justify-center h-full w-full">
                     {isLoading ? (
-                        <svg
-                            className="animate-spin w-20 h-20 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                            ></circle>
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                            ></path>
-                        </svg>
+                        <div className="animate-spin w-12 h-12 border-4 border-white border-t-transparent rounded-full"></div>
                     ) : (
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +104,7 @@ const OrderVoiceButton: React.FC = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="w-20 h-20 text-white"
+                            className="w-14 h-14 text-white"
                         >
                             <path
                                 strokeLinecap="round"
@@ -129,7 +114,7 @@ const OrderVoiceButton: React.FC = () => {
                         </svg>
                     )}
                     <span
-                        className={`text-3xl font-extrabold mt-5 ${
+                        className={`text-lg font-bold mt-2 ${
                             isRecording ? "text-red-100" : "text-white"
                         }`}
                     >
@@ -141,34 +126,36 @@ const OrderVoiceButton: React.FC = () => {
             {/* 오버레이 창 */}
             {isOverlayVisible && (
                 <div
-                    className="fixed inset-x-4 top-16 bottom-44 bg-gray-100 z-50 flex flex-col border border-gray-300 rounded-xl shadow-xl overflow-hidden"
+                    className="fixed inset-x-4 top-24 bottom-36 z-40 flex flex-col bg-white border border-gray-300 rounded-xl shadow-2xl overflow-hidden"
                 >
                     {/* 채팅창 헤더 */}
                     <div
-                        className="sticky top-0 left-0 right-0 h-12 bg-blue-500 text-white flex items-center justify-between px-4 rounded-t-xl"
-                    >
+                        className="sticky top-0 left-0 right-0 h-14 bg-blue-600 text-white flex items-center justify-between px-4 rounded-t-xl">
                         <h2 className="font-bold text-lg">음성 주문중</h2>
                         <button
                             onClick={() => setIsOverlayVisible(false)}
-                            className="text-lg hover:text-gray-200 transition-colors duration-200"
+                            className="text-2xl hover:text-gray-200 transition-colors duration-200"
                         >
-                            X
+                            ×
                         </button>
                     </div>
 
                     {/* 채팅 메시지 리스트 */}
-                    <div ref={chatContainerRef} className="p-4 overflow-y-auto flex-1 bg-white">
+                    <div
+                        ref={chatContainerRef}
+                        className="p-4 overflow-y-auto flex-1 h-[80vh] bg-white"
+                    >
                         {chatMessages.map((msg, index) => (
                             <div
                                 key={index}
-                                className={`mb-4 p-3 rounded-lg shadow-md max-w-[70%] ${
+                                className={`mb-6 py-6 px-4 rounded-lg shadow-sm max-w-[70%] ${
                                     msg.sender === "사용자"
                                         ? "ml-auto bg-blue-100 text-blue-900"
                                         : "mr-auto bg-gray-200 text-gray-800"
                                 }`}
                             >
-                                <p className="text-sm font-semibold mb-1 text-gray-600">{msg.sender}</p>
-                                <p className="text-base">{msg.text}</p>
+                                <p className="text-lg font-bold mb-2 text-gray-600">{msg.sender}</p>
+                                <p className="text-2xl leading-10">{msg.text}</p>
                             </div>
                         ))}
                     </div>

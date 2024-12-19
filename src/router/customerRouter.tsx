@@ -8,9 +8,6 @@ const SignIn = lazy(() => import("../pages/customer/CustomerPhoneSignInPage.tsx"
 const Info = lazy(() => import("../pages/customer/CustomerInfoPage.tsx"))
 const CustomerUpdate = lazy(() => import("../pages/customer/CustomerUpdatePage.tsx"))
 
-
-
-
 const customerRouter = {
     path: "/:martID/customer",
     element: <Suspense fallback={Loading}><CustomerIndex/></Suspense>,

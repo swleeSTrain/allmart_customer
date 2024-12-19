@@ -73,13 +73,10 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
     const menuItems = [
-        { name: "최근 본 상품", link: "#" },
-        { name: "주문 상품", link: `/${getCustomerCookies().customerID}/order/list` },
-        { name: "배송지", link: `/${getCustomerCookies().martID}/address` },
-        { name: "회원정보", link: `/${getCustomerCookies().martID}/customer/info` },
-        { name: "회원정보수정", link: `/${getCustomerCookies().martID}/customer/update` },
-        { name: "고객센터", link: `#/${getCustomerCookies().martID}` },
-        { name: "포인트", link: `/${getCustomerCookies().martID}/points` },
+        { name: "주문 상품", link: "/order/list" },
+        { name: "배송지", link: "/address" },
+        { name: "회원정보", link: "/customer/info" },
+        { name: "포인트", link: "/points" },
     ];
 
     // navigate로 라우터 처리하려고 추가
@@ -96,7 +93,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                     {/* 모바일 돋보기 버튼 */}
                     <button
                         aria-label="검색"
-                        onClick={() => navigate(`/${martID}/product/search`)}
+                        onClick={() => navigate(`${martID}/product/search`)}
                         className="p-2 md:hidden"
                     >
                         <svg
@@ -175,35 +172,38 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
                 {/* 모바일 네비게이션 */}
                 <nav
-                    className={`fixed top-0 left-0 z-40 h-full w-64 bg-white transform transition-transform duration-300 ease-in-out shadow-md md:hidden ${
+                    className={`fixed left-0 z-40 w-64 bg-white transform transition-transform duration-300 ease-in-out shadow-md md:hidden ${
                         menuOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
+                    style={{ top: '4rem', bottom: '4rem' }} // 상단과 하단 여백 설정
                 >
-                    <ul className="pt-16 px-4 space-y-6">
+                    <ul className="h-full flex flex-col justify-between px-4 pt-8 pb-4 space-y-6 overflow-y-auto">
                         {/* 사용자 이름 */}
                         {name && (
                             <li>
-                                <span className="block text-2xl font-semibold text-gray-900">
-                                    {name}님
-                                </span>
+                <span className="block text-2xl font-semibold text-gray-900">
+                    {name}님
+                </span>
                             </li>
                         )}
 
                         {/* 메뉴 아이템 */}
-                        {menuItems.map((item, index) => (
-                            <li key={index}>
-                                <button
-                                    onClick={() => handleNavigate(item.link)}
-                                    className="block text-2xl font-semibold text-gray-900 hover:text-blue-600"
-                                >
-                                    {item.name}
-                                </button>
-                            </li>
-                        ))}
+                        <div className="space-y-6">
+                            {menuItems.map((item, index) => (
+                                <li key={index}>
+                                    <button
+                                        onClick={() => handleNavigate(item.link)}
+                                        className="block text-2xl font-semibold text-gray-900 hover:text-blue-600"
+                                    >
+                                        {item.name}
+                                    </button>
+                                </li>
+                            ))}
+                        </div>
 
                         {/* 로그인/로그아웃 버튼 */}
                         <li>
-                            {customerID ? (
+                            {name ? (
                                 <button
                                     onClick={handleLogout}
                                     className="block w-full h-12 text-2xl font-semibold bg-red-500 text-white rounded-lg hover:bg-red-600"
@@ -212,9 +212,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() =>{
-                                        console.log("Navigating to:", `/${martID}/customer/signIn`)
-                                        navigate(`/${martID}/customer/signIn`)}}
+                                    onClick={() => navigate("/customer/signIn")}
                                     className="block w-full h-12 text-2xl font-semibold bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                                 >
                                     로그인
@@ -223,6 +221,9 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                         </li>
                     </ul>
                 </nav>
+
+
+
 
 
             </header>
@@ -262,12 +263,14 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 </button>
 
                 {/* 음성 주문 버튼 */}
-                <OrderVoiceButton/>
-
+                <div className="absolute inset-x-0 bottom-0 flex justify-center">
+                    <OrderVoiceButton/>
+                </div>
                 {/* 주문 목록 버튼 */}
                 <button
                     className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
-                    onClick={() => navigate(`${martID}/product/cart`)}
+                    onClick={() => navigate("/product/oldcart")}
+
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -283,7 +286,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                             d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.0 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
                         />
                     </svg>
-                    <span>장바구니</span>
+                    <span>결제내역</span>
                 </button>
                 <InstallPopupComponents
                     isOpen={isOpen}

@@ -1,49 +1,29 @@
 import React from 'react';
 import { IMart } from '../../types/mart';
-import Swal from 'sweetalert2';
 import {useNavigate} from "react-router-dom";
-import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts";
-import {useCustomerStore} from "../../stores/customerStore.ts";
 
 interface MartCardProps {
     mart: IMart;
+    refProp?: React.Ref<HTMLDivElement>;
 }
 
-
-const MartCard: React.FC<MartCardProps> = ({ mart }) => {
-
+const MartCard: React.FC<MartCardProps> = ({ mart, refProp }) => {
     const navigate = useNavigate();
-    const { setCustomerCookies } = useCustomerCookie();
-    const { martID, setMartID } = useCustomerStore();
-    const handleMartClick = () => {
-        Swal.fire({
-            title: `${mart.martName}를 선택하시겠습니까?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '선택',
-            cancelButtonText: '취소',
-        }).then(() => {
-            setCustomerCookies(null, null, null, null, mart.martID)
 
-            // Zustand 상태 업데이트 (중복 확인 후)
-            if (martID !== mart.martID) {
-                setMartID(mart.martID);
-            }
-            navigate(`/${mart.martID}`);
-        });
+    const handleMartClick = () => {
+        navigate(`/${mart.martID}`);
     };
 
     return (
         <div
+            ref={refProp || null} // 추가: ref가 있을 경우에만 전달
             className="flex items-center bg-white rounded-lg shadow-md hover:shadow-lg p-4 cursor-pointer border"
             onClick={handleMartClick}
         >
             {/* 왼쪽: 이미지 */}
             <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center overflow-hidden rounded-md">
                 <img
-                    src={`http://localhost:8080/uploads/s_${mart.thumbnailImage}`}
+                    src={`${mart.thumbnailImage}`}
                     alt={`${mart.martName} Thumbnail`}
                     className="max-w-full max-h-full object-contain"
                 />

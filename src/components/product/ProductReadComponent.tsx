@@ -65,7 +65,7 @@ function ProductReadComponent() {
     };
 
     return (
-        <div className="flex flex-col items-center p-4 min-h-screen">
+        <div className="flex flex-col items-center p-4 min-h-screen mt-4">
             {/* 이미지 슬라이더 */}
             <div className="mt-6">
                 {product.attachImages && product.attachImages.length > 0 ? (
@@ -75,7 +75,7 @@ function ProductReadComponent() {
                             onTouchStart={handleTouchStart}
                         >
                             <img
-                                src={`http://localhost:8080/uploads/${product.attachImages[currentIndex]}`}
+                                src={`${product.attachImages[currentIndex]}`}
                                 alt="첨부 이미지"
                                 className="w-full h-auto object-cover"
                             />
@@ -92,7 +92,7 @@ function ProductReadComponent() {
             {/* 이름과 가격 */}
             <div className="w-full max-w-md text-center my-4">
                 <h1 className="text-xl font-bold">{product.name}</h1>
-                <p className="text-lg text-gray-600">
+                <p className="text-lg font-bold text-black-600">
                     {product.price.toLocaleString()}원
                 </p>
             </div>

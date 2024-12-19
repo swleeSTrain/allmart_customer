@@ -17,7 +17,7 @@ function CustomerInfoComponent() {
             customerData.martID !== martID ||
             customerData.customerID !== customerID
         ) {
-            setCustomerInfo(customerData.name, customerData.customerID, customerData.martID, undefined, customerData.email); // 변수 이름 수정
+            setCustomerInfo(customerData.name, customerData.customerID, customerData.martID); // 변수 이름 수정
         }
     }, [name, martID, customerID, customerData, setCustomerInfo]);
 

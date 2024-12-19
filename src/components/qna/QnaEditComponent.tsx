@@ -72,7 +72,7 @@ const QnaEditComponent: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 bg-white shadow rounded">
+        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 bg-white shadow rounded mt-6">
             <h1 className="text-xl font-bold mb-4">질문 수정</h1>
             <input
                 type="text"

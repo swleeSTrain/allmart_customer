@@ -63,6 +63,8 @@ const CustomerUpdate = () => {
             setIsLoading(true);
             const Response = await axios.get(`http://localhost:8080/api/v1/customer/update/${getCustomerCookies().customerID}`);
             setCustomer(Response.data);
+            const response = await axios.get("https://allmartsystem.shop/api/v1/customer/get");
+            setCustomer(response.data);
             setIsLoading(false);
         } catch (error) {
             console.error("고객 정보 가져오기 오류:", error);
@@ -143,6 +145,7 @@ const CustomerUpdate = () => {
                         name="name"
                         value={customer?.name || ""}
                         onChange={handleChange}
+                        disabled={customer.loginType === "PHONE"}
                         className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
                     />
                 </div>

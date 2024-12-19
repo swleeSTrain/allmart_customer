@@ -14,7 +14,7 @@ const QnaDetailComponent = () => {
     const navigate = useNavigate();
 
     // 서버에서 제공되는 이미지 기본 경로
-    const BASE_IMAGE_URL = "http://localhost:8080/uploads";
+    // const BASE_IMAGE_URL = "http://localhost:8080/uploads";
 
     useEffect(() => {
         if (qno) {
@@ -80,7 +80,7 @@ const QnaDetailComponent = () => {
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 mt-6">
             <div className="bg-white shadow-lg rounded-lg p-4">
                 <h1 className="text-2xl font-bold text-blue-700 mb-4">{question.title || "제목 없음"}</h1>
                 <p className="text-gray-700 mb-6">{question.content || "내용 없음"}</p>
@@ -98,7 +98,7 @@ const QnaDetailComponent = () => {
                             {question.attachFiles.map((file: string, index: number) => (
                                 <div key={index} className="border rounded-lg overflow-hidden">
                                     <img
-                                        src={`${BASE_IMAGE_URL}/${file}`}
+                                        src={`${file}`}
                                         alt={`첨부 파일 ${index + 1}`}
                                         className="w-full h-auto object-cover"
                                     />

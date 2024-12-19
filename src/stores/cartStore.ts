@@ -14,17 +14,22 @@ export interface CartItem {
 
 export interface CartState {
     products: CartItem[];
+    selectedProducts: number[]; // 선택된 상품 ID 배열 추가
     addToCart: (item: CartItem) => void;
     removeFromCart: (productID: number) => void;
+    updateProductQuantity: (productID: number, newQuantity: number) => void;
+    toggleSelectProduct: (productID: number) => void; // 개별 상품 선택/해제
+    selectAllProducts: () => void; // 전체 선택
+    clearSelection: () => void; // 선택 초기화
     clearCart: () => void;
 }
-
 
 export const useCartStore = create<CartState>()(
     persist(
         devtools(
             (set) => ({
                 products: [],
+                selectedProducts: [], // 초기값 빈 배열
                 addToCart: (item) =>
                     set((state) => {
                         const existingProduct = state.products.find((p) => p.productID === item.productID);
@@ -42,18 +47,44 @@ export const useCartStore = create<CartState>()(
                         } else {
                             updatedProducts = [...state.products, item];
                         }
-                        return { products: updatedProducts }; // persist middleware가 저장 처리
+                        return { products: updatedProducts };
                     }),
                 removeFromCart: (productID) =>
                     set((state) => {
                         const updatedProducts = state.products.filter((p) => p.productID !== productID);
-                        return { products: updatedProducts }; // persist middleware가 저장 처리
+                        return { products: updatedProducts };
                     }),
-                clearCart: () => set(() => ({ products: [] })), // persist middleware가 저장 처리
+                updateProductQuantity: (productID, newQuantity) =>
+                    set((state) => {
+                        const updatedProducts = state.products.map((p) =>
+                            p.productID === productID
+                                ? {
+                                    ...p,
+                                    quantity: newQuantity,
+                                    totalPrice: (p.totalPrice / p.quantity) * newQuantity,
+                                }
+                                : p
+                        );
+                        return { products: updatedProducts };
+                    }),
+                toggleSelectProduct: (productID) =>
+                    set((state) => {
+                        const isSelected = state.selectedProducts.includes(productID);
+                        const updatedSelection = isSelected
+                            ? state.selectedProducts.filter((id) => id !== productID)
+                            : [...state.selectedProducts, productID];
+                        return { selectedProducts: updatedSelection };
+                    }),
+                selectAllProducts: () =>
+                    set((state) => ({
+                        selectedProducts: state.products.map((product) => product.productID),
+                    })),
+                clearSelection: () => set(() => ({ selectedProducts: [] })),
+                clearCart: () => set(() => ({ products: [], selectedProducts: [] })),
             })
         ),
         {
-            name: 'cart', // 쿠키에 저장될 이름
+            name: 'cart',
             getStorage: (): PersistStorage<CartState> => ({
                 getItem: (name) => {
                     const savedCart = cookies.get(name);
@@ -61,8 +92,8 @@ export const useCartStore = create<CartState>()(
                         return savedCart ? JSON.parse(savedCart) : null;
                     } catch (error) {
                         console.error('쿠키 데이터 파싱 오류:', error);
-                        cookies.remove(name); // 잘못된 쿠키 삭제
-                        return { products: [] }; // 혹은 기본값 반환
+                        cookies.remove(name);
+                        return { products: [], selectedProducts: [] };
                     }
                 },
                 setItem: (name, value) => cookies.set(name, JSON.stringify(value), { path: '/', maxAge: 3600 }),

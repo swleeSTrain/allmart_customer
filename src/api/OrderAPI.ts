@@ -1,11 +1,11 @@
 import axios from 'axios';
 import {IOrder} from "../types/order.ts";
 
-const host = 'http://localhost:8080/api/v1/orders';
+const host = 'https://allmartsystem.shop/api/v1/orders';
 
 export const getReadOrder = async (): Promise<IOrder> => {
     try {
-        const res = await axios.get(`${host}/1`);
+        const res = await axios.get(`${host}/1`,{withCredentials: true,});
 
         console.log("===============================");
 

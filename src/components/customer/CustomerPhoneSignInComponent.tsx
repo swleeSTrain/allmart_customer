@@ -6,7 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 // import {replace, useNavigate} from "react-router-dom";
 import { useNavigate} from "react-router-dom";
 import { useCustomerStore } from "../../stores/customerStore.ts";
-import { useCustomerCookie } from "../../hooks/useCustomerCookie";
+import { useCustomerCookie } from "../../hooks/useCustomerCookie"; // useCustomerCookie 훅 추가
+//import { handleFCMTokenUpdate } from '../../firebase/fcmUtil.ts';
 import axios from "axios"; // useCustomerCookie 훅 추가
 // import axios from "axios";
 
@@ -15,54 +16,30 @@ function CustomerPhoneSignInComponent() {
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const { setTokens, setCustomerInfo } = useCustomerStore();
-    const { setCustomerCookies, getCustomerCookies } = useCustomerCookie(); // 쿠키 설정 함수 추가
-
-    const clientId = process.env.KAKAO_CLIENT_ID;
-    const redirectUri = process.env.KAKAO_REDIRECT_URI;
-    const clientSecret = process.env.KAKAO_CLIENT_SECRET;
-
+    const { setCustomerCookies } = useCustomerCookie(); // 쿠키 설정 함수 추가
 
     // const {email,setEmail} = useState("");
 
     const handleKakaoLogin = async () => {
-
             // 카카오 OAuth2 로그인 URL로 이동
-            //const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
-            //window.location.href = `${kakaoURL}`;
-            //window.location.href = `http://localhost:8080/oauth2/authorization/kakao?}`;
-
-        // const params = new URLSearchParams({
-        //     martID: getCustomerCookies().martID
-        // });
-
-        // window.location.href = `http://localhost:8080/oauth2/authorization/kakao?martID=${getCustomerCookies().martID}`;
-
-        const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
-
-        const handleKakaoLogin = () => {
-            window.location.href = kakaoURL;
-        };
+            const kakaoURL = `https://allmartsystem.shop/oauth2/authorization/kakao`;
+            window.location.href = `${kakaoURL}`;
 
 
     };
 
-
-
-
-
-    //
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const response = await fetch('http://localhost:8080/oauth2/authorization/kakao', {
-    //             method: 'GET',
-    //             credentials: 'include', // 세션 기반 인증 사용 시 필요
-    //         });
-    //         const data = await response.json();
-    //         console.log("==============================");
-    //         console.log('User info:', data); // 받은 JSON 출력
-    //     };
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch('https://allmartsystem.shop/oauth2/authorization/kakao', {
+                method: 'GET',
+                credentials: 'include', // 세션 기반 인증 사용 시 필요
+            });
+            const data = await response.json();
+            console.log("==============================");
+            console.log('User info:', data); // 받은 JSON 출력
+        };
+        fetchData();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -79,7 +56,7 @@ function CustomerPhoneSignInComponent() {
             // 로그인 시 상태, 쿠키 저장을 위한 부분
             // 상태 저장
             setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID, "phone", email);
+            setCustomerInfo(response.name, response.customerID, response.martID,"phone");
 
             // 쿠키에 정보 저장
             setCustomerCookies(

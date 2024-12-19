@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // const host = 'https://0962-58-235-119-39.ngrok-free.app/api/v1/voice';
-const host = 'http://10.10.10.54:8086/api/v1/voice';
+
+const host = 'https://allmartsystem.shop/napi/v1/voice';
 
 // STT
 export const convertSTT = async (voiceFile: File): Promise<string> => {
@@ -14,6 +15,7 @@ export const convertSTT = async (voiceFile: File): Promise<string> => {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
+            withCredentials: true,
         });
 
         return res.data;
@@ -39,6 +41,7 @@ export const convertTTS = async (text: string): Promise<Blob> => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            withCredentials: true,
         });
 
         // 서버에서 받은 byte[] 데이터를 Blob으로 변환
