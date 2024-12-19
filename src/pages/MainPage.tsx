@@ -1,13 +1,10 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import BasicLayout from "../layouts/BasicLayout";
-import GeneralLayout from "../layouts/GeneralLayout"; // 일반 사용자 레이아웃
+import GeneralLayout from "../layouts/GeneralLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
-
-import {  useParams } from "react-router-dom";
-import { useCustomerStore } from "../stores/customerStore";
-
+import {useParams} from "react-router-dom";
+import {useCustomerStore} from "../stores/customerStore";
 import BannerSlider from "../components/banner/BannerSlider.tsx";
-
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -16,17 +13,24 @@ interface BeforeInstallPromptEvent extends Event {
 
 function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-    const { martID } = useParams<{ martID: string }>();
-    const { loginType } = useCustomerStore(); // 로그인 타입 가져오기
+    const [isIOS, setIsIOS] = useState(false);
+    const [showPrompt, setShowPrompt] = useState(true);
+    const {martID} = useParams<{ martID: string }>();
+    const {loginType} = useCustomerStore();
 
-    // PWA 설치 이벤트 핸들러
     useEffect(() => {
         const handleBeforeInstallPrompt = (event: Event) => {
             event.preventDefault();
             setInstallPrompt(event as BeforeInstallPromptEvent);
         };
 
+        const checkIsIOS = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            setIsIOS(/iphone|ipad|ipod/.test(userAgent));
+        };
+
         window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+        checkIsIOS();
 
         return () => {
             window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -43,42 +47,95 @@ function MainPage() {
                     console.log("사용자가 앱 설치를 거부했습니다.");
                 }
                 setInstallPrompt(null);
+                setShowPrompt(false);
             });
         }
     };
 
-    // 레이아웃 선택 함수
-    const getLayout = () => (loginType === "email" ? GeneralLayout : BasicLayout);
+    const handleCloseClick = () => {
+        setShowPrompt(false);
+    };
 
+    const getLayout = () => (loginType === "phone" ? BasicLayout : GeneralLayout);
     const Layout = getLayout();
 
     return (
         <Layout>
-            <section className="container mx-auto px-4 py-6 mt-6">
-                {/* 배너 영역 */}
-                <BannerSlider/>
-
-                {/* 메인 콘텐츠 */}
-                <div className="mt-6">
-                    {/*<h1 className="text-2xl font-bold mb-4">메인 Mart {martID}</h1>*/}
-
-
-                    {/* 설치 버튼 또는 카테고리 목록 */}
+            <div className={`min-h-screen ${(showPrompt && (installPrompt || isIOS)) ? 'pb-24' : ''}`}>
+                <section className="container mx-auto px-4 py-6 mt-6">
+                    <BannerSlider/>
                     <div className="mt-6">
-                        {installPrompt ? (
+                        <CategoryListComponent/>
+                    </div>
+                </section>
+            </div>
+            {showPrompt && (installPrompt || isIOS) && (
+                <div
+                    className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-blue-500 to-purple-600 p-6 z-50 rounded-t-2xl shadow-lg">
+                    <div className="max-w-md mx-auto relative">
+                        <button
+                            onClick={handleCloseClick}
+                            className="absolute top-0 right-0 text-white hover:text-gray-200 focus:outline-none"
+                            aria-label="닫기"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                        <h2 className="text-2xl font-bold text-white mb-4 text-center">
+                            앱 설치
+                        </h2>
+                        {isIOS ? (
+                            <div className="bg-white rounded-lg p-4 shadow-inner">
+                                <p className="text-gray-800 font-semibold mb-2">iOS에서 설치하기:</p>
+                                <ol className="list-decimal list-outside text-gray-700 ml-4">
+                                    <li className="mb-1">
+            <span className="inline-flex items-center whitespace-nowrap">
+                Safari 브라우저의 공유
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                     height="24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     className="inline-block ml-1 mr-1">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                    <polyline points="16 6 12 2 8 6"/>
+                    <line x1="12" y1="2" x2="12" y2="15"/>
+                </svg>
+                버튼을 탭하세요.
+            </span>
+                                    </li>
+                                    <li>
+            <span className="inline-flex items-center whitespace-nowrap">
+                '홈 화면에 추가'
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                     height="24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     className="inline-block ml-1 mr-1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+                를 선택하세요.
+            </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        ) : (
                             <button
                                 id="install"
                                 onClick={handleInstallClick}
-                                className="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
+                                className="w-full px-6 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 text-lg"
                             >
-                                Install App
+                                앱 설치하기
                             </button>
-                        ) : (
-                            <CategoryListComponent />
                         )}
+                        <p className="text-xs text-white text-center mt-4 opacity-75">
+                            설치하면 더 빠르고 편리하게 이용할 수 있습니다.
+                        </p>
                     </div>
                 </div>
-            </section>
+            )}
         </Layout>
     );
 }

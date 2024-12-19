@@ -46,7 +46,7 @@ const CustomerUpdate = () => {
 
         try {
             setIsLoading(true);
-            const response = await axios.get("http://localhost:8080/api/v1/customer/get");
+            const response = await axios.get("https://allmartsystem.shop/api/v1/customer/get");
             setCustomer(response.data);
             setIsLoading(false);
         } catch (error) {
@@ -73,7 +73,7 @@ const CustomerUpdate = () => {
         e.preventDefault();
         try {
             const response = await axios.put(
-                `http://localhost:8080/api/v1/customers/update/${customer.customerID}`,
+                `https://allmartsystem.shop/api/v1/customers/update/${customer.customerID}`,
                 customer
             );
             alert("회원 정보가 성공적으로 수정되었습니다.");

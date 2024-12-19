@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IMart } from '../types/mart';
 
-const host = 'http://localhost:8080/api/v1/kakao/marts';
+const host = 'https://allmartsystem.shop/api/v1/kakao/marts';
 
 export const getMartRead = async (martID: number): Promise<IMart> => {
     try {
@@ -22,7 +22,9 @@ export const getMartList = async (
 ): Promise<IMart[]> => {
 
     const res = await axios.get(`${host}/list`, {
+
         params: { lat, lng, keyword, type },
+        withCredentials: true,
     });
 
     return res.data.dtoList; // dtoList를 반환
