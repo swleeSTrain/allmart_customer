@@ -8,6 +8,11 @@
   "theme_color": "#000000",
   "icons": [
     {
+      "src": "/amart/apple-touch-icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
       "src": "/amart/pwa-64x64.png",
       "sizes": "64x64",
       "type": "image/png"
