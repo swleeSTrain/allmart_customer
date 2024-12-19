@@ -6,7 +6,7 @@ import leafletIcon from '../../src/images/flyer.png'; // PNG 아이콘 경로 (�
 import FloatingCartButton from "../components/FloatingCartButton"; // 플로팅 버튼 import
 import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
 import { useMartStore } from "../stores/martStore.ts";
-
+import martImage from "../../src/images/a.png";
 function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
@@ -54,7 +54,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     {/* 왼쪽: 로고 */}
                     <div className="flex items-center">
                         <img
-                            src={martInfo?.logoURL || "/images/a.png"}
+                            src={martInfo?.logoURL || martImage}
                             alt="마트 로고"
                             className="h-12 object-contain cursor-pointer"
                             onClick={() => navigate("/")}
