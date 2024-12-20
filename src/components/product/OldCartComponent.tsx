@@ -1,5 +1,6 @@
 import { useCartStore } from "../../stores/cartStore.ts";
 import { useEffect, useState } from "react";
+import {toast, ToastContainer} from "react-toastify";
 
 function AccessibleCartComponent() {
     const { products } = useCartStore();
@@ -47,10 +48,12 @@ function AccessibleCartComponent() {
             selectedProducts.includes(product.productID)
         );
         console.log("결제할 상품:", selectedItems);
-        alert(`총 ${selectedItems.length}개의 상품을 결제합니다.`);
+        toast.info(`총 ${selectedItems.length}개의 상품을 결제합니다.`);
     };
 
     return (
+        <div>
+            <ToastContainer position="top-center" autoClose={2000} />
         <div className="p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto mt-8">
             {/* 상단 기능 버튼 */}
             <div className="mb-6 flex items-center border-b pb-4">
@@ -141,6 +144,7 @@ function AccessibleCartComponent() {
             </button>
                 </div>
             )}
+        </div>
         </div>
     );
 

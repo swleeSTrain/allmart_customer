@@ -3,6 +3,7 @@ import { useCartStore } from "../../stores/cartStore";
 import { useCustomerStore } from "../../stores/customerStore";
 import TossPayComponent from "../toss/TossPayComponent";
 import { v4 as uuidv4 } from "uuid";
+import {toast, ToastContainer} from "react-toastify";
 
 function CartComponent() {
     const { products } = useCartStore();
@@ -70,12 +71,12 @@ function CartComponent() {
     // 결제하기 버튼 클릭 핸들러
     const handleCheckout = () => {
         if (!customerName) {
-            alert("로그인 후 결제를 진행해주세요.");
+            toast.info("로그인 후 결제를 진행해주세요.");
             return;
         }
 
         if (selectedProducts.length === 0) {
-            alert("결제할 상품을 선택해주세요.");
+            toast.info("결제할 상품을 선택해주세요.");
             return;
         }
 
@@ -90,6 +91,9 @@ function CartComponent() {
     };
 
     return (
+
+        <div>
+            <ToastContainer position="top-center" autoClose={1500} />
         <div className="p-4 bg-gray-50 rounded-lg shadow-md max-w-4xl mx-auto mt-7">
             {/* 상단 기능 버튼 */}
             <div className="mb-4 flex items-center border-b pb-3">
@@ -211,16 +215,17 @@ function CartComponent() {
                     orderName={orderData.orderName}
                     customerName={orderData.customerName}
                     onSuccess={() => {
-                        alert("결제가 성공적으로 완료되었습니다!");
+                        toast.success("결제가 성공적으로 완료되었습니다!");
                         setShowPayment(false);
                     }}
                     onError={(error) => {
-                        alert("결제에 실패했습니다. 다시 시도해주세요.");
+                        toast.error("결제에 실패했습니다. 다시 시도해주세요.");
                         console.error(error);
                         setShowPayment(false);
                     }}
                 />
             )}
+        </div>
         </div>
     );
 }

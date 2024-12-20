@@ -247,18 +247,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
                     onClick={() => navigate("/")}
                 >
-                    {/* 홈 아이콘: 집 모양 */}
-                    {/*<svg*/}
-                    {/*    xmlns="http://www.w3.org/2000/svg"*/}
-                    {/*    fill="none"*/}
-                    {/*    viewBox="0 0 24 24"*/}
-                    {/*    strokeWidth="1.5"*/}
-                    {/*    stroke="currentColor"*/}
-                    {/*    className="w-6 h-6 group-hover:text-orange-500"*/}
-                    {/*>*/}
-                    {/*    <path strokeLinecap="round" strokeLinejoin="round"*/}
-                    {/*          d="M2.25 12l8.954-8.955c.44-.439 1.154-.439 1.594 0L21.75 12M4.5 9h15m-15 3h15m-8.25-6h.008v.008H12v-.008z"/>*/}
-                    {/*</svg>*/}
+
                     <img src={homeIcon} alt="홈" className="w-6 h-6 group-hover:text-orange-500"/>
                     <span className="text-xs mt-1">홈</span>
                 </button>
@@ -267,18 +256,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
                     onClick={() => navigate("/flyer/read")}
                 >
-                    {/*/!* 전단지 아이콘: 문서 모양 *!/*/}
-                    {/*<svg*/}
-                    {/*    xmlns="http://www.w3.org/2000/svg"*/}
-                    {/*    fill="none"*/}
-                    {/*    viewBox="0 0 24 24"*/}
-                    {/*    strokeWidth="1.5"*/}
-                    {/*    stroke="currentColor"*/}
-                    {/*    className="w-6 h-6 group-hover:text-orange-500"*/}
-                    {/*>*/}
-                    {/*    <path strokeLinecap="round" strokeLinejoin="round"*/}
-                    {/*          d="M10.5 6h-6a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h6m7.5-12h-6a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h6m-3-13.5v12m-9-3h12m-9-9v12m-3 1.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm3 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm3 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>*/}
-                    {/*</svg>*/}
+
                     <img src={leafletIcon} alt="전단지" className="w-6 h-6 group-hover:text-orange-500"/>
                     <span className="text-xs mt-1">전단지</span>
                 </button>

@@ -10,7 +10,8 @@ const config:AxiosRequestConfig = {
 
 }
 
-const host = 'https://allmartsystem.shop/api/v1/customer'
+// const host = 'https://allmartsystem.shop/api/v1/customer'
+const host = 'http://localhost:8080/api/v1/customer'
 
 // martInfo 데이터를 가져오는 API 함수
 export const fetchMartInfo = async (data: { phoneNumber?: string; email?: string }) => {

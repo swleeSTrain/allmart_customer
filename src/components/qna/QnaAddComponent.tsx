@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { addQuestion } from "../../api/qnaAPi";
 import { useCustomerStore } from "../../stores/customerStore.ts";
+import {toast, ToastContainer} from "react-toastify";
 
 const QnaAddComponent: React.FC = () => {
     const [title, setTitle] = useState("");
@@ -50,7 +51,11 @@ const QnaAddComponent: React.FC = () => {
         e.preventDefault();
 
         if (!name || !martID) {
-            alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+            toast.error("로그인이 필요합니다. 로그인 후 다시 시도해주세요.", {
+                autoClose: 1500,
+                className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                bodyClassName: "text-center",
+            });
             return;
         }
 
@@ -71,21 +76,40 @@ const QnaAddComponent: React.FC = () => {
 
             // 응답이 단순 값인지 확인
             if (typeof response === "number") {
-                alert(`질문 등록 성공! ID: ${response}`);
+                toast.success(`질문 등록 성공! ID: ${response}`, {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
                 navigate("/qna/list");
             } else if (response.id) {
-                alert(`질문 등록 성공! ID: ${response.id}`);
+                toast.success(`질문 등록 성공! ID: ${response.id}`, {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
                 navigate("/qna/list");
             } else {
-                alert("질문 등록 성공했지만 ID를 받지 못했습니다.");
+                toast.error("질문 등록 성공했지만 ID를 받지 못했습니다.", {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
             }
         } catch (error) {
             console.error("질문 등록 실패:", error);
-            alert("질문 등록 실패!");
+            toast.error("질문 등록 실패!", {
+                autoClose: 1500,
+                className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                bodyClassName: "text-center",
+            });
         }
     };
 
     return (
+
+        <div>
+            <ToastContainer position="top-center" autoClose={2000} />
         <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white shadow rounded mt-6">
             <h2 className="text-xl font-bold mb-4">질문 등록</h2>
             <input
@@ -117,6 +141,8 @@ const QnaAddComponent: React.FC = () => {
                 질문 등록
             </button>
         </form>
+        </div>
+
     );
 };
 
