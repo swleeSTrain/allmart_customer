@@ -1,11 +1,12 @@
 import axios from 'axios';
 import {IProduct} from "../types/product.ts";
 
+// const host = 'https://allmartsystem.shop/api/v1/product';
 const host = 'http://localhost:8080/api/v1/product';
 
 export const getReadProduct = async (martID: number, productID: number): Promise<IProduct> => {
 
-    const res = await axios.get(`${host}/${martID}/${productID}`);
+    const res = await axios.get(`${host}/${martID}/${productID}`,{withCredentials: true,});
 
     return res.data;
 }
@@ -27,6 +28,8 @@ export const getElasticList = async (
             type: type || null,
             categoryID: categoryID || null,
         },
+        withCredentials: true,
+
     });
 
     return res.data;
@@ -50,6 +53,7 @@ export const getProductList = async (
             type: type || null,
             categoryID: categoryID || null,
         },
+        withCredentials: true,
     });
 
     return res.data;

@@ -7,7 +7,7 @@ import CustomerPhoneSignInComponent from "../../components/customer/CustomerPhon
 
 function CustomerPhoneSignInPage() {
     const { loginType } = useCustomerStore(); // Zustand 상태로 로그인 타입 가져오기
-    const Layout = loginType === "phone" ? BasicLayout : GeneralLayout;
+    const Layout = loginType === "email" ? GeneralLayout : BasicLayout;
     return (
         <Layout>
             <CustomerPhoneSignInComponent />

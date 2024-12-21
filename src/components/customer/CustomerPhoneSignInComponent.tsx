@@ -3,33 +3,28 @@ import {useEffect, useState} from "react";
 import {postPhoneSignIn, postSocialSignIn} from "../../api/CustomerAPI.ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import {replace, useNavigate} from "react-router-dom";
 import { useNavigate} from "react-router-dom";
 import { useCustomerStore } from "../../stores/customerStore.ts";
-import { useCustomerCookie } from "../../hooks/useCustomerCookie"; // useCustomerCookie 훅 추가
-//import { handleFCMTokenUpdate } from '../../firebase/fcmUtil.ts';
-// import axios from "axios";
+import { useMartStore } from "../../stores/martStore.ts";
 
 function CustomerPhoneSignInComponent() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const { setTokens, setCustomerInfo } = useCustomerStore();
-    const { setCustomerCookies } = useCustomerCookie(); // 쿠키 설정 함수 추가
+    const { fetchAndStoreMartInfo } = useMartStore();
 
     // const {email,setEmail} = useState("");
 
     const handleKakaoLogin = async () => {
             // 카카오 OAuth2 로그인 URL로 이동
-            const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
+            const kakaoURL = `https://allmartsystem.shop/oauth2/authorization/kakao`;
             window.location.href = `${kakaoURL}`;
-
-
     };
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://localhost:8080/oauth2/authorization/kakao', {
+            const response = await fetch('https://allmartsystem.shop/oauth2/authorization/kakao', {
                 method: 'GET',
                 credentials: 'include', // 세션 기반 인증 사용 시 필요
             });
@@ -57,17 +52,10 @@ function CustomerPhoneSignInComponent() {
             setTokens(response.accessToken, response.refreshToken);
             setCustomerInfo(response.name, response.customerID, response.martID,"phone");
 
-            // 쿠키에 정보 저장
-            setCustomerCookies(
-                response.accessToken,
-                response.refreshToken,
-                response.name,
-                response.customerID,
-                response.martID
-            );
+            await fetchAndStoreMartInfo(response.phoneNumber, "phone");
 
             // 로그인 성공 후 페이지 이동
-            navigate("/1");
+            navigate(`/${response.martID}`);
             //await handleFCMTokenUpdate(response.customerID, response.martID);
 
             toast.success(`로그인 성공: ${response.name}님 환영합니다!`, {
@@ -95,16 +83,13 @@ function CustomerPhoneSignInComponent() {
 
         try {
             const response = await postSocialSignIn(trimmedEmail);
+
             setTokens(response.accessToken, response.refreshToken);
             setCustomerInfo(response.name, response.customerID, response.martID, "email");
-            setCustomerCookies(
-                response.accessToken,
-                response.refreshToken,
-                response.name,
-                response.customerID,
-                response.martID
-            );
-            navigate("/1");
+
+            await fetchAndStoreMartInfo(response.email, "email");
+
+            navigate(`/${response.martID}`);
             toast.success(`로그인 성공: ${response.name}님 환영합니다!`, { autoClose: 1500 });
         } catch (error) {
             toast.error("로그인 실패: 등록되지 않은 이메일입니다", { autoClose: 1500 });
@@ -114,9 +99,9 @@ function CustomerPhoneSignInComponent() {
 
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="min-h-screen bg-white flex items-center justify-center ">
             <div className="w-full max-w-md rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">로그인</h2>
+                <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6 ">로그인</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">

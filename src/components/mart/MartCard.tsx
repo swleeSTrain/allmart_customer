@@ -1,33 +1,26 @@
 import React from 'react';
 import { IMart } from '../../types/mart';
-import Swal from 'sweetalert2';
 import {useNavigate} from "react-router-dom";
+import { useMartStore } from '../../stores/martStore.ts';
 
 interface MartCardProps {
     mart: IMart;
+    refProp?: React.Ref<HTMLDivElement>;
 }
 
-
-const MartCard: React.FC<MartCardProps> = ({ mart }) => {
-
+const MartCard: React.FC<MartCardProps> = ({ mart, refProp }) => {
     const navigate = useNavigate();
 
-    const handleMartClick = () => {
-        Swal.fire({
-            title: `${mart.martName}를 선택하시겠습니까?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '선택',
-            cancelButtonText: '취소',
-        }).then(() => {
-            navigate(`/${mart.martID}`);
-        });
+    const handleMartClick = async () => {
+        const { fetchMartByID } = useMartStore.getState();
+        await fetchMartByID(mart.martID);
+
+        navigate(`/${mart.martID}`, { state: { useGeneralLayout: true } });
     };
 
     return (
         <div
+            ref={refProp || null} // 추가: ref가 있을 경우에만 전달
             className="flex items-center bg-white rounded-lg shadow-md hover:shadow-lg p-4 cursor-pointer border"
             onClick={handleMartClick}
         >

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { fetchAnswersByQno } from "../../api/answerAPI";
 import { IQuestion, IAnswer } from "../../types/qna";
 import { deleteQuestion, fetchQuestionById } from "../../api/qnaAPi.ts";
+import {toast, ToastContainer} from "react-toastify";
 
 const QnaDetailComponent = () => {
     const { qno } = useParams<{ qno: string }>();
@@ -42,11 +43,19 @@ const QnaDetailComponent = () => {
         if (window.confirm("정말로 이 질문을 삭제하시겠습니까?")) {
             try {
                 await deleteQuestion(Number(qno));
-                alert("질문이 삭제되었습니다.");
+                toast.success("질문이 삭제되었습니다.", {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
                 navigate("/qna/list");
             } catch (err) {
                 console.error("Error deleting question:", err);
-                alert("질문 삭제 중 오류가 발생했습니다.");
+                toast.error("질문 삭제 중 오류가 발생했습니다.", {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
             }
         }
     };
@@ -80,6 +89,8 @@ const QnaDetailComponent = () => {
     }
 
     return (
+        <div>
+            <ToastContainer position="top-center" autoClose={2000} />
         <div className="container mx-auto p-4 mt-6">
             <div className="bg-white shadow-lg rounded-lg p-4">
                 <h1 className="text-2xl font-bold text-blue-700 mb-4">{question.title || "제목 없음"}</h1>
@@ -147,6 +158,7 @@ const QnaDetailComponent = () => {
                     </button>
                 </div>
             </div>
+        </div>
         </div>
     );
 };

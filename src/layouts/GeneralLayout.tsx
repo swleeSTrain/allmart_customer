@@ -1,36 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
-import { useCustomerCookie } from "../hooks/useCustomerCookie";
-import homeIcon from '../../public/images/home.png'; // PNG 아이콘 경로 (필요시)
-import leafletIcon from '../../public/images/flyer.png'; // PNG 아이콘 경로 (필요시)
+import homeIcon from '../../src/images/home.png'; // PNG 아이콘 경로 (필요시)
+import leafletIcon from '../../src/images/flyer.png'; // PNG 아이콘 경로 (필요시)
 import FloatingCartButton from "../components/FloatingCartButton"; // 플로팅 버튼 import
 import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
-
-
+import { useMartStore } from "../stores/martStore.ts";
+import martImage from "../../src/images/a.png";
 function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, setName, logout } = useCustomerStore();
-    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
+    const { name, logout } = useCustomerStore();
+    const { martInfo } = useMartStore();
 
     // 쿠키 기반으로 상태 초기화
-    useEffect(() => {
-        const customerData = getCustomerCookies();
-        if (customerData && customerData.name !== name) { // 기존 상태와 비교
-            setName(customerData.name); // Zustand 상태 업데이트
-        }
-    }, [name, getCustomerCookies, setName]);
 
     // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
-        // 쿠키 삭제
-        removeCustomerCookies();
-        // 상태 초기화 (옵션)
-        logout();
-        // 사이드바 닫기
-        setMenuOpen(false);
+
+        logout(); // Zustand 상태 및 쿠키 모두 초기화
+
+        setMenuOpen(false); // 메뉴 닫기
+
+        navigate('/');
     };
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -61,7 +54,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     {/* 왼쪽: 로고 */}
                     <div className="flex items-center">
                         <img
-                            src="/images/a.png"
+                            src={martInfo?.logoURL || martImage}
                             alt="마트 로고"
                             className="h-12 object-contain cursor-pointer"
                             onClick={() => navigate("/")}
@@ -158,58 +151,61 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 {/* 모바일 네비게이션 */}
                 <nav
-                    className={`fixed top-0 left-0 z-40 h-full w-64 bg-gradient-to-b from-gray-600 to-gray-500 transform transition-transform duration-300 ease-in-out shadow-xl md:hidden ${
+                    className={`fixed left-0 z-40 w-64 h-[calc(100%-4rem)] bg-gradient-to-b from-gray-600 to-gray-500 transform transition-transform duration-300 ease-in-out shadow-xl md:hidden ${
                         menuOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
+                    style={{ top: '4rem', bottom: '0' }} // 상단 네비게이션 여백 설정
                 >
-                    <ul className="pt-16 px-4 space-y-6">
+                    <ul className="h-full flex flex-col px-4 pt-6 pb-6 space-y-6 overflow-y-auto">
                         {/* 사용자 정보 */}
                         {name && (
-                            <li className="bg-white p-4 rounded-lg shadow-md flex items-center">
-                <span className="block text-xl font-semibold text-gray-900">
+                            <li className="bg-white py-3 px-4 rounded-lg shadow-md flex items-center justify-center mb-4">
+                <span className="text-xl font-semibold text-gray-900 text-center">
                     안녕하세요, <span className="text-orange-400">{name}</span>님!
                 </span>
                             </li>
                         )}
 
                         {/* 메뉴 아이템 */}
-                        {menuItems.map((item, index) => (
-                            <li
-                                key={index}
-                                className="flex items-center space-x-4 px-3 py-2 rounded-lg hover:bg-blue-400 transition-colors"
-                            >
-                                {/* 아이콘 */}
-                                <span className="text-white text-2xl">{item.icon || "⭐"}</span>
-                                {/* 텍스트 */}
-                                <button
-                                    onClick={() => handleNavigate(item.link)}
-                                    className="block text-lg font-medium text-white hover:text-gray-100 transition-transform hover:scale-105"
+                        <div className="flex-1 space-y-4">
+                            {menuItems.map((item, index) => (
+                                <li
+                                    key={index}
+                                    className="flex items-center space-x-4 py-2 px-3 rounded-lg hover:bg-blue-400 transition-colors"
                                 >
-                                    {item.name}
-                                </button>
-                            </li>
-                        ))}
+                                    {/* 아이콘 */}
+                                    <span className="text-yellow-400 text-2xl">{item.icon || "⭐"}</span>
+                                    {/* 메뉴 텍스트 */}
+                                    <button
+                                        onClick={() => handleNavigate(item.link)}
+                                        className="text-lg font-medium text-white hover:text-gray-100 transition-transform transform hover:scale-105"
+                                    >
+                                        {item.name}
+                                    </button>
+                                </li>
+                            ))}
+                        </div>
 
                         {/* 로그인/로그아웃 버튼 */}
-                        <li className="mt-6">
+                        <li className="mt-auto">
                             {name ? (
                                 <button
                                     onClick={handleLogout}
-                                    className="block w-full h-12 text-lg font-semibold bg-orange-400 text-white rounded-lg hover:bg-orange-400 shadow-md transform transition-transform hover:scale-105"
+                                    className="w-full h-12 text-lg font-semibold bg-orange-500 text-white rounded-lg hover:bg-orange-600 shadow-md transform hover:scale-105 transition-transform"
                                 >
-                                로그아웃
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={() => navigate("/customer/signIn")}
-                                        className="block w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform transition-transform hover:scale-105"
-                                    >
-                                        로그인
-                                    </button>
-                                )}
-                            </li>
-                        </ul>
-                    </nav>
+                                    로그아웃
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => navigate("/customer/signIn")}
+                                    className="w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform hover:scale-105 transition-transform"
+                                >
+                                    로그인
+                                </button>
+                            )}
+                        </li>
+                    </ul>
+                </nav>
 
 
             </header>
@@ -251,18 +247,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
                     onClick={() => navigate("/")}
                 >
-                    {/* 홈 아이콘: 집 모양 */}
-                    {/*<svg*/}
-                    {/*    xmlns="http://www.w3.org/2000/svg"*/}
-                    {/*    fill="none"*/}
-                    {/*    viewBox="0 0 24 24"*/}
-                    {/*    strokeWidth="1.5"*/}
-                    {/*    stroke="currentColor"*/}
-                    {/*    className="w-6 h-6 group-hover:text-orange-500"*/}
-                    {/*>*/}
-                    {/*    <path strokeLinecap="round" strokeLinejoin="round"*/}
-                    {/*          d="M2.25 12l8.954-8.955c.44-.439 1.154-.439 1.594 0L21.75 12M4.5 9h15m-15 3h15m-8.25-6h.008v.008H12v-.008z"/>*/}
-                    {/*</svg>*/}
+
                     <img src={homeIcon} alt="홈" className="w-6 h-6 group-hover:text-orange-500"/>
                     <span className="text-xs mt-1">홈</span>
                 </button>
@@ -271,18 +256,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
                     onClick={() => navigate("/flyer/read")}
                 >
-                    {/*/!* 전단지 아이콘: 문서 모양 *!/*/}
-                    {/*<svg*/}
-                    {/*    xmlns="http://www.w3.org/2000/svg"*/}
-                    {/*    fill="none"*/}
-                    {/*    viewBox="0 0 24 24"*/}
-                    {/*    strokeWidth="1.5"*/}
-                    {/*    stroke="currentColor"*/}
-                    {/*    className="w-6 h-6 group-hover:text-orange-500"*/}
-                    {/*>*/}
-                    {/*    <path strokeLinecap="round" strokeLinejoin="round"*/}
-                    {/*          d="M10.5 6h-6a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h6m7.5-12h-6a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h6m-3-13.5v12m-9-3h12m-9-9v12m-3 1.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm3 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm3 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>*/}
-                    {/*</svg>*/}
+
                     <img src={leafletIcon} alt="전단지" className="w-6 h-6 group-hover:text-orange-500"/>
                     <span className="text-xs mt-1">전단지</span>
                 </button>

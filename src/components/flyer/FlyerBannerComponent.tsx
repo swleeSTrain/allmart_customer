@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 const BannerComponent = () => {
     const [banners, setBanners] = useState([]);
@@ -7,7 +8,7 @@ const BannerComponent = () => {
     // Fetch banners from the API
     const fetchBanners = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/v1/banners/getAll");
+            const response = await axios.get("https://allmartsystem.shop/api/v1/banners/getAll");
             setBanners(response.data.slice(0, 2)); // 처음 2개 배너만 표시
         } catch (error) {
             console.error("Error fetching banners:", error);
@@ -22,12 +23,12 @@ const BannerComponent = () => {
         if (youtubeUrl) {
             window.open(youtubeUrl, "_blank"); // Open YouTube URL in a new tab
         } else {
-            alert("YouTube URL is not provided.");
+            toast("YouTube URL is not provided.");
         }
     };
 
     const getImageUrl = (imagePath) => {
-        return imagePath.startsWith("http") ? imagePath : `http://localhost:8080/files/image/${imagePath}`;
+        return imagePath.startsWith("http") ? imagePath : `https://allmartsystem.shop/files/image/${imagePath}`;
     };
 
     return (
