@@ -10,6 +10,7 @@ export interface CartItem {
     name: string;
     quantity: number;
     totalPrice: number;
+    thumbnailImage?: string;
 }
 
 export interface CartState {

@@ -8,6 +8,7 @@ import ProductModalComponent from "../../components/product/ProductModalComponen
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import {useCartStore} from "../../stores/cartStore.ts";
+import FloatingCartButton from "../FloatingCartButton.tsx";
 
 const initialState: IPageResponse = {
     dtoList: [],
@@ -181,6 +182,8 @@ function ProductSearchComponent() {
 
     return (
         <div className="container mx-auto pt-16 pb-20 p-4">
+            {/* 플로팅 장바구니 버튼 */}
+            <FloatingCartButton />
             <div className="container mx-auto p-4">
                 <div
                     className="flex items-center border border-gray-300 rounded-full p-1 shadow-sm mb-6 bg-white max-w-4xl mx-auto">

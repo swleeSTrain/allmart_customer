@@ -8,6 +8,7 @@ import ProductModalComponent from "../../components/product/ProductModalComponen
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import {useCartStore} from "../../stores/cartStore.ts";
+import FloatingCartButton from "../FloatingCartButton.tsx";
 
 const initialState: IPageResponse = {
     dtoList: [],
@@ -135,6 +136,9 @@ function ProductListComponent() {
 
     return (
         <div className="container mx-auto pt-16 pb-20 p-4">
+            {/* 플로팅 장바구니 버튼 */}
+            <FloatingCartButton />
+
             <ul className="space-y-4">{productItems}</ul>
             {loading && <LoadingComponent/>}
             {isModalOpen && selectedProduct && (
@@ -148,10 +152,9 @@ function ProductListComponent() {
                             name: selectedProduct.name,
                             quantity,
                             totalPrice: selectedProduct.price * quantity,
+                            thumbnailImage: selectedProduct.thumbnailImage, // 썸네일 이미지 추가
                         });
-                        console.log(
-                            `${quantity}개 추가됨: ${selectedProduct.name}`
-                        );
+                        console.log(`${quantity}개 추가됨: ${selectedProduct.name}`);
                         closeModal();
                     }}
                 />

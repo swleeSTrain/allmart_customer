@@ -135,6 +135,14 @@ function CartComponent() {
                                 key={product.productID}
                                 className="bg-white p-4 rounded-lg shadow flex items-center"
                             >
+                                {/* 썸네일 이미지 */}
+                                {product.thumbnailImage && (
+                                    <img
+                                        src={product.thumbnailImage}
+                                        alt={product.name}
+                                        className="w-16 h-16 object-cover rounded-lg mr-4"
+                                    />
+                                )}
                                 <input
                                     type="checkbox"
                                     className="mr-4"
@@ -156,8 +164,8 @@ function CartComponent() {
                                             -
                                         </button>
                                         <span className="text-lg text-gray-800 font-medium">
-                                            {product.quantity}
-                                        </span>
+                        {product.quantity}
+                    </span>
                                         <button
                                             className="px-2 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
                                             onClick={() =>
