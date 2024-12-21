@@ -1,8 +1,8 @@
 
 import { AddressForm, Address } from "../types/address.ts";
 
-// const address ="https://allmartsystem.shop/api/v1/addresses" // API 기본 경로
-const address ="http://localhost:8080/api/v1/addresses" // API 기본 경로
+const address ="https://allmartsystem.shop/api/v1/addresses" // API 기본 경로
+// const address ="http://localhost:8080/api/v1/addresses" // API 기본 경로
 
 
 // 주소 등록 API

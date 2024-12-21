@@ -80,10 +80,28 @@ function CartComponent() {
             return;
         }
 
+        const selectedItems = products.filter((product) =>
+            selectedProducts.includes(product.productID)
+        );
+
         // 결제 정보 생성
         const amount = calculateTotalAmount();
         const orderId = uuidv4().replace(/-/g, "").slice(0, 36);
         const orderName = createOrderName();
+
+        // 주문 정보 localStorage에 저장
+        localStorage.setItem(
+            "orderItems",
+            JSON.stringify(
+                selectedItems.map((product) => ({
+                    productId: product.productID,
+                    quantity: product.quantity,
+                    unitPrice: product.totalPrice,
+                    productName: product.name,
+                }))
+            )
+        );
+
 
         // 결제 데이터를 상태에 저장
         setOrderData({ amount, orderId, orderName, customerName });

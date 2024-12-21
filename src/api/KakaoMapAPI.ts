@@ -1,8 +1,8 @@
 import axios from "axios";
 import {IMartMap} from "../types/mart.ts";
 
-// const host = "https://allmartsystem.shop/api/v1/kakao";
-const host = "http://localhost:8080/api/v1/kakao";
+const host = "https://allmartsystem.shop/api/v1/kakao";
+// const host = "http://localhost:8080/api/v1/kakao";
 
 export const getMapScriptUrl = async (): Promise<string> => {
     try {
