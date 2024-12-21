@@ -19,5 +19,44 @@ export const getReadOrder = async (): Promise<IOrder> => {
     }
 };
 
+// 결제 검증 API 호출
+export const confirmPayment = async (data: {
+    paymentKey: string;
+    orderId: string;
+    amount: number;
+}) => {
+    const response = await axios.post(`${host}/toss-payments/confirm`, data);
+    return response.data;
+};
+
+// 주문 생성 API 호출
+export const createOrder = async (data: {
+    paymentDTO: { paymentKey: string; orderId: string; amount: string };
+    orderItems: {
+        productId: number;
+        quantity: number;
+        unitPrice: number;
+        productName: string;
+    }[];
+}) => {
+    const response = await axios.post(`${host}/create`, data);
+    return response.data;
+};
 
 
+// 주문 목록 조회 API 호출
+export const getOrderList = async (params: {
+    status?: string;       // 주문 상태 필터링
+    customerId?: string;   // 고객 ID 필터링
+    page?: number;         // 페이지 번호
+    size?: number;         // 페이지 크기
+}) => {
+    try {
+        const response = await axios.get(`${host}/list`, { params });
+        console.log("Order List:", response.data);
+        return response.data; // PageResponseDTO 반환
+    } catch (error) {
+        console.error("Error fetching order list:", error);
+        throw error;
+    }
+};

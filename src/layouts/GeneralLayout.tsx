@@ -29,7 +29,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const menuItems = [
         { name: "최근 본 상품", link: "#" ,icon: <AiOutlineHome /> },
-        { name: "주문 상품", link: "/order/list" },
+        { name: "주문 상품", link: "/orders/list" },
         { name: "배송지", link: "/address" },
         { name: "회원정보", link: "/customer/info" },
         { name: "고객센터", link: "/qna/list" },
@@ -222,9 +222,9 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/categories")}
+                    onClick={() => navigate("/orders/list")}
                 >
-                    {/* 카테고리 아이콘: 3줄 수평선 */}
+                    {/* 주문내역 아이콘: 3줄 수평선 */}
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -236,8 +236,8 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                         <path strokeLinecap="round" strokeLinejoin="round"
                               d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
                     </svg>
-                    {/* <img src={categoryIcon} alt="카테고리" className="w-6 h-6 group-hover:text-orange-500" /> */}
-                    <span className="text-xs mt-1">카테고리</span>
+                    {/* <img src={categoryIcon} alt="주문내역" className="w-6 h-6 group-hover:text-orange-500" /> */}
+                    <span className="text-xs mt-1">주문내역</span>
                 </button>
 
                 <button

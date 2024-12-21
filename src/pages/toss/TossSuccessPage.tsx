@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { confirmPayment } from "../../api/tosspaymentAPI";
-import { useCustomerStore } from "../../stores/customerStore.ts";
+import { useCustomerStore } from "../../stores/customerStore";
 import BasicLayout from "../../layouts/BasicLayout.tsx";
 import GeneralLayout from "../../layouts/GeneralLayout.tsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {confirmPayment, createOrder} from "../../api/OrderAPI.ts";
 
 function TossSuccessPage() {
     const { loginType } = useCustomerStore(); // Zustand 상태로 로그인 타입 가져오기
@@ -13,14 +13,9 @@ function TossSuccessPage() {
     const [searchParams] = useSearchParams();
 
     useEffect(() => {
-        if (!searchParams) {
-            console.error("Search parameters가 초기화되지 않았습니다.");
-            return;
-        }
-
+        const paymentKey = searchParams.get("paymentKey");
         const orderId = searchParams.get("orderId");
         const amount = searchParams.get("amount");
-        const paymentKey = searchParams.get("paymentKey");
 
         if (!orderId || !amount || !paymentKey) {
             console.error("필수 결제 데이터가 누락되었습니다:", { orderId, amount, paymentKey });
@@ -29,16 +24,33 @@ function TossSuccessPage() {
         }
 
         const requestData = {
+            paymentKey,
             orderId,
             amount: parseInt(amount, 10),
-            paymentKey,
         };
 
-        const verifyPayment = async () => {
+        const verifyAndCreateOrder = async () => {
             try {
-                console.log("결제 데이터 확인 중:", requestData);
-                const response = await confirmPayment(requestData);
-                console.log("결제 검증 성공:", response);
+                // 1. 결제 검증 요청
+                console.log("결제 검증 요청:", requestData);
+                const paymentResponse = await confirmPayment(requestData);
+                console.log("결제 검증 성공:", paymentResponse);
+
+                // 2. 주문 정보 생성
+                const orderItems = JSON.parse(localStorage.getItem("orderItems") || "[]");
+
+                const createOrderPayload = {
+                    paymentDTO: {
+                        paymentKey,
+                        orderId,
+                        amount: amount.toString(),
+                    },
+                    orderItems: orderItems,
+                };
+
+                console.log("주문 생성 요청:", createOrderPayload);
+                const orderResponse = await createOrder(createOrderPayload);
+                console.log("주문 생성 성공:", orderResponse);
 
                 // 결제 성공 메시지
                 toast.success("결제에 성공했습니다.", {
@@ -57,7 +69,7 @@ function TossSuccessPage() {
             }
         };
 
-        verifyPayment();
+        verifyAndCreateOrder();
     }, [searchParams]);
 
     const orderId = searchParams.get("orderId") || "정보 없음";
