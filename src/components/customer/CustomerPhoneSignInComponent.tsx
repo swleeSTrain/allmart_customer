@@ -1,32 +1,22 @@
-import { useState} from "react";
-// import {kakaoSignInRequest, postPhoneSignIn} from "../../api/CustomerAPI.ts";
-import {postPhoneSignIn, postSocialSignIn} from "../../api/CustomerAPI.ts";
+import { useState } from "react";
+import { postPhoneSignIn, postSocialSignIn } from "../../api/CustomerAPI.ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import {replace, useNavigate} from "react-router-dom";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../../stores/customerStore.ts";
 import { useCustomerCookie } from "../../hooks/useCustomerCookie";
-// import axios from "axios";
 
 function CustomerPhoneSignInComponent() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const { setTokens, setCustomerInfo } = useCustomerStore();
-    const { setCustomerCookies, getCustomerCookies} = useCustomerCookie(); // 쿠키 설정 함수 추가
+    const { setCustomerCookies } = useCustomerCookie();
 
-    // const {email,setEmail} = useState("");
-
-    const handleKakaoLogin = async () => {
-
-            const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
-            window.location.href = `${kakaoURL}`;
-            //window.location.href = `http://localhost:8080/oauth2/authorization/kakao?}`;
-
-
+    const handleKakaoLogin = () => {
+        const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
+        window.location.href = `${kakaoURL}`;
     };
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,24 +30,20 @@ function CustomerPhoneSignInComponent() {
         try {
             const response = await postPhoneSignIn(trimmedPhoneNumber);
 
-            // 로그인 시 상태, 쿠키 저장을 위한 부분
-            // 상태 저장
+            // Zustand 상태 저장
             setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID, "phone", email);
+            setCustomerInfo(response.name, response.customerID, response.martID, "phone");
 
-            // 쿠키에 정보 저장
             setCustomerCookies(
                 response.accessToken,
                 response.refreshToken,
                 response.name,
                 response.customerID,
-                response.martID,
-                response.email
+                response.martID
             );
 
             // 로그인 성공 후 페이지 이동
-            navigate(`/1}`);
-
+            navigate(`/${response.martID}`);
             toast.success(`로그인 성공: ${response.name}님 환영합니다!`, {
                 autoClose: 1500,
                 className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
@@ -83,42 +69,43 @@ function CustomerPhoneSignInComponent() {
 
         try {
             const response = await postSocialSignIn(trimmedEmail);
+
+            // Zustand 상태 저장
             setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID, "email", email);
+            setCustomerInfo(response.name, response.customerID, response.martID, "email");
+
             setCustomerCookies(
                 response.accessToken,
                 response.refreshToken,
                 response.name,
                 response.customerID,
-                response.martID,
-                response.email
+                response.martID
             );
-            navigate(`/${getCustomerCookies().martID}`);
+
+            // 로그인 성공 후 페이지 이동
+            navigate(`/${response.martID}`);
             toast.success("회원 정보가 수정되었습니다", {
-                    position: "top-right", // 메시지 위치
-                    autoClose: 3000, // 3초 후 자동 닫힘
-                    hideProgressBar: false, // 진행 상태 표시 바 숨기기 여부
-                    closeOnClick: true, // 클릭 시 닫힘
-                    pauseOnHover: true, // 마우스 오버 시 일시정지
-                    draggable: true, // 드래그 가능 여부
-                    progress: undefined, // 진행 상태 초기화
-                    theme: "colored", // 테마 (colored, light, dark)
-                });
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+            });
         } catch (error) {
             toast.error("로그인 실패: 등록되지 않은 이메일입니다", {
-                position: "top-right", // 메시지 위치
-                autoClose: 3000, // 3초 후 자동 닫힘
-                hideProgressBar: false, // 진행 상태 표시 바 숨기기 여부
-                closeOnClick: true, // 클릭 시 닫힘
-                pauseOnHover: true, // 마우스 오버 시 일시정지
-                draggable: true, // 드래그 가능 여부
-                progress: undefined, // 진행 상태 초기화
-                theme: "colored", // 테마 (colored, light, dark)
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
             });
             console.error("Error during email sign-in:", error);
         }
     };
-
 
     return (
         <div className="min-h-screen bg-white flex items-center justify-center">
@@ -173,7 +160,7 @@ function CustomerPhoneSignInComponent() {
                             className="w-full flex items-center rounded-lg justify-center"
                         >
                             <img
-                                src="/logo/kakao_login_large_wide.png" // public 폴더에 있는 이미지 경로
+                                src="/logo/kakao_login_large_wide.png"
                                 alt="카카오 로그인"
                                 className="w-full"
                             />
@@ -181,7 +168,7 @@ function CustomerPhoneSignInComponent() {
                     </div>
                 </form>
             </div>
-            <ToastContainer position="top-center" autoClose={2000}/>
+            <ToastContainer position="top-center" autoClose={2000} />
         </div>
     );
 }

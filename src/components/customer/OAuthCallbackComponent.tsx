@@ -2,17 +2,16 @@ import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useCustomerStore } from "../../stores/customerStore.ts";
-import { useCustomerCookie } from "../../hooks/useCustomerCookie.ts";
 import { toast, ToastContainer } from "react-toastify"; // Import Toast
-import "react-toastify/dist/ReactToastify.css"; // Toast styles
+import "react-toastify/dist/ReactToastify.css";
+import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts"; // Toast styles
 
 const OAuthCallbackComponent = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { martID: cookieMartID } = useCustomerCookie().getCustomerCookies();
-    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
+    const martID = useCustomerStore((state) => state.martID);
+    const { setCustomerInfo, setTokens } = useCustomerStore();
     const { setCustomerCookies } = useCustomerCookie();
-    const { setCustomerInfo } = useCustomerStore();
 
     useEffect(() => {
         const fetchAuthData = async () => {
@@ -50,23 +49,20 @@ const OAuthCallbackComponent = () => {
                     theme: "light", // 테마 (light, dark, colored)
                 });
 
-                // 성공적으로 로그인하면 React 상태 저장
-                setCustomerInfo(
+                // Zustand 상태 업데이트
+                setTokens(response.data.accessToken, response.data.refreshToken);
+                setCustomerInfo(response.data.name, response.data.customerID, response.data.martID, "email");
+
+                setCustomerCookies(
+                    response.data.accessToken,
+                    response.data.refreshToken,
                     response.data.name,
                     response.data.customerID,
-                    response.data.martID,
-                    response.data.loginType,
-                    response.data.email
+                    response.data.martID
                 );
 
                 console.log("After setCustomerInfo (zustand state):", useCustomerStore.getState());
 
-                setCustomerCookies(
-                    response.data.accessToken, response.data.refreshToken,
-                    response.data.name, response.data.customerID,
-                    response.data.martID, response.data.email )
-
-                console.log("After setCustomerInfo (zustand state):", useCustomerStore.getState());
                 // Redirect logic
                 if (response.data.phoneNumber === "N/A") {
                     navigate(`/${martID}/customer/update`);
@@ -75,17 +71,16 @@ const OAuthCallbackComponent = () => {
                 }
             } catch (error) {
                 console.error("Authentication failed:", error);
-                toast.error("로그인에 실패했습니다.",
-                    {
-                        autoClose: 1500,
-                        className: "bg-red-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
-                        bodyClassName: "text-center",
-                    }); // Toast for error
+                toast.error("로그인에 실패했습니다.", {
+                    autoClose: 1500,
+                    className: "bg-red-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
             }
         };
 
         fetchAuthData();
-    }, [location, navigate]);
+    }, [location, navigate, martID, setCustomerInfo, setTokens]);
 
     return (
         <>
@@ -95,4 +90,3 @@ const OAuthCallbackComponent = () => {
 };
 
 export default OAuthCallbackComponent;
-

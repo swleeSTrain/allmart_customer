@@ -12,7 +12,7 @@ const CustomerUpdate = lazy(() => import("../pages/customer/CustomerUpdatePage.t
 
 
 const customerRouter = {
-    path: "/:martID/customer",
+    path: "customer",
     element: <Suspense fallback={Loading}><CustomerIndex/></Suspense>,
     children: [
         {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { IMart } from '../../types/mart';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMartStore } from '../../stores/martStore.ts';
 
 interface MartCardProps {
@@ -12,9 +12,19 @@ const MartCard: React.FC<MartCardProps> = ({ mart, refProp }) => {
     const navigate = useNavigate();
 
     const handleMartClick = async () => {
-        const { fetchMartByID } = useMartStore.getState();
+        const { fetchMartByID, clearMartInfo } = useMartStore.getState();
+
+        // 선택한 martID를 저장
+        // @ts-ignore
+        useMartStore.setState({ martID: mart.martID });
+
+        // 마트 정보를 가져오기 전에 상태 초기화
+        clearMartInfo();
+
+        // 마트 정보 가져오기
         await fetchMartByID(mart.martID);
 
+        // 고객 로그인 화면으로 이동
         navigate(`/customer/signIn`, { state: { useGeneralLayout: true } });
     };
 

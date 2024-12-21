@@ -8,24 +8,21 @@ export const useCustomerCookie = () => {
         "name",
         "customerID",
         "martID",
-        "email"
     ]);
 
     // 로그인시 쿠키 생성
     const setCustomerCookies = (
-        accessToken: string | null,
-        refreshToken: string | null,
-        name: string | null,
+        accessToken: string,
+        refreshToken: string,
+        name: string,
         customerID: number,
-        martID: number,
-        email: string | undefined
+        martID: number
     ) => {
         setCookie("accessToken", accessToken, { expires: new Date(Date.now() + 86400000) }); // 1일
         setCookie("refreshToken", refreshToken, { expires: new Date(Date.now() + 604800000) }); // 7일
         setCookie("name", name, { expires: new Date(Date.now() + 604800000) }); // 7일
         setCookie("customerID", customerID, { expires: new Date(Date.now() + 604800000) }); // 7일
         setCookie("martID", martID, { expires: new Date(Date.now() + 604800000) }); // 7일
-        setCookie("email", email, { expires: new Date(Date.now() + 604800000) });
 
         console.log("========================== set");
         console.log("Cookies:", cookies);
@@ -39,7 +36,6 @@ export const useCustomerCookie = () => {
         removeCookie("name");
         removeCookie("customerID");
         removeCookie("martID");
-        removeCookie("email");
 
         console.log("========================== remove");
         console.log("Cookies after removal:", cookies);
@@ -54,7 +50,6 @@ export const useCustomerCookie = () => {
             martID: cookies.martID,
             accessToken: cookies.accessToken,
             refreshToken: cookies.refreshToken,
-            email: cookies.email
         };
     };
 
