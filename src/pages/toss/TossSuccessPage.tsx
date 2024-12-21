@@ -5,10 +5,11 @@ import BasicLayout from "../../layouts/BasicLayout.tsx";
 import GeneralLayout from "../../layouts/GeneralLayout.tsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {sendPayFcm} from "../../api/FcmAPI.ts";
 import {confirmPayment, createOrder} from "../../api/OrderAPI.ts";
 
 function TossSuccessPage() {
-    const { loginType } = useCustomerStore(); // Zustand 상태로 로그인 타입 가져오기
+    const { loginType, customerID, martID } = useCustomerStore(); // Zustand 상태로 로그인 타입 가져오기
     const Layout = loginType === "phone" ? BasicLayout : GeneralLayout;
     const [searchParams] = useSearchParams();
 
@@ -51,7 +52,7 @@ function TossSuccessPage() {
                 console.log("주문 생성 요청:", createOrderPayload);
                 const orderResponse = await createOrder(createOrderPayload);
                 console.log("주문 생성 성공:", orderResponse);
-
+                await sendPayFcm(customerID, martID); // FCM 전송
                 // 결제 성공 메시지
                 toast.success("결제에 성공했습니다.", {
                     autoClose: 2000,
