@@ -15,7 +15,7 @@ const MartCard: React.FC<MartCardProps> = ({ mart, refProp }) => {
         const { fetchMartByID } = useMartStore.getState();
         await fetchMartByID(mart.martID);
 
-        navigate(`/${mart.martID}`, { state: { useGeneralLayout: true } });
+        navigate(`/customer/signIn`, { state: { useGeneralLayout: true } });
     };
 
     return (

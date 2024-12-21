@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
 import homeIcon from '../../src/images/home.png'; // PNG 아이콘 경로 (필요시)
-import leafletIcon from '../../src/images/flyer.png'; // PNG 아이콘 경로 (필요시)
-import FloatingCartButton from "../components/FloatingCartButton"; // 플로팅 버튼 import
+import leafletIcon from '../../src/images/order.png'; // PNG 아이콘 경로 (필요시)
 import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
 import { useMartStore } from "../stores/martStore.ts";
 import martImage from "../../src/images/a.png";
@@ -46,8 +45,6 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            {/* 플로팅 장바구니 버튼 */}
-            <FloatingCartButton />
 
             <header className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
                 <div className="container mx-auto px-4 flex items-center justify-between h-16">
@@ -254,11 +251,11 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/flyer/read")}
+                    onClick={() => navigate("/order/read")}
                 >
 
-                    <img src={leafletIcon} alt="전단지" className="w-6 h-6 group-hover:text-orange-500"/>
-                    <span className="text-xs mt-1">전단지</span>
+                    <img src={leafletIcon} alt="주문내역" className="w-6 h-6 group-hover:text-orange-500"/>
+                    <span className="text-xs mt-1">주문내역</span>
                 </button>
 
 
