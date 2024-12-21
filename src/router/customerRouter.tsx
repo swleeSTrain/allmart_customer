@@ -1,22 +1,36 @@
 import {lazy, Suspense} from "react";
+import LoadingPage from "../pages/LoadingPage.tsx";
 
+
+const Loading =<LoadingPage></LoadingPage>
 const CustomerIndex = lazy(()=> import("../pages/customer/CustomerIndexPage.tsx"))
 const SignIn = lazy(() => import("../pages/customer/CustomerPhoneSignInPage.tsx"))
 const Info = lazy(() => import("../pages/customer/CustomerInfoPage.tsx"))
-// const CustomerUpdate = lazy(() => import("../pages/customer/CustomerUpdatePage.tsx"))
+const CustomerUpdate = lazy(() => import("../pages/customer/CustomerUpdatePage.tsx"))
+
+
+
 
 const customerRouter = {
-    path: "customer",
-    element: <Suspense><CustomerIndex/></Suspense>,
+    path: "/:martID/customer",
+    element: <Suspense fallback={Loading}><CustomerIndex/></Suspense>,
     children: [
         {
             path: "signIn",
-            element: <Suspense><SignIn/></Suspense>,
+            element: <Suspense fallback={Loading}><SignIn/></Suspense>,
+
         },
         {
             path: "info",
-            element: <Suspense><Info/></Suspense>,
+            element: <Suspense fallback={Loading}><Info/></Suspense>,
         },
+        {
+            path: "update",
+            element: <Suspense fallback={Loading}><CustomerUpdate/></Suspense>,
+
+        }
+
+
     ]
 }
 

@@ -37,7 +37,7 @@ export const postPhoneSignIn = async (phoneNumber: string): Promise<ICustomer> =
         console.log("--------------------");
 
         return res.data;
-    } catch (error: any) {
+    } catch (error: never) {
         console.error("Error during phone sign-in request:", error.response || error.message);
         throw new Error("Phone sign-in request failed");
     }
@@ -56,7 +56,7 @@ export const postSocialSignIn = async (email: string): Promise<ICustomer> => {
         console.log("--------------------");
 
         return res.data;
-    } catch (error: any) {
+    } catch (error: never) {
         console.error("Error during phone sign-in request:", error.response || error.message);
         throw new Error("Phone sign-in request failed");
     }
@@ -73,7 +73,7 @@ export const postSignUp = async (param:ISignUpParam ):Promise<ICustomer> => {
             config
         );
         return res.data;
-    } catch (error: any) {
+    } catch (error: never) {
         console.error("Error during sign-up request:", error.response || error.message);
         throw new Error("Sign-up request failed");
     }
@@ -90,6 +90,34 @@ export const refreshRequest = async (accessToken:string, refreshToken:string):Pr
     return res.data
 
 }
+
+export const updateCustomer = async (customerData: {
+    phoneNumber: string;
+    social: boolean;
+    customerID: number;
+    name: string;
+    accessToken: string;
+    loyaltyPoints: number;
+    martID: number;
+    email: string;
+    refreshToken: string
+    loginType: string
+}): Promise<ICustomer> => {
+    const res = await axios.put(
+        `${host}/update`,
+        customerData,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+
+    return res.data;
+}
+
+
+
 //
 // export const kakaoSignInRequest = async () : Promise<ICustomer> => {
 //

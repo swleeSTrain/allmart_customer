@@ -4,7 +4,7 @@ import GeneralLayout from "../layouts/GeneralLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
 import {useCustomerStore} from "../stores/customerStore";
 import BannerSlider from "../components/banner/BannerSlider.tsx";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -14,7 +14,6 @@ function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isIOS, setIsIOS] = useState(false);
     const [showPrompt, setShowPrompt] = useState(true);
-    const { martID } = useParams<{ martID: string }>();
     const { loginType } = useCustomerStore();
     const location = useLocation();
 

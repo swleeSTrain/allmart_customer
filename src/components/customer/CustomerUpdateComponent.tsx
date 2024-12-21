@@ -1,54 +1,45 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCustomerCookie } from "../../hooks/useCustomerCookie.ts";
+import { useCustomerStore } from "../../stores/customerStore.ts";
+import { updateCustomer } from "../../api/CustomerAPI.ts";
+import { toast } from "react-toastify";
 import axios from "axios";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts";
-import {useCustomerStore} from "../../stores/customerStore.ts";
-import {toast, ToastContainer} from "react-toastify";
+import LoadingPage from "../../pages/LoadingPage.tsx";
 
 const CustomerUpdate = () => {
     const [customer, setCustomer] = useState({
-        customerID: "",
-        phoneNumber: "",
+        accessToken: "",
+        customerID: 0,
         email: "",
-        name: "",
         loyaltyPoints: 0,
-        loginType: "",
+        martID: 0,
+        name: "",
+        phoneNumber: "",
+        refreshToken: "",
+        social: false,
+        loginType:""
     });
-    const navigate = useNavigate();
-    const{setTokens, setCustomerInfo} = useCustomerStore();
-    const {setCustomerCookies, getCustomerCookies} = useCustomerCookie()
 
+    const navigate = useNavigate();
+    const { setTokens, setCustomerInfo } = useCustomerStore();
+    const { setCustomerCookies, getCustomerCookies } = useCustomerCookie();
+
+    // 마트 ID 가져오기
+    const { martID: cookieMartID } = getCustomerCookies();
+    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const [searchParams] = useSearchParams();
-
-    // 쿼리 파라미터 값 읽기
-    const name : string | undefined = searchParams.get("name");
-    const email : string | null = searchParams.get('email');
-    const id : string | null = searchParams.get('phoneNumber');
-    const accessToken :  string | null= searchParams.get('accessToken');
-    const refreshToken : string | null= searchParams.get('refreshToken');
-
-    // 값이 없을 경우 기본값 설정
-    const defaultValue = searchParams.get('value') || '기본값';
 
     // 고객 정보 가져오기
     const fetchCustomer = async () => {
-
-        setCustomerCookies(
-            accessToken, refreshToken, name, customerID , martID
-        )
-
-        console.log("Param name:" + email)
-        console.log("Param id:" + id)
-        console.log("Param accessToken:" + accessToken)
-        console.log("Param refreshToken:" + refreshToken)
-
         try {
             setIsLoading(true);
-            const response = await axios.get("https://allmartsystem.shop/api/v1/customer/get");
-            setCustomer(response.data);
+            const response = await axios.get(
+                `http://localhost:8080/api/v1/customer/update/${getCustomerCookies().customerID}`
+            );
+            setCustomer(response.data); // API에서 가져온 데이터로 상태 설정
             setIsLoading(false);
         } catch (error) {
             console.error("고객 정보 가져오기 오류:", error);
@@ -56,69 +47,78 @@ const CustomerUpdate = () => {
         }
     };
 
+    // 초기 로딩 시 고객 정보 가져오기
     useEffect(() => {
         fetchCustomer();
     }, []);
 
-    // 입력 핸들러
+    // 입력값 변경 핸들러
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCustomer({
-            ...customer,
+
+        // 상태 업데이트
+        setCustomer((prevCustomer) => ({
+            ...prevCustomer,
             [name]: value,
-        });
+        }));
     };
 
     // 회원 정보 수정 요청
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            const response = await axios.put(
-                `https://allmartsystem.shop/api/v1/customers/update/${customer.customerID}`,
-                customer
+            const response = await updateCustomer(customer);
+
+            // 상태 및 쿠키 업데이트
+            setTokens(response.accessToken, response.refreshToken);
+            setCustomerInfo(
+                response.name,
+                response.customerID,
+                martID,
+                response.loginType,
+                response.email
             );
-            toast.success("회원 정보가 성공적으로 수정되었습니다.");
-            navigate(`${martId}/details`)
+            setCustomerCookies(
+                response.accessToken,
+                response.refreshToken,
+                response.name,
+                response.customerID,
+                response.martID,
+                response.email
+            );
+
+            console.log("고객 정보가 성공적으로 업데이트되었습니다.");
+            toast.success("고객 정보가 성공적으로 업데이트되었습니다.", {
+                autoClose: 1500,
+                className:
+                    "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                bodyClassName: "text-center",
+            });
+
+            navigate(`/1`);
         } catch (error) {
-            console.error("회원 정보 수정 오류:", error);
-            toast.error("회원 정보 수정에 실패했습니다.");
+            console.error("회원정보 수정 오류:", error);
+            toast.error("회원정보 수정 오류: 다시 시도 해주세요", {
+                autoClose: 1500,
+                className:
+                    "bg-red-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                bodyClassName: "text-center",
+            });
         }
     };
 
     if (isLoading) {
-        return <div>로딩 중...</div>;
+        return <LoadingPage/>
     }
 
     return (
-        <div>
-            <ToastContainer position="top-center" autoClose={2000} />
         <div className="container mx-auto p-6">
             <h1 className="text-3xl font-bold mb-6 text-center">회원정보 수정</h1>
-            <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-lg shadow-md">
-                <div className="mb-4">
-                    <label className="block text-lg font-medium text-gray-700">전화번호</label>
-                    <input
-                        type="text"
-                        name="phoneNumber"
-                        value={customer.phoneNumber}
-                        onChange={handleChange}
-                        disabled={customer.loginType === "PHONE"}
-                        className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-lg font-medium text-gray-700">이메일</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={handleChange}
-                        disabled={customer.loginType === "PHONE"}
-                        className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
-                    />
-                </div>
-
+            <form
+                onSubmit={handleSubmit}
+                className="bg-gray-100 p-6 rounded-lg shadow-md"
+            >
                 <div className="mb-4">
                     <label className="block text-lg font-medium text-gray-700">이름</label>
                     <input
@@ -131,13 +131,27 @@ const CustomerUpdate = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-lg font-medium text-gray-700">로열티 포인트</label>
+                    <label className="block text-lg font-medium text-gray-700">
+                        전화번호
+                    </label>
                     <input
-                        type="number"
-                        name="loyaltyPoints"
-                        value={customer.loyaltyPoints}
+                        type="text"
+                        name="phoneNumber"
+                        value={customer.phoneNumber || ""}
                         onChange={handleChange}
-                        disabled
+                        className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-lg font-medium text-gray-700">
+                        이메일
+                    </label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={customer.email || ""}
+                        onChange={handleChange}
                         className="mt-2 block w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 text-lg p-3"
                     />
                 </div>
@@ -149,7 +163,6 @@ const CustomerUpdate = () => {
                     수정하기
                 </button>
             </form>
-        </div>
         </div>
     );
 };

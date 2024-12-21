@@ -1,39 +1,32 @@
-import {useEffect, useState} from "react";
+import { useState} from "react";
 // import {kakaoSignInRequest, postPhoneSignIn} from "../../api/CustomerAPI.ts";
 import {postPhoneSignIn, postSocialSignIn} from "../../api/CustomerAPI.ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import {replace, useNavigate} from "react-router-dom";
 import { useNavigate} from "react-router-dom";
 import { useCustomerStore } from "../../stores/customerStore.ts";
-import { useMartStore } from "../../stores/martStore.ts";
+import { useCustomerCookie } from "../../hooks/useCustomerCookie";
+// import axios from "axios";
 
 function CustomerPhoneSignInComponent() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const { setTokens, setCustomerInfo } = useCustomerStore();
-    const { fetchAndStoreMartInfo } = useMartStore();
+    const { setCustomerCookies, getCustomerCookies} = useCustomerCookie(); // 쿠키 설정 함수 추가
 
     // const {email,setEmail} = useState("");
 
     const handleKakaoLogin = async () => {
-            // 카카오 OAuth2 로그인 URL로 이동
-            const kakaoURL = `https://allmartsystem.shop/oauth2/authorization/kakao`;
+
+            const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
             window.location.href = `${kakaoURL}`;
+            //window.location.href = `http://localhost:8080/oauth2/authorization/kakao?}`;
+
+
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch('https://allmartsystem.shop/oauth2/authorization/kakao', {
-                method: 'GET',
-                credentials: 'include', // 세션 기반 인증 사용 시 필요
-            });
-            const data = await response.json();
-            console.log("==============================");
-            console.log('User info:', data); // 받은 JSON 출력
-        };
-        fetchData();
-    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,13 +43,20 @@ function CustomerPhoneSignInComponent() {
             // 로그인 시 상태, 쿠키 저장을 위한 부분
             // 상태 저장
             setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID,"phone");
+            setCustomerInfo(response.name, response.customerID, response.martID, "phone", email);
 
-            await fetchAndStoreMartInfo(response.phoneNumber, "phone");
+            // 쿠키에 정보 저장
+            setCustomerCookies(
+                response.accessToken,
+                response.refreshToken,
+                response.name,
+                response.customerID,
+                response.martID,
+                response.email
+            );
 
             // 로그인 성공 후 페이지 이동
-            navigate(`/${response.martID}`);
-            //await handleFCMTokenUpdate(response.customerID, response.martID);
+            navigate(`/1}`);
 
             toast.success(`로그인 성공: ${response.name}님 환영합니다!`, {
                 autoClose: 1500,
@@ -83,25 +83,47 @@ function CustomerPhoneSignInComponent() {
 
         try {
             const response = await postSocialSignIn(trimmedEmail);
-
             setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID, "email");
-
-            await fetchAndStoreMartInfo(response.email, "email");
-
-            navigate(`/${response.martID}`);
-            toast.success(`로그인 성공: ${response.name}님 환영합니다!`, { autoClose: 1500 });
+            setCustomerInfo(response.name, response.customerID, response.martID, "email", email);
+            setCustomerCookies(
+                response.accessToken,
+                response.refreshToken,
+                response.name,
+                response.customerID,
+                response.martID,
+                response.email
+            );
+            navigate(`/${getCustomerCookies().martID}`);
+            toast.success("회원 정보가 수정되었습니다", {
+                    position: "top-right", // 메시지 위치
+                    autoClose: 3000, // 3초 후 자동 닫힘
+                    hideProgressBar: false, // 진행 상태 표시 바 숨기기 여부
+                    closeOnClick: true, // 클릭 시 닫힘
+                    pauseOnHover: true, // 마우스 오버 시 일시정지
+                    draggable: true, // 드래그 가능 여부
+                    progress: undefined, // 진행 상태 초기화
+                    theme: "colored", // 테마 (colored, light, dark)
+                });
         } catch (error) {
-            toast.error("로그인 실패: 등록되지 않은 이메일입니다", { autoClose: 1500 });
+            toast.error("로그인 실패: 등록되지 않은 이메일입니다", {
+                position: "top-right", // 메시지 위치
+                autoClose: 3000, // 3초 후 자동 닫힘
+                hideProgressBar: false, // 진행 상태 표시 바 숨기기 여부
+                closeOnClick: true, // 클릭 시 닫힘
+                pauseOnHover: true, // 마우스 오버 시 일시정지
+                draggable: true, // 드래그 가능 여부
+                progress: undefined, // 진행 상태 초기화
+                theme: "colored", // 테마 (colored, light, dark)
+            });
             console.error("Error during email sign-in:", error);
         }
     };
 
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center ">
+        <div className="min-h-screen bg-white flex items-center justify-center">
             <div className="w-full max-w-md rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6 ">로그인</h2>
+                <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">로그인</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">

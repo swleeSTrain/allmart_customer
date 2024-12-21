@@ -11,7 +11,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, logout } = useCustomerStore();
+    const { name, logout, martID } = useCustomerStore();
     const { martInfo } = useMartStore();
 
     // 쿠키 기반으로 상태 초기화
@@ -197,7 +197,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() => navigate("/customer/signIn")}
+                                    onClick={() => navigate(`/${martID}/customer/signIn`)}
                                     className="w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform hover:scale-105 transition-transform"
                                 >
                                     로그인

@@ -9,6 +9,7 @@ export interface ICustomer{
     social: boolean;
     accessToken: string;
     refreshToken: string;
+    loginType:string;
 }
 
 export interface ISignUpParam{

@@ -1,16 +1,17 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import AllMartLogo from "../assets/images/backgrounds/AllMartLogo.png";
+import {useCustomerCookie} from "../hooks/useCustomerCookie.ts";
 
 const Header = ({children}: { children: React.ReactNode }) => {
-
+const {cookies} = useCustomerCookie();
     const navigate = useNavigate();
 
     return (
         <>
             <header className="bg-white shadow-lg flex justify-around items-center h-20  mb-4">
                 <img src={AllMartLogo} alt="AllMart Logo" className="w-[120px] h-auto"
-                     onClick={() => navigate("/")}/>
+                     onClick={() => navigate(`/`)}/>
                 <input type="text" placeholder="Search"
                        className="w-2/3 mx-2 py-2 px-4 border rounded-lg border-gray-300"/>
                 <button className="w-fit rounded-s">
@@ -41,7 +42,7 @@ const Header = ({children}: { children: React.ReactNode }) => {
                         <li className="mb-4"><a href="#"
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">장바구니</a>
                         </li>
-                        <li className="mb-4"><a href="/customer/qrImage"
+                        <li className="mb-4"><a href="${mart/customer/qrImage"
                                                 className="text-center text-4xl block hover:bg-blue-400 rounded">회원정보</a>
                         </li>
                         <li className="mb-4"><a href="#"
@@ -51,7 +52,7 @@ const Header = ({children}: { children: React.ReactNode }) => {
                                                 className="text-center text-4xl block hover:bg-gray-400 rounded">포인트</a>
                         </li>
                         <button className="w-full h-20 text-5xl hover:bg-blue-400 rounded"
-                                onClick={() => navigate(("/customer/signup"))}>로그인
+                                onClick={() => navigate(('/customer/signup'))}>로그인
                         </button>
                     </ul>
                 </nav>

@@ -11,8 +11,9 @@ interface CustomerState {
     customerID: number | null;
     martID: number | null;
     loginType: "phone" | "email" | null;
+    email: string | null;
     setTokens: (accessToken: string, refreshToken: string) => void;
-    setCustomerInfo: (name: string, customerID: number, martID: number, loginType: "phone" | "email") => void;
+    setCustomerInfo: (name: string, customerID: number, martID: number, loginType: "phone" | "email"| null, email: string | null) => void;
     logout: () => void;
 }
 
@@ -25,12 +26,13 @@ export const useCustomerStore = create<CustomerState>()(
             customerID: null,
             martID: null,
             loginType: null,
+            email:null,
 
             setTokens: (accessToken, refreshToken) => {
                 set({ accessToken, refreshToken });
             },
-            setCustomerInfo: (name, customerID, martID, loginType) => {
-                set({ name, customerID, martID, loginType });
+            setCustomerInfo: (name, customerID, martID,  loginType, email) => {
+                set({ name, customerID, martID, loginType, email });
             },
             logout: () => {
                 set({
