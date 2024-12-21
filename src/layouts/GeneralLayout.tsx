@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
 import homeIcon from '../../src/images/home.png'; // PNG 아이콘 경로 (필요시)
-import leafletIcon from '../../src/images/flyer.png'; // PNG 아이콘 경로 (필요시)
-import FloatingCartButton from "../components/FloatingCartButton"; // 플로팅 버튼 import
+import leafletIcon from '../../src/images/order.png'; // PNG 아이콘 경로 (필요시)
 import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
 import { useMartStore } from "../stores/martStore.ts";
 import martImage from "../../src/images/a.png";
@@ -30,7 +29,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const menuItems = [
         { name: "최근 본 상품", link: "#" ,icon: <AiOutlineHome /> },
-        { name: "주문 상품", link: "/order/list" },
+        { name: "주문 상품", link: "/orders/list" },
         { name: "배송지", link: "/address" },
         { name: "회원정보", link: "/customer/info" },
         { name: "고객센터", link: "/qna/list" },
@@ -46,8 +45,6 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            {/* 플로팅 장바구니 버튼 */}
-            <FloatingCartButton />
 
             <header className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
                 <div className="container mx-auto px-4 flex items-center justify-between h-16">
@@ -225,9 +222,9 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/categories")}
+                    onClick={() => navigate("/orders/list")}
                 >
-                    {/* 카테고리 아이콘: 3줄 수평선 */}
+                    {/* 주문내역 아이콘: 3줄 수평선 */}
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -239,8 +236,8 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                         <path strokeLinecap="round" strokeLinejoin="round"
                               d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
                     </svg>
-                    {/* <img src={categoryIcon} alt="카테고리" className="w-6 h-6 group-hover:text-orange-500" /> */}
-                    <span className="text-xs mt-1">카테고리</span>
+                    {/* <img src={categoryIcon} alt="주문내역" className="w-6 h-6 group-hover:text-orange-500" /> */}
+                    <span className="text-xs mt-1">주문내역</span>
                 </button>
 
                 <button
@@ -254,11 +251,11 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/flyer/read")}
+                    onClick={() => navigate("/order/read")}
                 >
 
-                    <img src={leafletIcon} alt="전단지" className="w-6 h-6 group-hover:text-orange-500"/>
-                    <span className="text-xs mt-1">전단지</span>
+                    <img src={leafletIcon} alt="주문내역" className="w-6 h-6 group-hover:text-orange-500"/>
+                    <span className="text-xs mt-1">주문내역</span>
                 </button>
 
 

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { IMart } from '../types/mart';
 
-// const host = 'https://allmartsystem.shop/api/v1/kakao/marts';
-const host = 'http://localhost:8080/api/v1/kakao/marts';
+const host = 'https://allmartsystem.shop/api/v1/kakao/marts';
+// const host = 'http://localhost:8080/api/v1/kakao/marts';
 export const getMartRead = async (martID: number): Promise<IMart> => {
     try {
 
-        const response = await axios.get<IMart>(`http://localhost:8080/api/v1/mart/${martID}`);
+        const response = await axios.get<IMart>(`https://allmartsystem.shop/api/v1/mart/${martID}`);
 
         return response.data; // 조회된 마트 데이터를 반환
     } catch (error) {

@@ -1,12 +1,12 @@
-import {loadTossPayments} from "@tosspayments/payment-sdk";
-import {useEffect} from "react";
+import { loadTossPayments } from "@tosspayments/payment-sdk";
+import { useEffect } from "react";
 import {toast} from "react-toastify";
 
 interface TossPayProps {
-    amount: number,
-    orderId: string,
-    orderName: string,
-    customerName: string,
+    amount: number;
+    orderId: string;
+    orderName: string;
+    customerName: string;
     onSuccess: () => void,
     onError: (error: string) => void
 }
@@ -27,7 +27,7 @@ const TossPayComponent: React.FC<TossPayProps> = ({
                 orderId,
                 orderName,
                 customerName,
-                successUrl: `${window.location.origin}/toss/success`,
+                successUrl: `${window.location.origin}/toss/success?orderId=${orderId}&amount=${amount}`,
                 failUrl: `${window.location.origin}/toss/fail`,
             });
         } catch (error) {

@@ -91,8 +91,8 @@ function ProductReadComponent() {
 
             {/* 이름과 가격 */}
             <div className="w-full max-w-md text-center my-4">
-                <h1 className="text-xl font-bold">{product.name}</h1>
-                <p className="text-lg font-bold text-black-600">
+                <h1 className="text-4xl font-bold">{product.name}</h1>
+                <p className="text-6xl font-bold text-red-600">
                     {product.price.toLocaleString()}원
                 </p>
             </div>

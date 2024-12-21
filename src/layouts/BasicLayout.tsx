@@ -250,7 +250,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 {/* 주문 목록 버튼 */}
                 <button
                     className="flex flex-col items-center justify-center text-white text-2xl md:text-3xl hover:text-yellow-300 focus:outline-none"
-                    onClick={() => navigate("/product/oldcart")}
+                    onClick={() => navigate("/order/temporary")}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

@@ -80,10 +80,28 @@ function CartComponent() {
             return;
         }
 
+        const selectedItems = products.filter((product) =>
+            selectedProducts.includes(product.productID)
+        );
+
         // 결제 정보 생성
         const amount = calculateTotalAmount();
         const orderId = uuidv4().replace(/-/g, "").slice(0, 36);
         const orderName = createOrderName();
+
+        // 주문 정보 localStorage에 저장
+        localStorage.setItem(
+            "orderItems",
+            JSON.stringify(
+                selectedItems.map((product) => ({
+                    productId: product.productID,
+                    quantity: product.quantity,
+                    unitPrice: product.totalPrice,
+                    productName: product.name,
+                }))
+            )
+        );
+
 
         // 결제 데이터를 상태에 저장
         setOrderData({ amount, orderId, orderName, customerName });
@@ -135,6 +153,14 @@ function CartComponent() {
                                 key={product.productID}
                                 className="bg-white p-4 rounded-lg shadow flex items-center"
                             >
+                                {/* 썸네일 이미지 */}
+                                {product.thumbnailImage && (
+                                    <img
+                                        src={product.thumbnailImage}
+                                        alt={product.name}
+                                        className="w-16 h-16 object-cover rounded-lg mr-4"
+                                    />
+                                )}
                                 <input
                                     type="checkbox"
                                     className="mr-4"
@@ -156,8 +182,8 @@ function CartComponent() {
                                             -
                                         </button>
                                         <span className="text-lg text-gray-800 font-medium">
-                                            {product.quantity}
-                                        </span>
+                        {product.quantity}
+                    </span>
                                         <button
                                             className="px-2 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
                                             onClick={() =>
