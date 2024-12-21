@@ -2,21 +2,21 @@ import {useState, useEffect} from "react";
 import BasicLayout from "../layouts/BasicLayout";
 import GeneralLayout from "../layouts/GeneralLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
-import {useParams} from "react-router-dom";
 import {useCustomerStore} from "../stores/customerStore";
 import BannerSlider from "../components/banner/BannerSlider.tsx";
+import { useLocation, useParams } from "react-router-dom";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
     userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
-
 function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isIOS, setIsIOS] = useState(false);
     const [showPrompt, setShowPrompt] = useState(true);
-    const {martID} = useParams<{ martID: string }>();
-    const {loginType} = useCustomerStore();
+    const { martID } = useParams<{ martID: string }>();
+    const { loginType } = useCustomerStore();
+    const location = useLocation();
 
     useEffect(() => {
         const handleBeforeInstallPrompt = (event: Event) => {
@@ -56,16 +56,25 @@ function MainPage() {
         setShowPrompt(false);
     };
 
-    const getLayout = () => (loginType === "email" ? GeneralLayout : BasicLayout);
+    const getLayout = () => {
+        // MartCard에서 넘어온 경우 GeneralLayout 사용
+        if (location.state?.useGeneralLayout) {
+            return GeneralLayout;
+        }
+
+        // 기본 loginType에 따라 레이아웃 결정
+        return loginType === "email" ? GeneralLayout : BasicLayout;
+    };
+
     const Layout = getLayout();
 
     return (
         <Layout>
             <div className={`min-h-screen ${(showPrompt && (installPrompt || isIOS)) ? 'pb-24' : ''}`}>
                 <section className="container mx-auto px-4 py-6 mt-6">
-                    <BannerSlider/>
+                    <BannerSlider />
                     <div className="mt-6">
-                        <CategoryListComponent/>
+                        <CategoryListComponent />
                     </div>
                 </section>
             </div>

@@ -12,11 +12,10 @@ const MartCard: React.FC<MartCardProps> = ({ mart, refProp }) => {
     const navigate = useNavigate();
 
     const handleMartClick = async () => {
-
         const { fetchMartByID } = useMartStore.getState();
         await fetchMartByID(mart.martID);
 
-        navigate(`/${mart.martID}`);
+        navigate(`/${mart.martID}`, { state: { useGeneralLayout: true } });
     };
 
     return (
