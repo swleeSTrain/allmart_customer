@@ -116,7 +116,7 @@ function ProductListComponent() {
                 <h3 className="font-bold text-lg text-gray-800">
                     {product.name}
                 </h3>
-                <p className="text-orange-500 font-bold text-base mt-2">
+                <p className="text-red-500 font-bold text-xl mt-2">
                     {product.price.toLocaleString()}원
                 </p>
                 {/* 상품 카드용 플로팅 장바구니 버튼 */}
