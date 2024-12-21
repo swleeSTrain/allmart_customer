@@ -1,8 +1,5 @@
 import { create } from "zustand";
-import { devtools, persist, PersistStorage } from "zustand/middleware";
-import { Cookies } from "react-cookie";
-
-const cookies = new Cookies();
+import { devtools } from "zustand/middleware";
 
 interface CustomerState {
     accessToken: string | null;
@@ -10,61 +7,48 @@ interface CustomerState {
     name: string | null;
     customerID: number | null;
     martID: number | null;
-    loginType: "phone" | "email" | null;
+    loginType: "phone" | "email" | null; // 로그인 타입 추가
     setTokens: (accessToken: string, refreshToken: string) => void;
+    setName: (name: string) => void;
+    setMartID: (martID: number) => void;
     setCustomerInfo: (name: string, customerID: number, martID: number, loginType: "phone" | "email") => void;
     logout: () => void;
 }
 
+// zustand는 여기 로직 내에서 쿠키 처리가 안됨 따로 해줘야 함
 export const useCustomerStore = create<CustomerState>()(
-    persist(
-        devtools((set) => ({
-            accessToken: null,
-            refreshToken: null,
-            name: null,
-            customerID: null,
-            martID: null,
-            loginType: null,
+    devtools((set) => ({
+        accessToken: null,
+        refreshToken: null,
+        name: null,
+        customerID: null,
+        martID: null,
+        loginType: null, // 초기값 추가
 
-            setTokens: (accessToken, refreshToken) => {
-                set({ accessToken, refreshToken });
-            },
-            setCustomerInfo: (name, customerID, martID, loginType) => {
-                set({ name, customerID, martID, loginType });
-            },
-            logout: () => {
-                set({
-                    accessToken: null,
-                    refreshToken: null,
-                    name: null,
-                    customerID: null,
-                    martID: null,
-                    loginType: null,
-                });
-            },
-        })),
-        {
-            name: "customer", // 쿠키 이름
+        // 로그인 시 zustand에 밀어넣기
+        setTokens: (accessToken, refreshToken) => {
+            set({ accessToken, refreshToken });
+        },
+        setCustomerInfo: (name, customerID, martID, loginType) => {
+            set({ name, customerID, martID, loginType });
+        },
+        // 얘는 사이드바에 이름 뜨게 하려고 설정
+        setName: (name) => {
+            set({ name })
+        },
+        setMartID: (martID) => {
+            set({ martID })
+        },
 
-            // @ts-ignore
-            getStorage: (): PersistStorage<CustomerState> => ({
-                getItem: (name) => {
-                    const storedData = cookies.get(name);
-                    try {
-                        return storedData ? JSON.parse(storedData) : null;
-                    } catch (error) {
-                        console.error("쿠키 데이터 파싱 오류:", error);
-                        cookies.remove(name);
-                        return null;
-                    }
-                },
-                setItem: (name, value) => {
-                    cookies.set(name, JSON.stringify(value), { path: "/", maxAge: 604800 }); // 7일 유지
-                },
-                removeItem: (name) => {
-                    cookies.remove(name, { path: "/" });
-                },
-            }),
-        }
-    )
+        logout: () => {
+            set({
+                accessToken: null,
+                refreshToken: null,
+                name: null,
+                customerID: null,
+                martID: null,
+                loginType: null,
+            });
+        },
+    }))
 );
