@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 const BannerComponent = () => {
     const [banners, setBanners] = useState([]);
@@ -22,7 +23,7 @@ const BannerComponent = () => {
         if (youtubeUrl) {
             window.open(youtubeUrl, "_blank"); // Open YouTube URL in a new tab
         } else {
-            alert("YouTube URL is not provided.");
+            toast("YouTube URL is not provided.");
         }
     };
 

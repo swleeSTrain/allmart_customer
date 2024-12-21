@@ -1,6 +1,7 @@
     import React, { useState, useEffect } from "react";
     import {AddressForm} from "../../types/address.ts";
     import {saveAddress} from "../../api/AddressAPI.ts";
+    import {toast, ToastContainer} from "react-toastify";
 
 
     const PostcodeSearch: React.FC = () => {
@@ -27,7 +28,11 @@
 
         const handleDaumPostcode = () => {
             if (!isScriptLoaded || !window.daum || !window.daum.Postcode) {
-                alert("Daum Postcode API가 아직 로드되지 않았습니다.");
+                toast.error("Daum Postcode API가 아직 로드되지 않았습니다.", {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
                 return;
             }
 
@@ -62,21 +67,35 @@
             e.preventDefault();
 
             if (!formData.postcode || !formData.roadAddress || !formData.detailAddress) {
-                alert("모든 필드를 입력해주세요.");
+                toast.info("모든 필드를 입력해주세요.", {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
                 return;
             }
 
             try {
                 const savedAddress = await saveAddress(formData);
                 console.log("등록된 주소:", savedAddress);
-                alert("주소가 등록되었습니다!");
+                toast.success("주소가 등록되었습니다!", {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
             } catch (error) {
                 console.error("주소 등록 중 에러 발생:", error);
-                alert("주소 등록에 실패했습니다.");
+                toast.error("주소 등록에 실패했습니다.", {
+                    autoClose: 1500,
+                    className: "bg-blue-500 text-white font-semibold rounded-lg shadow-md px-4 py-3",
+                    bodyClassName: "text-center",
+                });
             }
         };
 
         return (
+            <div>
+                <ToastContainer position="top-center" autoClose={2000} />
             <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
                 <h2 className="text-2xl font-bold mb-4 text-center">주소 검색</h2>
                 <form onSubmit={handleSubmit}>
@@ -132,6 +151,7 @@
                         </button>
                     </div>
                 </form>
+            </div>
             </div>
         );
     };

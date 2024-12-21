@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useCustomerStore } from "../../stores/customerStore";
 import {fetchQuestionById, updateQuestion} from "../../api/qnaAPi.ts";
+import {toast, ToastContainer} from "react-toastify";
 
 const QnaEditComponent: React.FC = () => {
     const { qno } = useParams<{ qno: string }>();
@@ -63,15 +64,17 @@ const QnaEditComponent: React.FC = () => {
 
         try {
             await updateQuestion(Number(qno), formDataToSend);
-            alert("질문 수정 성공!");
+            toast.success("질문 수정 성공!");
             navigate(`/qna/${qno}`);
         } catch (error) {
             console.error("질문 수정 실패:", error);
-            alert("질문 수정 실패!");
+            toast.error("질문 수정 실패!");
         }
     };
 
     return (
+        <div>
+            <ToastContainer position="top-center" autoClose={2000} />
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 bg-white shadow rounded mt-6">
             <h1 className="text-xl font-bold mb-4">질문 수정</h1>
             <input
@@ -113,6 +116,7 @@ const QnaEditComponent: React.FC = () => {
                 질문 수정
             </button>
         </form>
+        </div>
     );
 };
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useCustomerCookie} from "../../hooks/useCustomerCookie.ts";
 import {useCustomerStore} from "../../stores/customerStore.ts";
+import {toast, ToastContainer} from "react-toastify";
 
 const CustomerUpdate = () => {
     const [customer, setCustomer] = useState({
@@ -76,11 +77,11 @@ const CustomerUpdate = () => {
                 `https://allmartsystem.shop/api/v1/customers/update/${customer.customerID}`,
                 customer
             );
-            alert("회원 정보가 성공적으로 수정되었습니다.");
+            toast.success("회원 정보가 성공적으로 수정되었습니다.");
             navigate(`${martId}/details`)
         } catch (error) {
             console.error("회원 정보 수정 오류:", error);
-            alert("회원 정보 수정에 실패했습니다.");
+            toast.error("회원 정보 수정에 실패했습니다.");
         }
     };
 
@@ -89,6 +90,8 @@ const CustomerUpdate = () => {
     }
 
     return (
+        <div>
+            <ToastContainer position="top-center" autoClose={2000} />
         <div className="container mx-auto p-6">
             <h1 className="text-3xl font-bold mb-6 text-center">회원정보 수정</h1>
             <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-lg shadow-md">
@@ -146,6 +149,7 @@ const CustomerUpdate = () => {
                     수정하기
                 </button>
             </form>
+        </div>
         </div>
     );
 };
