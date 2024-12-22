@@ -19,7 +19,7 @@ function CustomerPhoneSignInComponent() {
 
     const handleKakaoLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        const trimmedEmail = "faker@naver.com"
+        const trimmedEmail = "woals3527@naver.com"
 
         try {
             const response = await postSocialSignIn(trimmedEmail);
