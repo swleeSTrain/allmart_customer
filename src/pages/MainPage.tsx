@@ -1,5 +1,4 @@
 import {useState, useEffect, useMemo} from "react";
-import BasicLayout from "../layouts/BasicLayout";
 import GeneralLayout from "../layouts/GeneralLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
 import {useCustomerStore} from "../stores/customerStore";
@@ -7,6 +6,7 @@ import BannerSlider from "../components/banner/BannerSlider.tsx";
 import {handleFCMTokenUpdate} from "../firebase/fcmUtil.ts";
 import { useLocation } from "react-router-dom";
 import {useCustomerCookie} from "../hooks/useCustomerCookie.ts";
+import BasicLayout from "../layouts/BasicLayout.tsx";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -87,7 +87,7 @@ function MainPage() {
         }
 
         // 기본 loginType에 따라 레이아웃 결정
-        return loginType === "email" ? GeneralLayout : BasicLayout;
+        return loginType === "phone" ? BasicLayout : GeneralLayout;
     };
 
     const Layout = getLayout();

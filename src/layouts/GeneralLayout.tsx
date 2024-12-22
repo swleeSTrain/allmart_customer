@@ -232,7 +232,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/orders/list")}
+                    onClick={() => navigate("/category/list")}
                 >
                     {/* 주문내역 아이콘: 3줄 수평선 */}
                     <svg
@@ -247,7 +247,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                               d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
                     </svg>
                     {/* <img src={categoryIcon} alt="주문내역" className="w-6 h-6 group-hover:text-orange-500" /> */}
-                    <span className="text-xs mt-1">주문내역</span>
+                    <span className="text-xs mt-1">카테고리</span>
                 </button>
 
                 <button
@@ -261,7 +261,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
 
                 <button
                     className="flex flex-col items-center text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-                    onClick={() => navigate("/order/read")}
+                    onClick={() => navigate("/orders/list   ")}
                 >
 
                     <img src={leafletIcon} alt="주문내역" className="w-6 h-6 group-hover:text-orange-500"/>
