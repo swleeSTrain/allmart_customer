@@ -1,6 +1,6 @@
-const CACHE_NAME = 'mart-1-cache-v1';
+const CACHE_NAME = 'mart-1-cache-v2';
 const urlsToCache = [
-    '/1',
+    '/',
     '/index.html',
     '/styles/main.css',
     '/scripts/main.js',
