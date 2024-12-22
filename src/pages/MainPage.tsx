@@ -17,6 +17,7 @@ function MainPage() {
     const [showPrompt, setShowPrompt] = useState(true);
     const {martID} = useParams<{ martID: string }>();
     const {loginType, customerID} = useCustomerStore();
+    console.log("customerID"+ customerID+"martID"+martID);
     if (customerID != null) {
         handleFCMTokenUpdate(customerID, Number(martID)).then(r => console.log(r));
     }
