@@ -17,7 +17,9 @@ function MainPage() {
     const [showPrompt, setShowPrompt] = useState(true);
     const {martID} = useParams<{ martID: string }>();
     const {loginType, customerID} = useCustomerStore();
-    handleFCMTokenUpdate(Number(customerID), Number(martID)).then(r => console.log(r));
+    if (customerID != null) {
+        handleFCMTokenUpdate(customerID, Number(martID)).then(r => console.log(r));
+    }
 
     const location = useLocation();
 
