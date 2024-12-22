@@ -1,11 +1,12 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useMemo} from "react";
 import BasicLayout from "../layouts/BasicLayout";
 import GeneralLayout from "../layouts/GeneralLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
 import {useCustomerStore} from "../stores/customerStore";
 import BannerSlider from "../components/banner/BannerSlider.tsx";
 import {handleFCMTokenUpdate} from "../firebase/fcmUtil.ts";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation} from "react-router-dom";
+import {useCustomerCookie} from "../hooks/useCustomerCookie.ts";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -15,11 +16,28 @@ function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isIOS, setIsIOS] = useState(false);
     const [showPrompt, setShowPrompt] = useState(true);
-    const {martID} = useParams<{ martID: string }>();
-    const {loginType, customerID} = useCustomerStore();
+
+    const { name, martID, customerID, setCustomerInfo } = useCustomerStore(); // Zustand에서 상태 관리 함수 가져오기
+    const { getCustomerCookies } = useCustomerCookie(); // 쿠키에서 고객 정보 가져오기
+
+    // 쿠키랑 상태가 연동이 안되어있어서 여기를 통해 동기화 시켜주는 것
+    // `getCustomerCookies` 결과 캐싱
+    const customerData = useMemo(() => getCustomerCookies(), [getCustomerCookies]);
+
+    // 쿠키 기반으로 상태 초기화
+    useEffect(() => {
+        if (
+            customerData.name !== name ||
+            customerData.martID !== martID ||
+            customerData.customerID !== customerID
+        ) {
+            setCustomerInfo(customerData.name, customerData.customerID, customerData.martID, null, customerData.email); // 변수 이름 수정
+        }
+    }, [name, martID, customerID, customerData, setCustomerInfo]);
     console.log("customerID"+ customerID+"martID"+martID);
-    if (customerID != null) {
-        handleFCMTokenUpdate(customerID, Number(martID)).then(r => console.log(r));
+
+    if (customerID != null && martID != null) {
+        handleFCMTokenUpdate(customerID, martID).then(r => console.log(r));
     }
 
     const location = useLocation();
