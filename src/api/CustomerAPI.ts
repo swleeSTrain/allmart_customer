@@ -110,6 +110,7 @@ export const updateCustomer = async (customerData: {
             headers: {
                 'Content-Type': 'application/json',
             },
+            withCredentials: true,
         }
     );
 

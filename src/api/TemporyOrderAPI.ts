@@ -7,7 +7,7 @@ const host = 'https://allmartsystem.shop/api/v1/temporary-orders';
 // 상태별 임시 주문 리스트 조회 함수
 export const getTemporaryOrders = async (status: string): Promise<ITemporaryOrder[]> => {
     try {
-        const res = await axios.get(`${host}/status/${status}`);
+        const res = await axios.get(`${host}/status/${status}`, { withCredentials: true });
 
         console.log('===============================');
         console.log('Temporary Orders:', res.data);
@@ -21,7 +21,7 @@ export const getTemporaryOrders = async (status: string): Promise<ITemporaryOrde
 
 export const deleteTemporaryOrder = async (tempOrderId: number): Promise<void> => {
     try {
-        await axios.delete(`${host}/${tempOrderId}`);
+        await axios.delete(`${host}/${tempOrderId}`, { withCredentials: true });
         console.log(`Order ${tempOrderId} deleted successfully.`);
     } catch (error) {
         console.error('Error deleting order:', error);

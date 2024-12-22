@@ -25,7 +25,7 @@ export const confirmPayment = async (data: {
     orderId: string;
     amount: number;
 }) => {
-    const response = await axios.post(`${host}/toss-payments/confirm`, data);
+    const response = await axios.post(`${host}/toss-payments/confirm`, data,{withCredentials: true,});
     return response.data;
 };
 
@@ -39,7 +39,7 @@ export const createOrder = async (data: {
         productName: string;
     }[];
 }) => {
-    const response = await axios.post(`${host}/create`, data);
+    const response = await axios.post(`${host}/create`, data,{withCredentials: true,});
     return response.data;
 };
 
@@ -52,7 +52,7 @@ export const getOrderList = async (params: {
     size?: number;         // 페이지 크기
 }) => {
     try {
-        const response = await axios.get(`${host}/list`, { params });
+        const response = await axios.get(`${host}/list`, { params,withCredentials:true },);
         console.log("Order List:", response.data);
         return response.data; // PageResponseDTO 반환
     } catch (error) {
