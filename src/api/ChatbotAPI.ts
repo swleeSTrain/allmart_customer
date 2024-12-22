@@ -4,7 +4,7 @@ import { IOrderRequest, ISlot  } from "../types/chatbot.ts";
 // const chatbotHost = 'https://0962-58-235-119-39.ngrok-free.app/api/v1/chatbot';
 
 const chatbotHost = 'https://allmartservice.shop/napi/v1/chatbot';
-const orderHost = 'https://allmartservice.shop/napi/v1/orders/voice';
+const orderHost = 'https://allmartsystem.shop/api/v1/orders/voice';
 
 // const chatbotHost = 'http://10.10.10.121:8081/api/v1/chatbot';
 // const orderHost = 'http://localhost:8080/api/v1/orders/voice';
