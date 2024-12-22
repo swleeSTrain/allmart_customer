@@ -9,7 +9,7 @@ interface DeviceRegistrationRequest {
     fcmToken: string;
 }
 
-const API_BASE_URL = 'https://allmartservice/fcm';
+const API_BASE_URL = 'https://allmartservice.shop/fcm';
 const requestNotificationPermission = async () => {
     try {
         const permission = await Notification.requestPermission();

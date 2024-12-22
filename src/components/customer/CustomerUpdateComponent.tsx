@@ -37,7 +37,7 @@ const CustomerUpdate = () => {
         try {
             setIsLoading(true);
             const response = await axios.get(
-                `https://allmartsystem/api/v1/customer/update/${getCustomerCookies().customerID}`
+                `https://allmartsystem.shop/api/v1/customer/update/${getCustomerCookies().customerID}`
             );
             setCustomer(response.data);
             setIsLoading(false);
