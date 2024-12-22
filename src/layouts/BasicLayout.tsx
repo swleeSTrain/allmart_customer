@@ -2,8 +2,10 @@ import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import OrderVoiceButton from "../components/chatbot/OrderVoiceButton.tsx";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
+import { useCustomerCookie } from "../hooks/useCustomerCookie";
 import { useMartStore } from "../stores/martStore.ts";
 import martImage from "../../src/images/a.png";
+
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
     userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
@@ -13,7 +15,17 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-    const { martInfo } = useMartStore();
+    const { martLogo } = useMartStore();
+    const { name, setName, logout } = useCustomerStore();
+    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
+
+    // 쿠키 기반으로 상태 초기화
+    useEffect(() => {
+        const customerData = getCustomerCookies();
+        if (customerData && customerData.name !== name) { // 기존 상태와 비교
+            setName(customerData.name); // Zustand 상태 업데이트
+        }
+    }, [name, getCustomerCookies, setName]);
 
     useEffect(() => {
         const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
@@ -45,15 +57,17 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, logout } = useCustomerStore();
-
 
     // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
 
         logout(); // Zustand 상태 및 쿠키 모두 초기화
 
+        removeCustomerCookies();
+
         setMenuOpen(false); // 메뉴 닫기
+
+        navigate('/');
     };
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -98,7 +112,7 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
 
                     {/* 로고 */}
                     <img
-                        src={martInfo?.logoURL || martImage}
+                        src={martLogo || martImage}
                         alt="마트 로고"
                         className="h-20 md:h-16 lg:h-20 object-contain cursor-pointer mx-auto md:mx-0"
                         onClick={() => navigate("/")}

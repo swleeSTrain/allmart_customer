@@ -1,7 +1,8 @@
-import React from 'react';
-import { IMart } from '../../types/mart';
-import {useNavigate} from "react-router-dom";
-import { useMartStore } from '../../stores/martStore.ts';
+import React from "react";
+import { IMart } from "../../types/mart";
+import { useNavigate } from "react-router-dom";
+import { useMartStore } from "../../stores/martStore";
+import { useMartCookie } from "../../hooks/useMartCookie"; // 쿠키 관리 훅 가져오기
 
 interface MartCardProps {
     mart: IMart;
@@ -10,11 +11,20 @@ interface MartCardProps {
 
 const MartCard: React.FC<MartCardProps> = ({ mart, refProp }) => {
     const navigate = useNavigate();
+    const { setMartCookies } = useMartCookie(); // 쿠키 저장 훅 호출
+    const { setMartIDAndLogo } = useMartStore(); // zustand 상태 업데이트
 
-    const handleMartClick = async () => {
-        const { fetchMartByID } = useMartStore.getState();
-        await fetchMartByID(mart.martID);
+    const handleMartClick = () => {
+        const martID = mart.martID;
+        const martLogo = mart.thumbnailImage;
 
+        // zustand 상태 업데이트
+        setMartIDAndLogo(martID, martLogo);
+
+        // 쿠키에 저장
+        setMartCookies(martID, martLogo);
+
+        // 고객 로그인 화면으로 이동
         navigate(`/customer/signIn`, { state: { useGeneralLayout: true } });
     };
 

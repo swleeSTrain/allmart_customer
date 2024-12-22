@@ -1,6 +1,4 @@
 import BasicLayout from "../../layouts/BasicLayout.tsx";
-import {useCustomerStore} from "../../stores/customerStore.ts";
-import GeneralLayout from "../../layouts/GeneralLayout.tsx";
 
 interface ResultModalProps {
     msg: string;
@@ -8,10 +6,8 @@ interface ResultModalProps {
 }
 
 function LoginCheckPage({ msg, callback }: ResultModalProps) {
-    const { loginType } = useCustomerStore(); // Zustand 상태로 로그인 타입 가져오기
-    const Layout = loginType === "phone" ? BasicLayout : GeneralLayout;
     return (
-        <Layout>
+        <BasicLayout>
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-white z-50">
             <div className="bg-whtie p-8 rounded-lg shadow-lg w-96 border-gray border-2" >
                 <h2 className="text-xl font-semibold mb-4 text-balck-600">알림</h2>
@@ -25,7 +21,7 @@ function LoginCheckPage({ msg, callback }: ResultModalProps) {
                 </button>
             </div>
         </div>
-        </Layout>
+        </BasicLayout>
     );
 }
 

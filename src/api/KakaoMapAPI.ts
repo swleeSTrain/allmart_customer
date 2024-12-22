@@ -8,8 +8,6 @@ export const getMapScriptUrl = async (): Promise<string> => {
     try {
         const res = await axios.get<{ scriptUrl: string }>(`${host}/script`,);
 
-        console.log(res.data.scriptUrl);
-
         return res.data.scriptUrl;
     } catch (error) {
         console.error("Failed to get Kakao Map Script URL", error);
@@ -25,7 +23,7 @@ export const getMarts = async (lat: number, lng: number): Promise<IMartMap[]> =>
         });
         return res.data;
     } catch (error) {
-        console.error("Failed to get mart data", error);
+
         throw error;
     }
 };

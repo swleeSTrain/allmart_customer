@@ -65,11 +65,6 @@ function KakaoMap() {
 
     useEffect(() => {
 
-        console.log("========================");
-        console.log(location.lat);
-        console.log("========================");
-        console.log(location.lng);
-
         if (location.lat !== null && location.lng !== null) {
             const fetchMartData = async () => {
                 try {

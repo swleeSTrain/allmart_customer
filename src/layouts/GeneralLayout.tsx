@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useCustomerStore } from "../stores/customerStore.ts"; // 상태관리
 import homeIcon from '../../src/images/home.png'; // PNG 아이콘 경로 (필요시)
@@ -6,19 +6,29 @@ import leafletIcon from '../../src/images/order.png'; // PNG 아이콘 경로 (�
 import {AiOutlineHome, AiOutlineShoppingCart} from "react-icons/ai"; // React Icons 라이브러리에서 가져오기
 import { useMartStore } from "../stores/martStore.ts";
 import martImage from "../../src/images/a.png";
+import {useCustomerCookie} from "../hooks/useCustomerCookie.ts";
 function GeneralLayout({ children }: { children: React.ReactNode }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { name, logout } = useCustomerStore();
-    const { martInfo } = useMartStore();
+    const { name, setName, logout, martID } = useCustomerStore();
+    const { martLogo } = useMartStore();
+    const { getCustomerCookies, removeCustomerCookies } = useCustomerCookie(); // 쿠키 삭제 함수
 
     // 쿠키 기반으로 상태 초기화
+    useEffect(() => {
+        const customerData = getCustomerCookies();
+        if (customerData && customerData.name !== name) { // 기존 상태와 비교
+            setName(customerData.name); // Zustand 상태 업데이트
+        }
+    }, [name, getCustomerCookies, setName]);
 
     // 로그아웃 시 쿠키랑 상태 초기화 시킴
     const handleLogout = () => {
 
-        logout(); // Zustand 상태 및 쿠키 모두 초기화
+        logout();
+
+        removeCustomerCookies();
 
         setMenuOpen(false); // 메뉴 닫기
 
@@ -51,7 +61,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                     {/* 왼쪽: 로고 */}
                     <div className="flex items-center">
                         <img
-                            src={martInfo?.logoURL || martImage}
+                            src={martLogo || martImage}
                             alt="마트 로고"
                             className="h-12 object-contain cursor-pointer"
                             onClick={() => navigate("/")}
@@ -194,7 +204,7 @@ function GeneralLayout({ children }: { children: React.ReactNode }) {
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() => navigate("/customer/signIn")}
+                                    onClick={() => navigate(`/${martID}/customer/signIn`)}
                                     className="w-full h-12 text-lg font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 shadow-md transform hover:scale-105 transition-transform"
                                 >
                                     로그인
