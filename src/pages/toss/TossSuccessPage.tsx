@@ -60,7 +60,6 @@ function TossSuccessPage() {
                     bodyClassName: "text-center",
                 });
             } catch (error: any) {
-                console.error("결제 검증 실패:", error.message);
                 // 결제 실패 메시지
                 toast.error("결제 검증에 실패했습니다. 다시 시도해주세요.", {
                     autoClose: 2000,
@@ -70,7 +69,7 @@ function TossSuccessPage() {
             }
         };
 
-        verifyAndCreateOrder();
+        verifyAndCreateOrder().then(r => r);
     }, [searchParams]);
 
     const orderId = searchParams.get("orderId") || "정보 없음";
