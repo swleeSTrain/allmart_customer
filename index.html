@@ -12,7 +12,7 @@
     link.rel = 'manifest';
     link.href = `/manifest${appNumber}.json`;
     document.head.appendChild(link);
-    navigator.serviceWorker.register(`/sw1.js`, { scope: `/` });
+    navigator.serviceWorker.register(`/sw1.js`, { scope: `/1/` });
     navigator.serviceWorker.register(`/sw2.js`, { scope: `/2/` });
     navigator.serviceWorker.register(`/sw3.js`, { scope: `/3/` });
     navigator.serviceWorker.register(`/sw4.js`, { scope: `/4/` });
