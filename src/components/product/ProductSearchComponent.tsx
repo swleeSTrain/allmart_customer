@@ -9,6 +9,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import {useCartStore} from "../../stores/cartStore.ts";
 import FloatingCartButton from "../FloatingCartButton.tsx";
+import { useSearchStore } from "../../stores/searchStore";
 
 const initialState: IPageResponse = {
     dtoList: [],
@@ -30,13 +31,13 @@ function ProductSearchComponent() {
     const [loading, setLoading] = useState<boolean>(false);
     const [pageResponse, setPageResponse] = useState<IPageResponse>(initialState);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
-    const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [isSearchMode, setIsSearchMode] = useState<boolean>(false); // 검색 모드 상태 추가
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [searchParams] = useSearchParams();
     const categoryID = searchParams.get("categoryID");
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null); // 선택된 상품
+    const { recentSearches, addSearch, clearSearches } = useSearchStore();
 
     const observer = useRef<IntersectionObserver | null>(null);
 
@@ -56,6 +57,7 @@ function ProductSearchComponent() {
         if (!searchKeyword.trim()) return;
 
         setLoading(true);
+        addSearch(searchKeyword);
         setIsSearchMode(true); // 검색 모드 활성화
         try {
             const data = await getElasticList(1, 10, {
@@ -64,11 +66,6 @@ function ProductSearchComponent() {
             });
             setPageResponse(data);
 
-            // 최근 검색어 업데이트
-            setRecentSearches((prev) => {
-                const updatedSearches = [searchKeyword, ...prev.filter((word) => word !== searchKeyword)];
-                return updatedSearches.slice(0, 5); // 최대 5개 유지
-            });
         } catch (error) {
             console.error("Error searching products:", error);
         } finally {
@@ -230,13 +227,13 @@ function ProductSearchComponent() {
                     <ul className="space-y-3">
                         {recentSearches.map((keyword, index) => (
                             <li key={index} className="flex items-center justify-between text-gray-700 border-b pb-2">
-                                <span onClick={() => handleRecentSearchClick(keyword)}
-                                      className="cursor-pointer hover:underline">
-                                    {keyword}
-                                </span>
+                        <span onClick={() => handleRecentSearchClick(keyword)}
+                              className="cursor-pointer hover:underline">
+                            {keyword}
+                        </span>
                                 <button
                                     aria-label="삭제"
-                                    onClick={() => setRecentSearches((prev) => prev.filter((word) => word !== keyword))}
+                                    onClick={() => clearSearches()} // 전체 삭제
                                     className="text-red-500 hover:text-red-600"
                                 >
                                     삭제
@@ -268,10 +265,9 @@ function ProductSearchComponent() {
                             name: selectedProduct.name,
                             quantity,
                             totalPrice: selectedProduct.price * quantity,
+                            thumbnailImage: selectedProduct.thumbnailImage, // 썸네일 이미지 추가
                         });
-                        console.log(
-                            `${quantity}개 추가됨: ${selectedProduct.name}`
-                        );
+                        console.log(`${quantity}개 추가됨: ${selectedProduct.name}`);
                         closeModal();
                     }}
                 />

@@ -8,14 +8,48 @@ import { useCustomerCookie } from "../../hooks/useCustomerCookie";
 
 function CustomerPhoneSignInComponent() {
     const [phoneNumber, setPhoneNumber] = useState("");
-    const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const { setTokens, setCustomerInfo } = useCustomerStore();
     const { setCustomerCookies } = useCustomerCookie();
 
-    const handleKakaoLogin = () => {
-        const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
-        window.location.href = `${kakaoURL}`;
+    // const handleKakaoLogin = () => {
+    //     const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
+    //     window.location.href = `${kakaoURL}`;
+    // };
+
+    const handleKakaoLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const trimmedEmail = "faker@naver.com"
+
+        try {
+            const response = await postSocialSignIn(trimmedEmail);
+
+            // Zustand 상태 저장
+            setTokens(response.accessToken, response.refreshToken);
+            setCustomerInfo(response.name, response.customerID, response.martID, "email");
+
+            setCustomerCookies(
+                response.accessToken,
+                response.refreshToken,
+                response.name,
+                response.customerID,
+                response.martID
+            );
+
+            // 로그인 성공 후 페이지 이동
+            navigate(`/${response.martID}`);
+        } catch (error) {
+            toast.error("로그인 실패: 등록되지 않은 이메일입니다", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+            });
+            console.error("Error during email sign-in:", error);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -59,54 +93,6 @@ function CustomerPhoneSignInComponent() {
         }
     };
 
-    const handleEmailSignIn = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const trimmedEmail = email.trim();
-        if (!trimmedEmail) {
-            toast.error("이메일을 입력해주세요.", { autoClose: 1500 });
-            return;
-        }
-
-        try {
-            const response = await postSocialSignIn(trimmedEmail);
-
-            // Zustand 상태 저장
-            setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID, "email");
-
-            setCustomerCookies(
-                response.accessToken,
-                response.refreshToken,
-                response.name,
-                response.customerID,
-                response.martID
-            );
-
-            // 로그인 성공 후 페이지 이동
-            navigate(`/${response.martID}`);
-            toast.success("회원 정보가 수정되었습니다", {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "colored",
-            });
-        } catch (error) {
-            toast.error("로그인 실패: 등록되지 않은 이메일입니다", {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "colored",
-            });
-            console.error("Error during email sign-in:", error);
-        }
-    };
-
     return (
         <div className="min-h-screen bg-white flex items-center justify-center">
             <div className="w-full max-w-md rounded-lg shadow-lg p-6">
@@ -132,27 +118,6 @@ function CustomerPhoneSignInComponent() {
                         로그인
                     </button>
 
-                    {/* 이메일 로그인 */}
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                            이메일
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="example@example.com"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
-                        <button
-                            type="button"
-                            onClick={handleEmailSignIn}
-                            className="w-full mt-2 bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition duration-200"
-                        >
-                            이메일로 로그인
-                        </button>
-                    </div>
                     <div className="mt-6 border-t pt-6">
                         <button
                             type="button"

@@ -24,9 +24,7 @@ export const useCustomerCookie = () => {
         setCookie("customerID", customerID, { expires: new Date(Date.now() + 604800000) }); // 7일
         setCookie("martID", martID, { expires: new Date(Date.now() + 604800000) }); // 7일
 
-        console.log("========================== set");
-        console.log("Cookies:", cookies);
-        console.log("Document Cookies:", document.cookie);
+
     };
 
     // 로그아웃시 쿠키 지우기
@@ -37,9 +35,6 @@ export const useCustomerCookie = () => {
         removeCookie("customerID");
         removeCookie("martID");
 
-        console.log("========================== remove");
-        console.log("Cookies after removal:", cookies);
-        console.log("Document Cookies after removal:", document.cookie);
     };
 
     // 쿠키 값을 반환하는 함수 추가

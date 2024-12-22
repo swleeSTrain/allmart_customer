@@ -6,6 +6,8 @@ import { updateCustomer } from "../../api/CustomerAPI.ts";
 import { toast } from "react-toastify";
 import axios from "axios";
 import LoadingPage from "../../pages/LoadingPage.tsx";
+import { useMartStore } from "../../stores/martStore.ts";
+import { useMartSync } from "../../hooks/useMartSync.ts";
 
 const CustomerUpdate = () => {
     const [customer, setCustomer] = useState({
@@ -18,28 +20,26 @@ const CustomerUpdate = () => {
         phoneNumber: "",
         refreshToken: "",
         social: false,
-        loginType:""
+        loginType: ""
     });
 
     const navigate = useNavigate();
     const { setTokens, setCustomerInfo } = useCustomerStore();
     const { setCustomerCookies, getCustomerCookies } = useCustomerCookie();
 
-    // 마트 ID 가져오기
-    const { martID: cookieMartID } = getCustomerCookies();
-    const martID = useCustomerStore((state) => state.martID) || cookieMartID;
+    useMartSync();
+
+    const martID = useMartStore((state) => state.martID);
 
     const [isLoading, setIsLoading] = useState(false);
 
-
-    // 고객 정보 가져오기
     const fetchCustomer = async () => {
         try {
             setIsLoading(true);
             const response = await axios.get(
                 `http://localhost:8080/api/v1/customer/update/${getCustomerCookies().customerID}`
             );
-            setCustomer(response.data); // API에서 가져온 데이터로 상태 설정
+            setCustomer(response.data);
             setIsLoading(false);
         } catch (error) {
             console.error("고객 정보 가져오기 오류:", error);
@@ -47,46 +47,43 @@ const CustomerUpdate = () => {
         }
     };
 
-    // 초기 로딩 시 고객 정보 가져오기
     useEffect(() => {
         fetchCustomer();
     }, []);
 
-    // 입력값 변경 핸들러
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // 상태 업데이트
         setCustomer((prevCustomer) => ({
             ...prevCustomer,
             [name]: value,
         }));
     };
 
-    // 회원 정보 수정 요청
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             const response = await updateCustomer(customer);
 
-            // 상태 및 쿠키 업데이트
             setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(
-                response.name,
-                response.customerID,
-                martID,
-                response.loginType,
-                response.email
-            );
-            setCustomerCookies(
-                response.accessToken,
-                response.refreshToken,
-                response.name,
-                response.customerID,
-                response.martID,
-                response.email
-            );
+            if (martID != null) {
+                setCustomerInfo(
+                    response.name,
+                    response.customerID,
+                    martID,
+                    "email"
+                );
+            }
+            if (martID != null) {
+                setCustomerCookies(
+                    response.accessToken,
+                    response.refreshToken,
+                    response.name,
+                    response.customerID,
+                    martID
+                );
+            }
 
             console.log("고객 정보가 성공적으로 업데이트되었습니다.");
             toast.success("고객 정보가 성공적으로 업데이트되었습니다.", {
@@ -109,7 +106,7 @@ const CustomerUpdate = () => {
     };
 
     if (isLoading) {
-        return <LoadingPage/>
+        return <LoadingPage />;
     }
 
     return (
