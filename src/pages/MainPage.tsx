@@ -4,7 +4,8 @@ import GeneralLayout from "../layouts/GeneralLayout";
 import CategoryListComponent from "../components/CategoryListComponent.tsx";
 import {useCustomerStore} from "../stores/customerStore";
 import BannerSlider from "../components/banner/BannerSlider.tsx";
-import { useLocation } from "react-router-dom";
+import {handleFCMTokenUpdate} from "../firebase/fcmUtil.ts";
+import { useLocation, useParams } from "react-router-dom";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -14,7 +15,10 @@ function MainPage() {
     const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isIOS, setIsIOS] = useState(false);
     const [showPrompt, setShowPrompt] = useState(true);
-    const { loginType } = useCustomerStore();
+    const {martID} = useParams<{ martID: string }>();
+    const {loginType, customerID} = useCustomerStore();
+    handleFCMTokenUpdate(Number(customerID), Number(martID)).then(r => console.log(r));
+
     const location = useLocation();
 
     useEffect(() => {
