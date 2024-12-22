@@ -5,7 +5,7 @@ import CategoryListComponent from "../components/CategoryListComponent.tsx";
 import {useCustomerStore} from "../stores/customerStore";
 import BannerSlider from "../components/banner/BannerSlider.tsx";
 import {handleFCMTokenUpdate} from "../firebase/fcmUtil.ts";
-import { useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {useCustomerCookie} from "../hooks/useCustomerCookie.ts";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -17,7 +17,7 @@ function MainPage() {
     const [isIOS, setIsIOS] = useState(false);
     const [showPrompt, setShowPrompt] = useState(true);
 
-    const { name, martID, customerID, setCustomerInfo } = useCustomerStore(); // Zustand에서 상태 관리 함수 가져오기
+    const {loginType, name, martID, customerID, setCustomerInfo } = useCustomerStore(); // Zustand에서 상태 관리 함수 가져오기
     const { getCustomerCookies } = useCustomerCookie(); // 쿠키에서 고객 정보 가져오기
 
     // 쿠키랑 상태가 연동이 안되어있어서 여기를 통해 동기화 시켜주는 것
@@ -31,7 +31,7 @@ function MainPage() {
             customerData.martID !== martID ||
             customerData.customerID !== customerID
         ) {
-            setCustomerInfo(customerData.name, customerData.customerID, customerData.martID, null, customerData.email); // 변수 이름 수정
+            setCustomerInfo(customerData.name, customerData.customerID, customerData.martID); // 변수 이름 수정
         }
     }, [name, martID, customerID, customerData, setCustomerInfo]);
     console.log("customerID"+ customerID+"martID"+martID);
