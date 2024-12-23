@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { postPhoneSignIn, postSocialSignIn } from "../../api/CustomerAPI.ts";
+import { postPhoneSignIn } from "../../api/CustomerAPI.ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -12,44 +12,9 @@ function CustomerPhoneSignInComponent() {
     const { setTokens, setCustomerInfo } = useCustomerStore();
     const { setCustomerCookies } = useCustomerCookie();
 
-    // const handleKakaoLogin = () => {
-    //     const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
-    //     window.location.href = `${kakaoURL}`;
-    // };
-
-    const handleKakaoLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const trimmedEmail = "woals3527@naver.com"
-
-        try {
-            const response = await postSocialSignIn(trimmedEmail);
-
-            // Zustand 상태 저장
-            setTokens(response.accessToken, response.refreshToken);
-            setCustomerInfo(response.name, response.customerID, response.martID, "email");
-
-            setCustomerCookies(
-                response.accessToken,
-                response.refreshToken,
-                response.name,
-                response.customerID,
-                response.martID
-            );
-
-            // 로그인 성공 후 페이지 이동
-            navigate(`/${response.martID}`);
-        } catch (error) {
-            toast.error("로그인 실패: 등록되지 않은 이메일입니다", {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "colored",
-            });
-            console.error("Error during email sign-in:", error);
-        }
+    const handleKakaoLogin = () => {
+        const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
+        window.location.href = `${kakaoURL}`;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
